@@ -10,10 +10,10 @@ var appBarHeight = AppBar().preferredSize.height;
 
 AppBar buildAppBar(){
   return AppBar(
-    title: Text('Pop Up Menu',
+    title: Text('Library Of Ruina',
       style: TextStyle(color: Colors.white, fontSize: 30),
     ),
-    backgroundColor: Colors.pink,
+    backgroundColor: Colors.brown.shade900,
     actions: [
       PopupMenuButton(
         onSelected: (value){
