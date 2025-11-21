@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar.dart';
-import 'package:bookshop/register.dart';
+import 'package:bookshop/views/loginpage.dart';
 
-class LogInPage extends StatefulWidget {
-  const LogInPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LogInPage> createState() => _LogInPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LogInPageState extends State<LogInPage> {
+class _RegisterPageState extends State<RegisterPage> {
+  final _firstName = TextEditingController();
+  final _lastName = TextEditingController();
+  final _phoneNumber = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -29,8 +32,38 @@ class _LogInPageState extends State<LogInPage> {
               child: Container(
                 color: Colors.yellow.shade50,
                 child: TextField(
+                  controller: _firstName,
+                  decoration: InputDecoration(labelText: 'First Name:'),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(50.0),
+              child: Container(
+                color: Colors.yellow.shade50,
+                child: TextField(
+                  controller: _lastName,
+                  decoration: InputDecoration(labelText: 'Last Name:'),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(50.0),
+              child: Container(
+                color: Colors.yellow.shade50,
+                child: TextField(
+                  controller: _phoneNumber,
+                  decoration: InputDecoration(labelText: 'Phone Number:'),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(50.0),
+              child: Container(
+                color: Colors.yellow.shade50,
+                child: TextField(
                   controller: _emailController,
-                  decoration: InputDecoration(labelText: 'Password:'),
+                  decoration: InputDecoration(labelText: 'Email:'),
                 ),
               ),
             ),
@@ -58,7 +91,7 @@ class _LogInPageState extends State<LogInPage> {
             SizedBox(height: 35),
             Row(
               children: [
-                SizedBox(width: 30,),
+                SizedBox(width: 30),
                 Flexible(
                   fit: FlexFit.tight,
                   child: ElevatedButton(
@@ -67,7 +100,9 @@ class _LogInPageState extends State<LogInPage> {
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
-                          Colors.brown.shade500),),
+                        Colors.brown.shade500,
+                      ),
+                    ),
                     child: Text(
                       'Login',
                       style: TextStyle(
@@ -76,18 +111,22 @@ class _LogInPageState extends State<LogInPage> {
                         color: Colors.white,
                       ),
                     ),
-                  ),),
-                SizedBox(width: 10,),
-                Text('New to Ruina? ${TextButton(
-                  onPressed: () => MaterialPageRoute(builder: (context)=> RegisterPage()),
-                  child: Text('Create an Account', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),),
-                )}', style: TextStyle(color: Colors.white, fontSize: 20) ,),
-                SizedBox(width: 40,),
-                
+                  ),
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Already have an account? ${TextButton(
+                    onPressed: () => MaterialPageRoute(builder: (context) => RegisterPage()),
+                    child: Text(
+                      'Log in',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+                    ),
+                  )}',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                SizedBox(width: 40),
               ],
-            )
-
-
+            ),
           ],
         ),
       ),
