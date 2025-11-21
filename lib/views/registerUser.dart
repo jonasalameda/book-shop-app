@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar.dart';
-import 'package:bookshop/views/loginpage.dart';
+import 'package:bookshop/views/loginPage.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class RegisterUserPage extends StatefulWidget {
+  const RegisterUserPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<RegisterUserPage> createState() => _RegisterUserPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterUserPageState extends State<RegisterUserPage> {
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
   final _phoneNumber = TextEditingController();
@@ -104,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     child: Text(
-                      'Login',
+                      'Register',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
@@ -114,15 +114,21 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(width: 10),
-                Text(
-                  'Already have an account? ${TextButton(
-                    onPressed: () => MaterialPageRoute(builder: (context) => RegisterPage()),
-                    child: Text(
-                      'Log in',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
-                    ),
-                  )}',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                // Text(
+                //   'Already have an account? ${TextButton(
+                //     onPressed: () => MaterialPageRoute(builder: (context) => RegisterUserPage()),
+                //     child: Text(
+                //       'Log in',
+                //       style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+                //     ),
+                //   )}',
+                //   style: TextStyle(color: Colors.white, fontSize: 20),
+                // ),
+                TextButton(
+                  onPressed: () =>Navigator.popAndPushNamed(context, '/login'),
+                  child: Text(
+                    'Already have an account?', style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
                 ),
                 SizedBox(width: 40),
               ],
