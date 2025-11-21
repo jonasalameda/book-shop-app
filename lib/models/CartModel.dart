@@ -2,8 +2,8 @@
  * Here lies all functionalities/back-end logic of Cart class
  */
 
-import 'UserModel.dart'
-import 'BookModel.dart'
+import 'package:bookshop/models/UserModel.dart';
+import 'package:bookshop/models/BookModel.dart';
 class _CartModel {
   UserModel customer;
   BookModel book;
