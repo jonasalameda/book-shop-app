@@ -2,7 +2,7 @@ import 'BookModel.dart';
 /**
  * Here lies all functionalities/back-end logic of User class
  */
-class _UserModel {
+class UserModel {
   int customer_id;
   String first_name;
   String last_name;
@@ -12,7 +12,7 @@ class _UserModel {
   List<BookModel> wishList;
 
 
-  _UserModel(
+  UserModel(
     this.customer_id,
     this.first_name,
     this.last_name,
