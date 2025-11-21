@@ -1,6 +1,15 @@
 /**
  * Here lies all functionalities/back-end logic of Wishlist class
  */
+import 'UserModel.dart'
+import 'BookModel.dart'
 class _WishlistModel {
-  // may be only crud idk
+  UserModel customer;
+  BookModel book;
+
+  _WishlistModel(this.customer, this.book);
+
+
+
+
 }
