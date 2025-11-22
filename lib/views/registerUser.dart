@@ -114,16 +114,6 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                   ),
                 ),
                 SizedBox(width: 10),
-                // Text(
-                //   'Already have an account? ${TextButton(
-                //     onPressed: () => MaterialPageRoute(builder: (context) => RegisterUserPage()),
-                //     child: Text(
-                //       'Log in',
-                //       style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
-                //     ),
-                //   )}',
-                //   style: TextStyle(color: Colors.white, fontSize: 20),
-                // ),
                 TextButton(
                   onPressed: () =>Navigator.popAndPushNamed(context, '/login'),
                   child: Text(
