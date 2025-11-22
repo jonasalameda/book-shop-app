@@ -1,6 +1,6 @@
 /**
  * Here lies all functionalities/back-end logic of Cart class
  */
-class _CartModel {
+class CartModel {
   // may be only crud idk
 }
