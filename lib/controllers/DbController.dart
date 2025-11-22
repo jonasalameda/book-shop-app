@@ -27,3 +27,13 @@ Future<bool> deleteColumn(String id, CollectionReference collection) async {
     }
 }
 
+
+Future<bool> updateColumn(String id, CollectionReference collection, updatedObject) async {
+    try {
+        await collection.doc(id).update(updatedObject.toMap());
+        return true;
+    } catch(e) {
+        return false;
+    }
+}
+

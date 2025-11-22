@@ -4,19 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 // import 'package:email_validator/email_validator.dart';
 
-/**
- * BookController communicates with the view to render logic on the code
- */
+/// BookController communicates with the view to render logic on the code
 class _Usercontroller extends ControllerMVC {
-  /*
-    int customer_id;
-  String first_name;
-  String last_name;
-  String phone_number;
-  String email;
-  String password_hash;
-  List<BookModel> wishList;
-   */
+
 
   /// Checks all fields and hashes the password, then inserts in database
   /// It will return the error message if the input has problem,
@@ -53,7 +43,8 @@ class _Usercontroller extends ControllerMVC {
     } catch(e) {
       return "Db failure to add the user!";
     }
-
     return ""; // Empty string means success
   }
+
+
 }
