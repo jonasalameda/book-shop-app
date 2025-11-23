@@ -1,5 +1,7 @@
 
 class BookDB{
+  final CollectionReference books =
+  FirebaseFirestore.instance.collection('Books');
 
   void initializeDB() async{
     WidgetsFlutterBinding.ensureInitialized();

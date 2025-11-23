@@ -17,7 +17,7 @@ class _BookModel {
   double price;
   bool available;
   final CollectionReference books =
-      FirebaseFirestore.instance.collection('Books');
+      BookDB().books;
 
   _BookModel(this.book_id, this.book_name, this.author, this.country,
       this.genres, this.description, this.quantity, this.price, this.available);
@@ -68,7 +68,7 @@ class _BookModel {
   }
 
   /**
-   * Delete a book from the database through its id 
+   * Delete a book from the database through its id
    */
   Future<void> deleteBook(String bookID) async {
     await books.doc(bookID).delete();
