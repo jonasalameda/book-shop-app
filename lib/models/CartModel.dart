@@ -22,6 +22,7 @@ class _CartModel {
       'isCheckout': isCheckedOut
     };
   }
+
 }
 
 
