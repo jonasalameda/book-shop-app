@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar.dart';
-import 'package:bookshop/views/register.dart';
+import 'package:bookshop/views/registerUser.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
@@ -81,16 +81,15 @@ class _LogInPageState extends State<LogInPage> {
                   ),
                 ),
                 SizedBox(width: 10),
-                Text(
-                  'New to Ruina? ${TextButton(
-                    onPressed: () => MaterialPageRoute(builder: (context) => RegisterPage()),
+                // Text('New to Ruina?', style: TextStyle(color: Colors.white, fontSize: 20),),
+                  TextButton(
+                    onPressed: () =>Navigator.popAndPushNamed(context, '/registerUser'),
                     child: Text(
-                      'Create an Account',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+                      'New to Ruina?', style: TextStyle(color: Colors.white, fontSize: 20),
+                      // 'Create an Account',
+                      // style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
                     ),
-                  )}',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
+                  ),
                 SizedBox(width: 40),
               ],
             ),

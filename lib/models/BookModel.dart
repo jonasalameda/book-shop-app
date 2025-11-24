@@ -1,7 +1,7 @@
 /**
  * Here lies all functionalities/back-end logic of Book class
  */
-class _BookModel {
+class BookModel {
   int book_id;
   String book_name;
   String author;
@@ -12,7 +12,7 @@ class _BookModel {
   double price;
   bool available;
 
-  _BookModel(
+  BookModel(
     this.book_id,
     this.book_name,
     this.author,
@@ -23,4 +23,18 @@ class _BookModel {
     this.price,
     this.available,
   );
+
+  /// Maps without the ID
+  Map<String, Object?> toMap() {
+    return {
+      'book_name':book_name,
+      'author':author,
+      'country':country,
+      'genres':genres,
+      'description' : description,
+      'quantity' : quantity,
+      'price' : price,
+      'available' : available,
+    };
+  }
 }
