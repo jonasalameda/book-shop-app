@@ -1,19 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:bookshop/views/loginPage.dart';
-import 'package:bookshop/views/registerUser.dart';
-import 'package:bookshop/views/dashboardView.dart';
+import 'package:bookshop/views/loginpage.dart';
+import 'package:bookshop/database.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: "AIzaSyCjexEQCUZ3OhMj-VyXJcYTV7clWJclu6w",
-      appId: "464024739524",
-      messagingSenderId: "1:464024739524:android:7bd3f8116a399a5672f391",
-      projectId: "library-of-ruina",
-    ),
-  );
+  initializeDB();
   runApp(MyApp());
 }
 
