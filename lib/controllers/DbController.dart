@@ -24,7 +24,7 @@ class BookDB{
 /// Adds a column from the input reference collection with the inserted newObject.
 /// The object must have a toMap function.
 /// The function will return false in case of db failure
-Future<bool> addColumn(CollectionReference collection, newObject) async {
+Future<bool> addRow(CollectionReference collection, newObject) async {
     try {
         await collection.add(newObject.toMap());
         return true;
@@ -35,7 +35,7 @@ Future<bool> addColumn(CollectionReference collection, newObject) async {
 
 /// Deletes a column from the input reference collection where the id matches.
 /// The function will return false in case of db failure.
-Future<bool> deleteColumn(String id, CollectionReference collection) async {
+Future<bool> deleteRow(String id, CollectionReference collection) async {
     try {
         await collection.doc(id).delete();
         return true;
@@ -45,7 +45,7 @@ Future<bool> deleteColumn(String id, CollectionReference collection) async {
 }
 
 
-Future<bool> updateColumn(String id, CollectionReference collection, updatedObject) async {
+Future<bool> updateRow(String id, CollectionReference collection, updatedObject) async {
     try {
         await collection.doc(id).update(updatedObject.toMap());
         return true;

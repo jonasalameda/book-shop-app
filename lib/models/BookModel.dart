@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class BookModel {
-  int book_id;
+  int isbn;
   String book_name;
   String author;
   String country;
@@ -16,12 +16,13 @@ class BookModel {
   double price;
   bool available;
 
-  BookModel(this.book_id, this.book_name, this.author, this.country,
+  BookModel(this.isbn, this.book_name, this.author, this.country,
       this.genres, this.description, this.quantity, this.price, this.available);
 
   /// Maps without the ID
   Map<String, Object?> toMap() {
     return {
+      'isbn': isbn,
       'book_name':book_name,
       'author':author,
       'country':country,
