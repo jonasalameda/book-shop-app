@@ -1,12 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/views/loginpage.dart';
-import 'package:bookshop/database.dart';
+import 'package:bookshop/controllers/DbController.dart';
 
 void main() async {
-  initializeDB();
+  BookDB().initializeDB();
   runApp(MyApp());
 }
+
+// void initializeDB() {
+//   initializeDB();
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

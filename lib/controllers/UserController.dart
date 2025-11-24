@@ -39,7 +39,7 @@ class _Usercontroller extends ControllerMVC {
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
     try{
-      await addColumn(users, newUser);
+      await addRow(users, newUser);
     } catch(e) {
       return "Db failure to add the user!";
     }
