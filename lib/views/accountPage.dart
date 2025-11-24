@@ -4,7 +4,6 @@ import 'package:bookshop/appBar.dart';
 
 
 class MyAccount extends StatefulWidget {
-  final String user = currentUserID;
   const MyAccount({super.key});
 
   @override
@@ -12,7 +11,9 @@ class MyAccount extends StatefulWidget {
 }
 
 class _MyAccountState extends State<MyAccount> {
-  final
+  final String user = currentUserID;
+
+  
   @override
   Widget build(BuildContext context) {
     return const Placeholder();
