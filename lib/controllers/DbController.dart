@@ -1,8 +1,25 @@
-import 'dart:ffi';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mvc_application/controller.dart' show ControllerMVC;
-// import '../models/BookModel.dart';
+
+//TODO: Initialize all collections/tables
+class BookDB{
+    final CollectionReference books =
+    FirebaseFirestore.instance.collection('Books');
+
+    void initializeDB() async{
+        WidgetsFlutterBinding.ensureInitialized();
+        await Firebase.initializeApp(
+            options: const FirebaseOptions(
+                apiKey: "AIzaSyBbuPvGLzeKv0pXmx00hlXySPxT7F8ZQcE",
+                appId: "530607033314",
+                messagingSenderId: "1:530607033314:android:f0812a8ac5623e81bd47bb",
+                projectId: "book-shop-cdfd8",
+            ),
+        );
+    }
+}
 
 /// Adds a column from the input reference collection with the inserted newObject.
 /// The object must have a toMap function.
