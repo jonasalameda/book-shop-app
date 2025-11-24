@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/views/loginpage.dart';
 import 'package:bookshop/controllers/DbController.dart';
+import 'package:bookshop/views/dashboardView.dart';
+import 'package:bookshop/views/registerUser.dart';
 
 void main() async {
   BookDB().initializeDB();
