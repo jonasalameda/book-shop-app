@@ -5,7 +5,10 @@ import 'package:bookshop/controllers/DbController.dart';
 import 'package:bookshop/views/dashboardView.dart';
 import 'package:bookshop/views/registerUser.dart';
 
+String currentUserID = '';
+
 void main() async {
+
   BookDB().initializeDB();
   runApp(MyApp());
 }
@@ -19,6 +22,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Ruina Book Store',
