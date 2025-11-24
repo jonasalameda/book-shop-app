@@ -1,13 +1,32 @@
 {
   "project_info": {
-    "project_number": "464024739524",
-    "project_id": "library-of-ruina",
-    "storage_bucket": "library-of-ruina.firebasestorage.app"
+    "project_number": "530607033314",
+    "project_id": "book-shop-cdfd8",
+    "storage_bucket": "book-shop-cdfd8.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:464024739524:android:7bd3f8116a399a5672f391",
+        "mobilesdk_app_id": "1:530607033314:android:f0812a8ac5623e81bd47bb",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbuPvGLzeKv0pXmx00hlXySPxT7F8ZQcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530607033314:android:791efe275746d258bd47bb",
         "android_client_info": {
           "package_name": "library_of_ruina.com"
         }
@@ -15,7 +34,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCjexEQCUZ3OhMj-VyXJcYTV7clWJclu6w"
+          "current_key": "AIzaSyBbuPvGLzeKv0pXmx00hlXySPxT7F8ZQcE"
         }
       ],
       "services": {

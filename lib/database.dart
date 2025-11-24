@@ -7,10 +7,10 @@ class BookDB{
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
       options: FirebaseOptions(
-        apiKey: "AIzaSyCjexEQCUZ3OhMj-VyXJcYTV7clWJclu6w",
-        appId: "464024739524",
-        messagingSenderId: "1:464024739524:android:7bd3f8116a399a5672f391",
-        projectId: "library-of-ruina",
+        apiKey: "AIzaSyBbuPvGLzeKv0pXmx00hlXySPxT7F8ZQcE",
+        appId: "530607033314",
+        messagingSenderId: "1:530607033314:android:f0812a8ac5623e81bd47bb",
+        projectId: "book-shop-cdfd8",
       ),
     );
   }
