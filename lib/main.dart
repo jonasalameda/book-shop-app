@@ -13,8 +13,9 @@ import 'package:bookshop/views/splashScreen.dart';
 String currentUserID = '';
 
 void main() async {
-  BookDB().initializeDB();
   runApp(MyApp());
+  print("test");
+  BookDB().initializeDB();
 }
 
 class MyApp extends StatelessWidget {
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
         '/description': (context) => DescriptionPage(),
         // add more routes as needed
       },
-      home: LogInPage(),
+      home: SplashScreen(),
     );
   }
 }
