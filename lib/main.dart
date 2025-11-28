@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/description': (context) => DescriptionPage(),
         // add more routes as needed
       },
+      home: LogInPage(),
     );
   }
 }

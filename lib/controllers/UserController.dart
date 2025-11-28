@@ -35,7 +35,7 @@ class _Usercontroller extends ControllerMVC {
     //Define the ID later
     //Empty wishlist
     //TODO hash the psw
-    UserModel newUser = new UserModel(0, first_name, last_name, phone_number, email, password, []);
+    UserModel newUser = new UserModel(0, first_name, last_name, phone_number, email, password, [], []);
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
     try{
