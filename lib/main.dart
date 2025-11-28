@@ -13,9 +13,8 @@ import 'package:bookshop/views/splashScreen.dart';
 String currentUserID = '';
 
 void main() async {
-  runApp(MyApp());
-  print("test");
   BookDB().initializeDB();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
