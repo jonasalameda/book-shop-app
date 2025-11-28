@@ -33,7 +33,7 @@ dependencies:
   firebase_core: any
   cloud_firestore: any
   rxdart: any
-  mvc_application: ^8.9.0
+#  mvc_application: ^8.9.0
 
 
   # The following adds the Cupertino Icons font to your application.

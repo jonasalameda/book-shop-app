@@ -10,6 +10,7 @@ class UserModel {
   String email;
   String password_hash;
   List<BookModel> wishList;
+  List<BookModel> cart;
 
 
   UserModel(
@@ -19,7 +20,8 @@ class UserModel {
     this.phone_number,
     this.email,
     this.password_hash,
-    this.wishList
+    this.wishList,
+      this.cart
   );
 
   /// Maps without the ID
@@ -30,7 +32,8 @@ class UserModel {
       'phone_number': phone_number,
       'email': email,
       'password_hash': password_hash,
-      'wishList' : wishList
+      'wishList' : wishList,
+      'cart' : cart
     };
   }
 }
