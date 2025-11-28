@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "530607033314",
+    "project_id": "book-shop-cdfd8",
+    "storage_bucket": "book-shop-cdfd8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530607033314:android:f0812a8ac5623e81bd47bb",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbuPvGLzeKv0pXmx00hlXySPxT7F8ZQcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
