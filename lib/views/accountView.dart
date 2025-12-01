@@ -187,7 +187,7 @@ class _AccountPageState extends State<AccountPage> {
       appBar: buildAppBar(),
       backgroundColor: Colors.orange.shade100,
       body: Center(
-        child: buildBodyList()cd 
+        child: buildBodyList()
         ),
       );
   }
