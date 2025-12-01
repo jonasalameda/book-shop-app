@@ -1,10 +1,10 @@
-import 'package:mvc_application/controller.dart' show ControllerMVC;
+// import 'package:mvc_application/controller.dart' show ControllerMVC;
 import '../models/BookModel.dart';
 
 
 //TODO: link controller to model and view --> Better to just use the controller functions in the view no?
 /// BookController communicates with the view to render logic on the code
-class _BookController extends ControllerMVC {
+class _BookController  {
   // List books =;
   //
   // Future<void> addBook(name, author, country, List<String> genres, description, qtt, price, available) async {

@@ -1,11 +1,11 @@
 import 'package:bookshop/models/UserModel.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mvc_application/controller.dart' show ControllerMVC;
+// import 'package:mvc_application/controller.dart' show ControllerMVC;
 // import 'package:email_validator/email_validator.dart';
 
 /// BookController communicates with the view to render logic on the code
-class _Usercontroller extends ControllerMVC {
+class _Usercontroller {
 
 
   /// Checks all fields and hashes the password, then inserts in database
@@ -35,7 +35,7 @@ class _Usercontroller extends ControllerMVC {
     //Define the ID later
     //Empty wishlist
     //TODO hash the psw
-    UserModel newUser = new UserModel(0, first_name, last_name, phone_number, email, password, []);
+    UserModel newUser = new UserModel(0, first_name, last_name, phone_number, email, password, [], []);
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
     try{

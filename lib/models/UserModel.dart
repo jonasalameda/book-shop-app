@@ -10,17 +10,19 @@ class UserModel {
   String email;
   String password_hash;
   List<BookModel> wishList;
+  List<BookModel> cart;
 
 
   UserModel(
-    this.customer_id,
-    this.first_name,
-    this.last_name,
-    this.phone_number,
-    this.email,
-    this.password_hash,
-    this.wishList
-  );
+      this.customer_id,
+      this.first_name,
+      this.last_name,
+      this.phone_number,
+      this.email,
+      this.password_hash,
+      this.wishList,
+      this.cart
+      );
 
   /// Maps without the ID
   Map<String, Object?> toMap() {
@@ -30,7 +32,8 @@ class UserModel {
       'phone_number': phone_number,
       'email': email,
       'password_hash': password_hash,
-      'wishList' : wishList
+      'wishList' : wishList,
+      'cart' : cart
     };
   }
 }
