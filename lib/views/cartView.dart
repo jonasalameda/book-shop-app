@@ -4,9 +4,12 @@ import 'package:bookshop/appBar.dart';
 import 'package:bookshop/models/BookModel.dart';
 import 'package:bookshop/models/UserModel.dart';
 import 'package:bookshop/controllers/DbController.dart';
+import 'package:rxdart/rxdart.dart';
+
 
 class CartPage extends StatefulWidget {
-  const CartPage({super.key});
+  final String userID;
+  const CartPage({Key? key, required this.userID}) : super(key : key);
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -15,17 +18,13 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   late var booksInCart;
   double cartSubtotal = 0;
-  double federalTax = 5;
-  double provincialTax = 9.975;
+  double federalTax = 5/100;
+  double provincialTax = 9.975/100;
   late double totalCart = cartSubtotal * (federalTax + provincialTax);
 
   List<String> options = ['1', '2', '3', '4', '5',];
 
-  //TODO:get books from user cart from db
-  late var userItems;
 
-  //store Count from db in variable
-  int totalBooksInCart = 2;
 
   void initState() {
     super.initState();
@@ -36,17 +35,55 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
-  //
-  // loadBooks() {
-  //   return ListView.builder(
-  //       itemCount: userItems.lenght,
-  //       // itemBuilder: (context, i);
-  //
-  //       // ListView booksInCart = ListView();
-  //       // for(int i = 0; i < totalBooksInCart; i++){
-  //       //   booksInCart.
-  //       // }
-  //   }
+
+  loadBooks() {
+   return Expanded(child: Padding(padding: EdgeInsets.all(10),
+   child: StreamBuilder<List<QuerySnapshot>>(
+     stream: CombineLatestStream.list([
+       FirebaseFirestore.instance.collection('Users').snapshots(),
+       FirebaseFirestore.instance.collection('Books').snapshots()
+     ]),
+     builder: (context, snapshot){
+       var dbUsers = snapshot.data![0].docs;
+       var dbBooks = snapshot.data![1].docs;
+       
+       var usersInfo = [
+         ...dbUsers.map((usr) => {
+           'id': usr.id,
+           'first_name': usr['first_name'],
+           'last_name': usr['last_name'],
+           'phone_number': usr['phone_number'],
+           'email': usr['email'],
+           'password_hash': usr['password_hash'],
+           'wishList': usr['wishList'],
+           'cart': usr['cart'],
+           'type': 'user'
+         })
+       ];
+
+
+       var booksInfo = [
+         ...dbBooks.map((book) => {
+           'id': book.id,
+           'isbn': book['isbn'],
+           'book_name': book['book_name'],
+           'author': book['author'],
+           'country': book['country'],
+           'genres': book['genres'],
+           'description': book['description'],
+           'quantity': book['quantity'],
+           'price': book['price'],
+           'available': book['available'],
+           'type': 'book'
+         }),
+       ];
+
+       var currentUser = getUser(usersInfo, widget.userID);
+   }
+   ),
+   ),
+    );
+    }
 
   //TODO:get user information from database and store it in variable
   ListTile bookInfoCart() {

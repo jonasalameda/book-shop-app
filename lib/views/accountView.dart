@@ -18,22 +18,22 @@ class _AccountPageState extends State<AccountPage> {
   // var usersListSnap = CombineLatestStream.list([FirebaseFirestore.instance.collection('Users').snapshots()]);
   // late var currentUser =  usersList.doc(widget.userID).get();
 
-  getUser(List users) async {
-    for (int i = 0; i < users.length; i++) {
-      if (users[i]['id'].equals(widget.userID)) {
-        return users[i];
-      }
-    }
-    // return await usersList.doc(widget.userID).get();
-  }
-
-  getBook(List books, String bookId) async {
-    for (int i = 0; i < books.length; i++) {
-      if (books[i]['id'].equals(bookId)) {
-        return books[i];
-      }
-    }
-  }
+  // getUser(List users) async {
+  //   for (int i = 0; i < users.length; i++) {
+  //     if (users[i]['id'].equals(widget.userID)) {
+  //       return users[i];
+  //     }
+  //   }
+  //   // return await usersList.doc(widget.userID).get();
+  // }
+  //
+  // getBook(List books, String bookId) async {
+  //   for (int i = 0; i < books.length; i++) {
+  //     if (books[i]['id'].equals(bookId)) {
+  //       return books[i];
+  //     }
+  //   }
+  // }
 
   /**
    * Update the user's wish list, remove the current book from the list
@@ -55,7 +55,7 @@ class _AccountPageState extends State<AccountPage> {
           builder: (context, snapshot) {
             var dbUsers = snapshot.data![0].docs;
             var dbBooks = snapshot.data![1].docs;
-            var usersInfo = [
+            var booksInfo = [
               ...dbBooks.map((book) => {
                     'id': book.id,
                     'isbn': book['isbn'],
@@ -70,7 +70,7 @@ class _AccountPageState extends State<AccountPage> {
                     'type': 'book'
                   }),
             ];
-            var booksInfo = [
+            var usersInfo = [
               ...dbUsers.map((customer) => {
                     'id': customer.id,
                     'first_name': customer['first_name'],
@@ -84,7 +84,7 @@ class _AccountPageState extends State<AccountPage> {
                   }),
             ];
 
-            var currentUser = getUser(usersInfo);
+            var currentUser = getUser(usersInfo, widget.userID);
             var savedBooks = currentUser['wishlist'];
             return Column(
               children: [

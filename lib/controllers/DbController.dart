@@ -35,6 +35,23 @@ Future<List> getTableList(String tableName) async{
     throw Exception(e.toString());
   }
 }
+
+getUser(List users, String wantedUser) async {
+  for (int i = 0; i < users.length; i++) {
+    if (users[i]['id'].equals(wantedUser)) {
+      return users[i];
+    }
+  }
+  // return await usersList.doc(widget.userID).get();
+}
+
+getBook(List books, String bookId) async {
+  for (int i = 0; i < books.length; i++) {
+    if (books[i]['id'].equals(bookId)) {
+      return books[i];
+    }
+  }
+}
 /// Adds a column from the input reference collection with the inserted newObject.
 /// The object must have a toMap function.
 /// The function will return false in case of db failure
