@@ -6,11 +6,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //TODO: Initialize all collections/tables
 class BookDB {
   final CollectionReference books =
-  FirebaseFirestore.instance.collection('Books');
+      FirebaseFirestore.instance.collection('Books');
 
   final CollectionReference users =
-  FirebaseFirestore.instance.collection('Users');
-  final CollectionReference cart = FirebaseFirestore.instance.collection('Cart');
+      FirebaseFirestore.instance.collection('Users');
+  final CollectionReference cart =
+      FirebaseFirestore.instance.collection('Cart');
 
   void initializeDB() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -25,15 +26,21 @@ class BookDB {
   }
 }
 
-Future<List> getTableList(String tableName) async{
-  try{
-    final tableData = await FirebaseFirestore.instance.collection(tableName).get();
-    return tableData.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-
-  }
-  catch(e){
+Future<List> getTableList(String tableName) async {
+  try {
+    final tableData =
+        await FirebaseFirestore.instance.collection(tableName).get();
+    return tableData.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  } catch (e) {
     throw Exception(e.toString());
   }
+}
+
+updateElement(CollectionReference collection, String id, String elementName,
+    dynamic elementToChange) async {
+  await collection.doc(id).update({elementName : elementToChange});
 }
 
 getUser(List users, String wantedUser) async {
@@ -52,6 +59,7 @@ getBook(List books, String bookId) async {
     }
   }
 }
+
 /// Adds a column from the input reference collection with the inserted newObject.
 /// The object must have a toMap function.
 /// The function will return false in case of db failure
