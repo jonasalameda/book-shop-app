@@ -30,6 +30,8 @@ class _CartPageState extends State<CartPage> {
     '5',
   ];
 
+  // !!!!!!!!!
+  // ????????????????????????????
   void initState() {
     super.initState();
     getTableList('cart').then((results) {
@@ -203,71 +205,71 @@ class _CartPageState extends State<CartPage> {
     double bookPrice = 29.99;
     return ListTile(
       //TODO: fetch book link info from db
-      leading: Image(image: AssetImage('assetName')),
-      title: Text(
-        userItems['cart'][booksInCart][''],
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      subtitle: Column(
-        children: [
-          Text(
-            'Author Name',
-            style: TextStyle(fontWeight: FontWeight.w500),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Container(
-              child: Row(children: [
-            TextButton(
-                onPressed: () {
-                  setState(() {
-                    bookQuantity -= 1;
-                    cartSubtotal -= bookPrice;
-                    if (bookQuantity <= 0) {
-                      //remove book from cart table in db
-                    }
-                  });
-                },
-                child: Row(
-                  children: [
-                    Icon(Icons.delete_forever),
-                    Text('Remove'),
-                  ],
-                )),
-            SizedBox(
-              width: 10,
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  bookQuantity += 1;
-                  cartSubtotal += bookPrice;
-                });
-              },
-              child: Row(children: [
-                Icon(Icons.add),
-                Text('Add'),
-              ]),
-            )
-          ]))
-        ],
-      ),
-      trailing: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(2),
-            child: Text(bookQuantity.toString()),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.all(2),
-            child: Text(bookPrice.toString()),
-          ),
-        ],
-      ),
+      // leading: Image(image: AssetImage('assetName')),
+      // title: Text(
+      //   userItems['cart'][booksInCart][''],
+      //   style: TextStyle(fontWeight: FontWeight.bold),
+      // ),
+      // subtitle: Column(
+      //   children: [
+      //     Text(
+      //       'Author Name',
+      //       style: TextStyle(fontWeight: FontWeight.w500),
+      //     ),
+      //     SizedBox(
+      //       height: 15,
+      //     ),
+      //     Container(
+      //         child: Row(children: [
+      //       TextButton(
+      //           onPressed: () {
+      //             setState(() {
+      //               bookQuantity -= 1;
+      //               cartSubtotal -= bookPrice;
+      //               if (bookQuantity <= 0) {
+      //                 //remove book from cart table in db
+      //               }
+      //             });
+      //           },
+      //           child: Row(
+      //             children: [
+      //               Icon(Icons.delete_forever),
+      //               Text('Remove'),
+      //             ],
+      //           )),
+      //       SizedBox(
+      //         width: 10,
+      //       ),
+      //       TextButton(
+      //         onPressed: () {
+      //           setState(() {
+      //             bookQuantity += 1;
+      //             cartSubtotal += bookPrice;
+      //           });
+      //         },
+      //         child: Row(children: [
+      //           Icon(Icons.add),
+      //           Text('Add'),
+      //         ]),
+      //       )
+      //     ]))
+      //   ],
+      // ),
+      // trailing: Column(
+      //   children: [
+      //     Padding(
+      //       padding: EdgeInsets.all(2),
+      //       child: Text(bookQuantity.toString()),
+      //     ),
+      //     SizedBox(
+      //       height: 20,
+      //     ),
+      //     Padding(
+      //       padding: EdgeInsets.all(2),
+      //       child: Text(bookPrice.toString()),
+      //     ),
+      //   ],
+      // ),
     );
   }
 

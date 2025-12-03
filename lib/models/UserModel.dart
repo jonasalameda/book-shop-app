@@ -3,25 +3,25 @@ import 'BookModel.dart';
  * Here lies all functionalities/back-end logic of User class
  */
 class UserModel {
-  int customer_id;
+  String? customer_id;
   String first_name;
   String last_name;
   String phone_number;
   String email;
   String password_hash;
-  List<BookModel> wishList;
-  List<BookModel> cart;
+  List<BookModel>? wishList;
+  List<BookModel>? cart;
 
 
   UserModel(
-      this.customer_id,
+      // this.customer_id,
       this.first_name,
       this.last_name,
       this.phone_number,
       this.email,
       this.password_hash,
-      this.wishList,
-      this.cart
+      // this.wishList,
+      // this.cart
       );
 
   /// Maps without the ID

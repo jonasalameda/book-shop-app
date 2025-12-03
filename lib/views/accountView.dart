@@ -39,7 +39,7 @@ class _AccountPageState extends State<AccountPage> {
    * Update the user's wish list, remove the current book from the list
    */
   deleteSavedBook(String userId, List usersInfo) async {
-    var user = getUser(usersInfo);
+    var user = getUser(usersInfo, widget.userID);
     List savedBooks = user['wishlist'];
   }
 
