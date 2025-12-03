@@ -17,7 +17,6 @@ void main() async {
   runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashScreen(),
+        '/': (context) => const SplashScreen(),
         '/login': (context) => LogInPage(),
         '/home': (context) => DashboardPage(),
         '/registerUser': (context) => RegisterUserPage(),
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/description': (context) => DescriptionPage(),
         // add more routes as needed
       },
-      home: LogInPage(),
+      home: SplashScreen(),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mvc_application/controller.dart' show ControllerMVC;
 
 //TODO: Initialize all collections/tables
 class BookDB {
@@ -10,7 +9,8 @@ class BookDB {
 
   final CollectionReference users =
       FirebaseFirestore.instance.collection('Users');
-  final CollectionReference cart = FirebaseFirestore.instance.collection('Cart');
+  final CollectionReference cart =
+      FirebaseFirestore.instance.collection('Cart');
 
   void initializeDB() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -25,16 +25,18 @@ class BookDB {
   }
 }
 
-Future<List> getTableList(String tableName) async{
-  try{
-    final tableData = await FirebaseFirestore.instance.collection(tableName).get();
-    return tableData.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-
-  }
-  catch(e){
+Future<List> getTableList(String tableName) async {
+  try {
+    final tableData =
+        await FirebaseFirestore.instance.collection(tableName).get();
+    return tableData.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  } catch (e) {
     throw Exception(e.toString());
   }
 }
+
 /// Adds a column from the input reference collection with the inserted newObject.
 /// The object must have a toMap function.
 /// The function will return false in case of db failure
