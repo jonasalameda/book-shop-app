@@ -51,7 +51,14 @@ getUser(List users, String wantedUser) async {
   }
   // return await usersList.doc(widget.userID).get();
 }
-
+findUser(List users, String email){
+  for(int i = 0; i < users.length; i++){
+    if( users[i]['email'] == (email)){
+      return users[i]['id'];
+    }
+    return null;
+  }
+}
 getBook(List books, String bookId) async {
   for (int i = 0; i < books.length; i++) {
     if (books[i]['id'].equals(bookId)) {
