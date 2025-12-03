@@ -15,13 +15,15 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       appBar: buildAppBar(),
       backgroundColor: Color.fromARGB(255, 104, 87, 61),
-      body: DecoratedBox(
-        decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage("asset/loginPageDb.jpg")),
-        ),
-        child: Center(
+      body: Center(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/loginPageBg.jpg"),
+                fit: BoxFit.fitHeight),
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               FilledButton(
                   onPressed: () {
@@ -29,13 +31,22 @@ class _SplashScreenState extends State<SplashScreen> {
                     //     MaterialPageRoute(builder: (builder) => LogInPage()));
                     Navigator.of(context).pushNamed("/login");
                   },
+                  style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                          Color.fromRGBO(104, 87, 61, 1)),
+                      fixedSize: WidgetStatePropertyAll(Size(200, 65)),
+                      enableFeedback: true),
                   child: Text("Log in")),
               SizedBox(
                 height: 20,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("New to Ruina?"),
+                  Text(
+                    "New to Ruina? ",
+                    style: TextStyle(color: Colors.white),
+                  ),
                   Padding(
                     padding: EdgeInsetsGeometry.all(0),
                     child: Text(
@@ -43,7 +54,8 @@ class _SplashScreenState extends State<SplashScreen> {
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline),
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.white),
                     ),
                   )
                 ],
