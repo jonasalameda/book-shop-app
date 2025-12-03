@@ -32,14 +32,14 @@ class _CartPageState extends State<CartPage> {
 
   // !!!!!!!!!
   // ????????????????????????????
-  void initState() {
-    super.initState();
-    getTableList('cart').then((results) {
-      setState(() {
-        userItems = results;
-      });
-    });
-  }
+  // void initState() {
+  //   super.initState();
+  //   getTableList('cart').then((results) {
+  //     setState(() {
+  //       userItems = results;
+  //     });
+  //   });
+  // }
 
   loadBooks() {
     return Expanded(

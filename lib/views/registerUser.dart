@@ -177,7 +177,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
     final password = _confirmPasswordController.text;
 
     CollectionReference usersCollection = FirebaseFirestore.instance.collection('Users');
-    UserModel newUser = new UserModel(fName, lName, phoneNumber, email, password)
+    UserModel newUser = new UserModel(fName, lName, phoneNumber, email, password);
     addRow(usersCollection, newUser);
 
     return registerColumn;
@@ -189,7 +189,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
       appBar: buildAppBar(),
       backgroundColor: Colors.brown.shade200,
       body: Center(
-        child: buildRegisterView();
+        child: buildRegisterView(),
         // Column(
         //   mainAxisAlignment: MainAxisAlignment.center,
         //   children: [

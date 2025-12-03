@@ -6,6 +6,7 @@ import 'package:bookshop/views/registerUser.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bookshop/views/registerUser.dart';
+import 'package:bookshop/views/accountView.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
@@ -142,7 +143,7 @@ class _LogInPageState extends State<LogInPage> {
                                   });
                                 }
                                 //*Passwoed is correct!!!
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=> DashboardPage()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> AccountPage(userID: currentUserID,)));
                               }
                             },
                             style: ButtonStyle(
