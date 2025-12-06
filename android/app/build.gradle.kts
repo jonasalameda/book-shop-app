@@ -64,7 +64,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.bookshop"
+        applicationId = "com.android.application"
         minSdk = flutter.minSdkVersion
         targetSdk = 34
 
