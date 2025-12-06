@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:bookshop/userSettings.dart';
 enum Options { search, myCart, wishList, logout, filter }
 
 var _popUpMenuIndex = 0;
+var isLight = true;
 //let the App Bar control the height of the menu
 var appBarHeight = AppBar().preferredSize.height;
 
@@ -12,9 +13,9 @@ AppBar buildAppBar() {
   return AppBar(
     title: Text(
       'Library Of Ruina',
-      style: TextStyle(color: Colors.white, fontSize: 30),
+      style: TextStyle(color: getAppBarText(), fontSize: 30),
     ),
-    backgroundColor: Colors.brown.shade900,
+    backgroundColor: getAppBarBG(),
     actions: [
       PopupMenuButton(
         onSelected: (value) {
@@ -40,6 +41,10 @@ AppBar buildAppBar() {
           _buildPopUpItem('Log Out', Icons.exit_to_app, Options.logout.index),
         ],
       ),
+      Switch(
+          value: isLight, onChanged: (value){
+         isLight = changeColorTheme(isLight);
+      }),
     ],
   );
 }
