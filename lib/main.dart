@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
         '/home': (context) => DashboardPage(),
         '/registerUser': (context) => RegisterUserPage(),
         '/admin': (context) => AdminPage(),
-        '/account': (context) => AccountPage(),
-        '/cart': (context) => CartPage(),
+        // '/account': (context) => AccountPage(),
+        // '/cart': (context) => CartPage(),
         '/description': (context) => DescriptionPage(),
         // add more routes as needed
       },

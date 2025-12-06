@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:mvc_application/controller.dart' show ControllerMVC;
 
 //TODO: Initialize all collections/tables
 class BookDB {
@@ -34,6 +35,35 @@ Future<List> getTableList(String tableName) async {
         .toList();
   } catch (e) {
     throw Exception(e.toString());
+  }
+}
+
+updateElement(CollectionReference collection, String id, String elementName,
+    dynamic elementToChange) async {
+  await collection.doc(id).update({elementName : elementToChange});
+}
+
+getUser(List users, String wantedUser) async {
+  for (int i = 0; i < users.length; i++) {
+    if (users[i]['id'].equals(wantedUser)) {
+      return users[i];
+    }
+  }
+  // return await usersList.doc(widget.userID).get();
+}
+findUser(List users, String email){
+  for(int i = 0; i < users.length; i++){
+    if( users[i]['email'] == (email)){
+      return users[i]['id'];
+    }
+    return null;
+  }
+}
+getBook(List books, String bookId) async {
+  for (int i = 0; i < books.length; i++) {
+    if (books[i]['id'].equals(bookId)) {
+      return books[i];
+    }
   }
 }
 
