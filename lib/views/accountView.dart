@@ -172,7 +172,31 @@ class _AccountPageState extends State<AccountPage> {
                       ),
                     );
                   },
-                ))
+                )),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.popAndPushNamed(context, '/');
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                        Colors.brown.shade500)),
+                            child: Text(
+                              "LogOut",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ))
+                      ],
+                    )
+                  ],
+                )
               ],
             );
           },
@@ -186,11 +210,7 @@ class _AccountPageState extends State<AccountPage> {
     return Scaffold(
       appBar: buildAppBar(),
       backgroundColor: Colors.orange.shade100,
-      body: Center(
-        child: buildBodyList()
-        ),
-      );
+      body: Center(child: buildBodyList()),
+    );
   }
 }
-
-
