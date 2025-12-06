@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:bookshop/views/loginPage.dart';
+import 'package:bookshop/views/loginpage.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:bookshop/views/registerUser.dart';
 import 'package:bookshop/views/accountView.dart';
@@ -17,7 +17,6 @@ void main() async {
   runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -27,21 +26,21 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Ruina Book Store',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange.shade100),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashScreen(),
+        '/': (context) => const SplashScreen(),
         '/login': (context) => LogInPage(),
         '/home': (context) => DashboardPage(),
         '/registerUser': (context) => RegisterUserPage(),
         '/admin': (context) => AdminPage(),
-        '/account': (context) => AccountPage(),
-        '/cart': (context) => CartPage(),
+        // '/account': (context) => AccountPage(),
+        // '/cart': (context) => CartPage(),
         '/description': (context) => DescriptionPage(),
         // add more routes as needed
       },
-      home: LogInPage(),
+      home: SplashScreen(),
     );
   }
 }
