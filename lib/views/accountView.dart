@@ -78,7 +78,7 @@ class _AccountPageState extends State<AccountPage> {
                     'phone_number': customer['phone_number'],
                     'email': customer['email'],
                     'password_hash': customer['password_hash'],
-                    'wishList': customer['wishList'],
+                    'wishlist': customer['wishlist'],
                     'cart': customer['cart'],
                     'type': 'user'
                   }),
@@ -118,7 +118,7 @@ class _AccountPageState extends State<AccountPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text("Your WishList!"),
+                    Text("Your wishlist!"),
                     Icon(
                       Icons.bookmark,
                       color: Colors.redAccent,

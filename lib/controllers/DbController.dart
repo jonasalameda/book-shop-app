@@ -43,28 +43,29 @@ updateElement(CollectionReference collection, String id, String elementName,
   await collection.doc(id).update({elementName : elementToChange});
 }
 
-getUser(List users, String wantedUser) async {
+getUser(List users, String wantedUser) {
   for (int i = 0; i < users.length; i++) {
-    if (users[i]['id'].equals(wantedUser)) {
+    if (users[i]['id'] == (wantedUser)) {
       return users[i];
     }
   }
   // return await usersList.doc(widget.userID).get();
 }
-findUser(List users, String email){
+String? findUser(List users, String email){
   for(int i = 0; i < users.length; i++){
     if( users[i]['email'] == (email)){
       return users[i]['id'];
     }
-    return null;
   }
+  return null;
 }
-getBook(List books, String bookId) async {
+getBook(List books, String bookId){
   for (int i = 0; i < books.length; i++) {
-    if (books[i]['id'].equals(bookId)) {
+    if (books[i]['id'] == (bookId)) {
       return books[i];
     }
   }
+  return null;
 }
 
 /// Adds a column from the input reference collection with the inserted newObject.

@@ -20,8 +20,8 @@ class UserModel {
       this.phone_number,
       this.email,
       this.password_hash,
-      // this.wishList,
-      // this.cart
+      this.wishList,
+      this.cart
       );
 
   /// Maps without the ID

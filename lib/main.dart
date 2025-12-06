@@ -1,7 +1,9 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:bookshop/views/loginpage.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:bookshop/controllers/DbController.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:bookshop/views/loginpage.dart';
+// import 'package:bookshop/controllers/DbController.dart';
 import 'package:bookshop/views/registerUser.dart';
 import 'package:bookshop/views/accountView.dart';
 import 'package:bookshop/views/adminView.dart';
@@ -13,7 +15,17 @@ import 'package:bookshop/views/splashScreen.dart';
 String currentUserID = '';
 
 void main() async {
-  BookDB().initializeDB();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyBbuPvGLzeKv0pXmx00hlXySPxT7F8ZQcE",
+      appId: "530607033314",
+      messagingSenderId: "1:530607033314:android:f0812a8ac5623e81bd47bb",
+      projectId: "book-shop-cdfd8",
+    ),
+  );
+  // BookDB().initializeDB();
   runApp(MyApp());
 }
 
@@ -26,7 +38,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Ruina Book Store',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown.shade400),
       ),
       initialRoute: '/',
       routes: {
@@ -40,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/description': (context) => DescriptionPage(),
         // add more routes as needed
       },
-      home: SplashScreen(),
+      // home: SplashScreen(),
     );
   }
 }
