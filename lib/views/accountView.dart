@@ -184,17 +184,22 @@ class _AccountPageState extends State<AccountPage> {
                               Navigator.popAndPushNamed(context, '/');
                             },
                             style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
                                         Colors.brown.shade500)),
-                            child: Text(
-                              "LogOut",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ))
+                            child: Row(
+                              children: [
+                                Text(
+                                  "LogOut",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),),
+                                Icon(Icons.logout, color: Colors.white,)
+                              ],
+                            )),
                       ],
-                    )
+                    ),
                   ],
                 )
               ],
