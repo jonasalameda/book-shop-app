@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bookshop/models/UserModel.dart';
 
 //TODO: Initialize all collections/tables
 class BookDB {
@@ -69,3 +70,33 @@ Future<bool> updateRow(
     return false;
   }
 }
+
+Future<UserModel?> getUserById(String userId) async {
+  try {
+    final doc = await FirebaseFirestore.instance.collection('Users').doc(userId).get();
+    if (!doc.exists) return null;
+    return UserModel.fromMap(doc.data()!, doc.id);
+  } catch (e) {
+    print("Error fetching user: $e");
+    return null;
+  }
+}
+
+Future<UserModel?> getUserByEmail(String email) async {
+  try {
+    final query = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+
+    if (query.docs.isEmpty) return null;
+    final doc = query.docs.first;
+    return UserModel.fromMap(doc.data(), doc.id);
+  } catch (e) {
+    print("Error fetching user by email: $e");
+    return null;
+  }
+}
+
+

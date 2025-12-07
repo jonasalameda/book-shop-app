@@ -1,3 +1,5 @@
+import 'package:bookshop/controllers/DbController.dart';
+import 'package:bookshop/main.dart';
 import 'package:bookshop/views/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar.dart';
@@ -11,7 +13,20 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
+  void initState() {
+    super.initState();
+    _initUser();
+  }
+
+  Future<void> _initUser() async {
+    if(currentUserID.isNotEmpty) {
+      currentUser = await getUserById(currentUserID);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: buildAppBar(),
       backgroundColor: Color.fromARGB(255, 104, 87, 61),

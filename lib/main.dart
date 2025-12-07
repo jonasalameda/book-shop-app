@@ -3,6 +3,7 @@ import 'package:bookshop/controllers/DbController.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:bookshop/views/loginpage.dart';
+
 // import 'package:bookshop/controllers/DbController.dart';
 import 'package:bookshop/views/registerUser.dart';
 import 'package:bookshop/views/accountView.dart';
@@ -11,11 +12,29 @@ import 'package:bookshop/views/cartView.dart';
 import 'package:bookshop/views/dashboardView.dart';
 import 'package:bookshop/views/descriptionPage.dart';
 import 'package:bookshop/views/splashScreen.dart';
+import 'package:bookshop/models/UserModel.dart';
 
-String currentUserID = '';
+String currentUserID = "0W9tQfd131ribtU2cw4P"; //default user
+UserModel? currentUser = null;
+
+// Future<UserModel?> getCurrentUser() async {
+//
+//   List<dynamic> usersData = await getTableList("Users");
+//
+//   List<UserModel> users = usersData
+//       .map((data) => UserModel.fromMap(data))
+//       .toList();
+//
+//   for (UserModel user in users) {
+//     if (user.customer_id == currentUserID) {
+//       return user;
+//     }
+//   }
+//
+//   return null;
+// }
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
@@ -26,8 +45,28 @@ void main() async {
     ),
   );
   // BookDB().initializeDB();
+  await loadCurrentUser();
+  print("AAAAAAAAAAAAAAAA: $currentUser");
   runApp(MyApp());
+
 }
+
+// Future<void> loadCurrentUser() async {
+//   List<dynamic> usersData = await getTableList('Users');
+//   List<UserModel> users = usersData.map((data) => UserModel.fromMap(data)).toList();
+//
+//   for (UserModel user in users) {
+//     if (user.id == currentUserID) {
+//       currentUser = user;
+//       return;
+//     }
+//   }
+// }
+Future<void> loadCurrentUser() async {
+  if (currentUserID.isEmpty) return;
+  currentUser = await getUserById(currentUserID);
+}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

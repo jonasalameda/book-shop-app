@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:bookshop/appBar.dart';
+import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/models/BookModel.dart';
 import 'package:bookshop/models/UserModel.dart';
 import 'package:bookshop/controllers/DbController.dart';
@@ -110,16 +110,15 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-
-
-
-
+  int _selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
-      body: Center(
+      // backgroundColor: Color(0xFFAE9674),
+        appBar: buildAppBar(context),
+        drawer: customerDrawer(context, _selectedIndex),
+        body: Center(
         child: Column(
           children: [
             Padding(

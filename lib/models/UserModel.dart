@@ -3,7 +3,7 @@ import 'BookModel.dart';
  * Here lies all functionalities/back-end logic of User class
  */
 class UserModel {
-  int customer_id;
+  String id;
   String first_name;
   String last_name;
   String phone_number;
@@ -14,7 +14,7 @@ class UserModel {
 
 
   UserModel(
-    this.customer_id,
+    this.id,
     this.first_name,
     this.last_name,
     this.phone_number,
@@ -32,8 +32,23 @@ class UserModel {
       'phone_number': phone_number,
       'email': email,
       'password_hash': password_hash,
-      'wishList' : wishList,
-      'cart' : cart
+      'wishList' : wishList.map((book) => book.toMap()).toList(),
+      'cart' : cart.map((book) => book.toMap()).toList(),
     };
   }
+
+  UserModel.fromMap(Map<String, dynamic> map, String docId)
+      : id = docId,
+        first_name = map['first_name'],
+        last_name = map['last_name'],
+        phone_number = map['phone_number'],
+        email = map['email'],
+        password_hash = map['password_hash'],
+        wishList = (map['wishList'] as List)
+            .map((item) => BookModel.fromMap(item))
+            .toList(),
+        cart = (map['cart'] as List)
+            .map((item) => BookModel.fromMap(item))
+            .toList();
+
 }
