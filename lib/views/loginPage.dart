@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar.dart';
 import 'package:bookshop/views/registerUser.dart';
+import 'package:bookshop/main.dart';
+import 'package:bookshop/controllers/DbController.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
@@ -14,6 +16,18 @@ class _LogInPageState extends State<LogInPage> {
   final _passwordController = TextEditingController();
 
   bool _obscured = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initUser();
+  }
+
+  Future<void> _initUser() async {
+    if(currentUserID.isNotEmpty) {
+      currentUser = await getUserById(currentUserID);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
