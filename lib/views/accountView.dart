@@ -80,6 +80,7 @@ class _AccountPageState extends State<AccountPage> {
                     'password_hash': customer['password_hash'],
                     'wishlist': customer['wishlist'],
                     'cart': customer['cart'],
+                    'role': customer['role'],
                     'type': 'user'
                   }),
             ];

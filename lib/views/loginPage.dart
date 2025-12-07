@@ -72,6 +72,8 @@ class _LogInPageState extends State<LogInPage> {
                       'email': data?['email'] ?? '',
                       'password_hash': data?['password_hash'] ?? '',
                       'wishlist': data?['wishlist'] ?? [],
+                      'cart': data?['cart'] ?? [],
+                      'role':data?['role'] ?? '',
                       'type': 'user'
                     };
                   }),

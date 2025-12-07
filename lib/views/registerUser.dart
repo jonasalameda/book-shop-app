@@ -80,7 +80,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
     });
 
     try {
-      QuerySnapshot existingUser =
+      var existingUser =
       await usersCollection.where('email', isEqualTo: email).limit(1).get();
 
       if (existingUser.docs.isNotEmpty) {
@@ -94,7 +94,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
 
       // Create new user
       UserModel newUser =
-      UserModel(fName, lName, phoneNumber, email, password, [], []);
+      UserModel(fName, lName, phoneNumber, email, password, [], [], 'customer');
 
       await addRow(usersCollection, newUser);
 

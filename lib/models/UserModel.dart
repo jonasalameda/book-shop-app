@@ -11,6 +11,7 @@ class UserModel {
   String password_hash;
   List<BookModel>? wishList;
   List<BookModel>? cart;
+  String role;
 
 
   UserModel(
@@ -21,7 +22,8 @@ class UserModel {
       this.email,
       this.password_hash,
       this.wishList,
-      this.cart
+      this.cart,
+      this.role
       );
 
   /// Maps without the ID
@@ -33,7 +35,8 @@ class UserModel {
       'email': email,
       'password_hash': password_hash,
       'wishList' : wishList,
-      'cart' : cart
+      'cart' : cart,
+      'role' : role
     };
   }
 }
