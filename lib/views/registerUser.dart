@@ -5,6 +5,7 @@ import 'package:bookshop/controllers/DbController.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bookshop/models/UserModel.dart';
+import 'package:bookshop/controllers/UserController.dart';
 
 class RegisterUserPage extends StatefulWidget {
   const RegisterUserPage({super.key});
@@ -28,9 +29,15 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
   final CollectionReference usersCollection =
   FirebaseFirestore.instance.collection('Users');
 
-  // Validate email format
+  //i put it in register because i its the only time we need to validate
   bool _isValidEmail(String email) {
-    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+    final emailRegex = RegExp(r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+    return emailRegex.hasMatch(email.trim());
+  }
+
+  bool _isValidPhone(String phone){
+    final phoneRegex = RegExp(r'^[0-9]{3}-[0-9]{3}-[0-9]{4}$');
+    return phoneRegex.hasMatch(phone.trim());
   }
 
   // Handle registration
@@ -43,7 +50,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    // Validate all fields are filled
+    // make sure nothing is empty
     if (fName.isEmpty ||
         lName.isEmpty ||
         phoneNumber.isEmpty ||
@@ -54,27 +61,31 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
       return;
     }
 
-    // Validate email format
+    // check email is valid
     if (!_isValidEmail(email)) {
       _showErrorDialog('Invalid Email', 'Please enter a valid email address');
       return;
     }
-
-    // Validate password length
-    if (password.length < 6) {
-      _showErrorDialog(
-          'Weak Password', 'Password must be at least 6 characters long');
+    //check if phone is put correctly
+    if (!_isValidPhone(phoneNumber)) {
+      _showErrorDialog('Invalid Phone Format', 'Please enter your phone number in this format: 123-123-1234');
       return;
     }
 
-    // Check if passwords match
+    if (password.length < 8) {
+      _showErrorDialog(
+          'Weak Password', 'Password must be at least 8 characters long');
+      return;
+    }
+
+    // passwords have to be the same
     if (password != confirmPassword) {
       _showErrorDialog(
-          'Passwords must match', 'Passwords must match please try again');
+          'Passwords must match', 'Passwords must match please check and try again');
       return;
     }
 
-    // Check if email already exists
+    // if email exists reject adding the customer
     setState(() {
       _isLoading = true;
     });
@@ -92,18 +103,15 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
         return;
       }
 
-      // Create new user
-      UserModel newUser =
-      UserModel(fName, lName, phoneNumber, email, password, [], [], 'customer');
-
-      await addRow(usersCollection, newUser);
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      // Show success dialog
-      _showSuccessDialog();
+      // Add a new customer
+      String addingSuccess = await Usercontroller().addCustomer(fName, lName, phoneNumber, email, password);
+       if(addingSuccess.isEmpty){ //if empty registration is successful
+         setState(() {
+           _isLoading = false;
+         });
+         // show that registration was successfull
+         _showSuccessDialog();
+       }
     } catch (e) {
       setState(() {
         _isLoading = false;
