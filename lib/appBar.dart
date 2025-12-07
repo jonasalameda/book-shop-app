@@ -17,30 +17,30 @@ AppBar buildAppBar() {
     ),
     backgroundColor: getAppBarBG(),
     actions: [
-      PopupMenuButton(
-        onSelected: (value) {
-          _onMenuItemsSelected(value as int);
-        },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(8.0),
-            topLeft: Radius.circular(8.0),
-            bottomRight: Radius.circular(8.0),
-            topRight: Radius.circular(8.0),
-          ),
-        ),
-        itemBuilder: (context) => [
-          _buildPopUpItem('Search', Icons.search, Options.search.index),
-          _buildPopUpItem(
-            'Filter',
-            Icons.filter_alt_outlined,
-            Options.filter.index,
-          ),
-          _buildPopUpItem('My saved', Icons.favorite, Options.wishList.index),
-          _buildPopUpItem('My cart', Icons.shopping_cart, Options.myCart.index),
-          _buildPopUpItem('Log Out', Icons.exit_to_app, Options.logout.index),
-        ],
-      ),
+      // PopupMenuButton(
+      //   onSelected: (value) {
+      //     _onMenuItemsSelected(value as int);
+      //   },
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.only(
+      //       bottomLeft: Radius.circular(8.0),
+      //       topLeft: Radius.circular(8.0),
+      //       bottomRight: Radius.circular(8.0),
+      //       topRight: Radius.circular(8.0),
+      //     ),
+      //   ),
+      //   itemBuilder: (context) => [
+      //     _buildPopUpItem('Search', Icons.search, Options.search.index),
+      //     _buildPopUpItem(
+      //       'Filter',
+      //       Icons.filter_alt_outlined,
+      //       Options.filter.index,
+      //     ),
+      //     _buildPopUpItem('My saved', Icons.favorite, Options.wishList.index),
+      //     _buildPopUpItem('My cart', Icons.shopping_cart, Options.myCart.index),
+      //     _buildPopUpItem('Log Out', Icons.exit_to_app, Options.logout.index),
+      //   ],
+      // ),
       Switch(
           value: isLight, onChanged: (value){
          isLight = changeColorTheme(isLight);

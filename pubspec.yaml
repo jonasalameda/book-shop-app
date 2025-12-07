@@ -57,22 +57,15 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   assets:
-    - assets/bookPlacehoolder.jpg
+    - assets/bookPlaceholder.jpg
     - assets/dashboardBg.jpg
     - assets/loginPageBg.jpg
-<<<<<<< HEAD
     - assets/avatarExample.jpg
-=======
     - assets/profilePlaceHolder.jpg
->>>>>>> 5145d99d80569133e89f9a4bd22fa58f57c6ee55
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-  assets:
-    - assets/bookPlaceholder.jpg
-    - assets/dashboardBg.jpg
-    - assets/loginPageBg.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
