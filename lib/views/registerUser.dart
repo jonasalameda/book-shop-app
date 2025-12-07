@@ -105,7 +105,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
 
       // Add a new customer
       // final UserController userController = UserController();
-      String addingSuccess = await addCustomer(fName, lName, phoneNumber, email, password);
+      String addingSuccess = await Usercontroller().addCustomer(fName, lName, phoneNumber, email, password);
        if(addingSuccess.isEmpty){ //if empty registration is successful
          setState(() {
            _isLoading = false;
