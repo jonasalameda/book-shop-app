@@ -61,11 +61,13 @@ String? findUser(List users, String email){
 }
 getBook(List books, String bookId){
   for (int i = 0; i < books.length; i++) {
-    if (books[i]['id'] == (bookId)) {
+    if (books[i]['id'] == bookId) {
+      print('Found Match at index $i, ${books[i]['id']} and $bookId are the same');
       return books[i];
     }
   }
-  // return null;
+  print('No match found in list');
+  return null;
 }
 
 /// Adds a column from the input reference collection with the inserted newObject.

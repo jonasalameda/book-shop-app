@@ -139,17 +139,21 @@ class _AccountPageState extends State<AccountPage> {
                             itemCount: savedBooks.length,
                             itemBuilder: (context, i) {
                               final currentBookReference = savedBooks[i];
-                              final String currentBookIdDouble = (currentBookReference.id) as String;
-                              final String currentBookId = currentBookIdDouble;
+                              // final String currentBookIdDouble = (currentBookReference.id.toString()) as String;
+                              final String currentBookId = currentBookReference.id.toString();
                               final currentBook =
-                                  getBook(booksInfo, currentBookId.trim());
+                                  getBook(booksInfo, currentBookId);
                               if(currentBook == null){
                                 return Center(child: Column(
                                   children: [
                                     // Text(currentBookId.value.runtimeType()),
-                                    Text(currentBookId.trim()), //prints book id so that means the book list is not being fetched right
+                                    Text('${currentBookId.runtimeType}'), //prints book id so that means the book list is not being fetched right
+                                    Text('${currentBookId}'), //prints book id so that means the book list is not being fetched right
+                                    Text(savedBooks[i].toString()), //WishList List is also being fetched so not an issue
+                                    Text(currentBook.toString()),
                                     Text(booksInfo[i].toString()), //Book List is also being fetched so not an issue
-                                    Text((booksInfo[i]['id'] == currentBookId).toString()), // returns false :/
+                                    Text('${booksInfo[i]['id'].runtimeType}'), //Book List is also being fetched so not an issue
+                                    Text("${booksInfo[i]['id'] == currentBookId}"), // returns false :/
                                     CircularProgressIndicator()
                                   ]
                                 ));
