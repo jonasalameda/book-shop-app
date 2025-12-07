@@ -5,12 +5,11 @@ import 'package:bookshop/models/UserModel.dart';
 
 //TODO: Initialize all collections/tables
 class BookDB {
-  final CollectionReference books =
+  late final CollectionReference books =
       FirebaseFirestore.instance.collection('Books');
-
-  final CollectionReference users =
+  late final CollectionReference users =
       FirebaseFirestore.instance.collection('Users');
-  final CollectionReference cart =
+  late final CollectionReference cart =
       FirebaseFirestore.instance.collection('Cart');
 
   void initializeDB() async {
