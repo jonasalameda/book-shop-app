@@ -4,6 +4,7 @@ import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/models/BookModel.dart';
 import 'package:bookshop/models/UserModel.dart';
 import 'package:bookshop/controllers/DbController.dart';
+import 'package:rxdart/rxdart.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -13,10 +14,12 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+
+  final _selectedIndex = 1;
   late var booksInCart;
   double cartSubtotal = 0;
-  double federalTax = 5;
-  double provincialTax = 9.975;
+  double federalTax = 5 / 100;
+  double provincialTax = 9.975 / 100;
   late double totalCart = cartSubtotal * (federalTax + provincialTax);
 
   List<String> options = ['1', '2', '3', '4', '5',];
@@ -110,15 +113,17 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  int _selectedIndex = 1;
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color(0xFFAE9674),
-        appBar: buildAppBar(context),
-        drawer: customerDrawer(context, _selectedIndex),
-        body: Center(
+      appBar: buildAppBar(context),
+      drawer: customerDrawer(context, _selectedIndex),
+      body: Center(
         child: Column(
           children: [
             Padding(

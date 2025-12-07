@@ -60,7 +60,11 @@ flutter:
     - assets/bookPlacehoolder.jpg
     - assets/dashboardBg.jpg
     - assets/loginPageBg.jpg
+<<<<<<< HEAD
     - assets/avatarExample.jpg
+=======
+    - assets/profilePlaceHolder.jpg
+>>>>>>> 5145d99d80569133e89f9a4bd22fa58f57c6ee55
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

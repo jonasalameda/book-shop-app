@@ -1,9 +1,12 @@
 import 'BookModel.dart';
+
 /**
  * Here lies all functionalities/back-end logic of User class
  */
+enum Role { admin, customer }
+
 class UserModel {
-  String id;
+  String? id;
   String first_name;
   String last_name;
   String phone_number;
@@ -11,18 +14,19 @@ class UserModel {
   String password_hash;
   List<BookModel> wishList;
   List<BookModel> cart;
+  Role role;
 
+  UserModel(this.id, this.first_name, this.last_name, this.phone_number,
+      this.email, this.password_hash, this.wishList, this.cart, this.role);
 
-  UserModel(
-    this.id,
-    this.first_name,
-    this.last_name,
-    this.phone_number,
-    this.email,
-    this.password_hash,
-    this.wishList,
-      this.cart
-  );
+  // UserModel(
+  //   this.id,
+  //   this.first_name,
+  //   this.last_name,
+  //   this.phone_number,
+  //   this.email,
+  //   this.password_hash,
+  // ) : wishList = [], cart = [];
 
   /// Maps without the ID
   Map<String, Object?> toMap() {
@@ -32,8 +36,9 @@ class UserModel {
       'phone_number': phone_number,
       'email': email,
       'password_hash': password_hash,
-      'wishList' : wishList.map((book) => book.toMap()).toList(),
-      'cart' : cart.map((book) => book.toMap()).toList(),
+      'wishList': wishList.map((book) => book.toMap()).toList(),
+      'cart': cart.map((book) => book.toMap()).toList(),
+      'role': role
     };
   }
 
@@ -49,6 +54,6 @@ class UserModel {
             .toList(),
         cart = (map['cart'] as List)
             .map((item) => BookModel.fromMap(item))
-            .toList();
-
+            .toList(),
+        role = map['role'] ?? Role.customer;
 }
