@@ -65,7 +65,7 @@ getBook(List books, String bookId){
       return books[i];
     }
   }
-  return null;
+  // return null;
 }
 
 /// Adds a column from the input reference collection with the inserted newObject.

@@ -14,26 +14,6 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  // var usersList = FirebaseFirestore.instance.collection('Users');
-  // var usersListSnap = CombineLatestStream.list([FirebaseFirestore.instance.collection('Users').snapshots()]);
-  // late var currentUser =  usersList.doc(widget.userID).get();
-
-  // getUser(List users) async {
-  //   for (int i = 0; i < users.length; i++) {
-  //     if (users[i]['id'].equals(widget.userID)) {
-  //       return users[i];
-  //     }
-  //   }
-  //   // return await usersList.doc(widget.userID).get();
-  // }
-  //
-  // getBook(List books, String bookId) async {
-  //   for (int i = 0; i < books.length; i++) {
-  //     if (books[i]['id'].equals(bookId)) {
-  //       return books[i];
-  //     }
-  //   }
-  // }
 
   /**
    * Update the user's wish list, remove the current book from the list
@@ -56,19 +36,21 @@ class _AccountPageState extends State<AccountPage> {
             var dbUsers = snapshot.data![0].docs;
             var dbBooks = snapshot.data![1].docs;
             var booksInfo = [
-              ...dbBooks.map((book) =>
-              {
-                'id': book.id,
-                'isbn': book['isbn'],
-                'book_name': book['book_name'],
-                'author': book['author'],
-                'country': book['country'],
-                'genres': book['genres'],
-                'description': book['description'],
-                'quantity': book['quantity'],
-                'price': book['price'],
-                'available': book['available'],
-                'type': 'book'
+              ...dbBooks.map((book) {
+                var data = book.data() as Map<String, dynamic>?;
+                return {
+                  'id': book.id,
+                  'isbn': data?['isbn'] ?? '',
+                  'book_name': data?['book_name'] ?? '',
+                  'author': data?['author'] ?? '',
+                  'country': data?['country'] ?? '',
+                  'genres': data?['genres'] ?? [],
+                  'description': data?['description'] ?? '',
+                  'quantity': data?['quantity'] ?? 0,
+                  'price': data?['price'] ?? 0.00,
+                  'available': data?['available'] ?? false,
+                  'type': 'book'
+                };
               }),
             ];
             var usersInfo = [
@@ -83,7 +65,7 @@ class _AccountPageState extends State<AccountPage> {
                   'password_hash': data?['password_hash'] ?? '',
                   'wishlist': data?['wishlist'] ?? [],
                   'cart': data?['cart'] ?? [],
-                  'role':data?['role'] ?? '',
+                  'role': data?['role'] ?? '',
                   'type': 'user'
                 };
               }),
@@ -92,124 +74,168 @@ class _AccountPageState extends State<AccountPage> {
             var currentUser = getUser(usersInfo, widget.userID);
             var savedBooks = currentUser['wishlist'];
             return Column(
-            children: [
-            SizedBox(height: 10),
-            Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-            Text('Welcome back ${currentUser['first_name']} ')
-            ],
-            ),
-            Padding(
-            padding: EdgeInsets.all(10),
-            child: Row(
-            children: [
-            //TODO: image link from db
-            Image(
-            image: AssetImage('assets/bookPlacehoolder.jpg'),
-            width: 200,
-            ),
-            Column(
-            children: [
-            Text(
-            '${currentUser['last_name']}, ${currentUser['first_name']}'),
-            Text('${currentUser['email']}'),
-            Text('${currentUser['phone_number']}')
-            ],
-            )
-            ],
-            ),
-            ),
-            Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-            Text("Your wishlist!"),
-            Icon(
-            Icons.bookmark,
-            color: Colors.redAccent,
-            )
-            ],
-            ),
-            Expanded(
-            child: ListView.builder(
-            itemCount: savedBooks.length,
-            itemBuilder: (context, i) {
-            final currentBookId = savedBooks[i];
-            final currentBook = getBook(booksInfo, currentBookId);
-            return Card(
-            margin: EdgeInsets.symmetric(vertical: 2),
-            child: ListTile(
-            //TODO: put image holder or link to book image
-            leading: Image(image: AssetImage('assetName')),
-            title: Text(
-            currentBook['book_name'],
-            style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(currentBook['author']),
-            trailing: Wrap(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-            Text(currentBook['price']),
-            IconButton(
-            onPressed: () {
-            // TODO: delete the current book from the wish list
-            // deleteTask(currentTask['id']);
-            List<dynamic> cartArray = currentUser['cart'];
-            cartArray.remove(currentBookId); //???????
-            },
-            icon: Icon(
-            Icons.delete_forever,
-            color: Colors.red,
-            ),
-            ),
-            IconButton(
-            onPressed: () {
-            //TODO: put current book in cart array instead of wishlist array
-            List<dynamic> cartArray = currentUser['cart'];
-            cartArray.add(currentBookId);
-            },
-            icon: Icon(
-            Icons.add_shopping_cart,
-            color: Colors.brown,
-            ))
-            ],
-            ),
-            ),
-            );
-            },
-            )),
-            Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-            Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-            ElevatedButton(
-            onPressed: () {
-            Navigator.popAndPushNamed(context, '/');
-            },
-            style: ButtonStyle(
-            backgroundColor:
-            MaterialStateProperty.all<Color>(
-            Colors.brown.shade500)),
-            child: Row(
-            children: [
-            Text(
-            "LogOut",
-            style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 15),),
-            Icon(Icons.logout, color: Colors.white,)
-            ],
-            )),
-            ],
-            ),
-            ]
-            ,
-            )
-            ]
-            ,
+              children: [
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(height:10),
+                    Text(
+                      'Welcome back ${currentUser['first_name']} ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+               Row(
+                    children: [
+                      //TODO: image link from db if it has
+                      Image(
+                        image: AssetImage('assets/profilePlaceHolder.jpg'),
+                        width: 200,
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            '${currentUser['last_name']}, ${currentUser['first_name']}',style: TextStyle(fontSize: 20)),
+                          Text('${currentUser['email']}'),
+                          Text('${currentUser['phone_number']}')
+                        ],
+                      )
+                    ],
+                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(children: [
+                      SizedBox(width: 15),
+                      Text(
+                        "Your wishlist!",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.brown.shade900),
+                      ),
+                    ],),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.bookmark,
+                          color: Colors.redAccent,
+                          size: 30,
+                        ),
+                        SizedBox(width: 15)
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(height:15),
+                Expanded(
+                    child: savedBooks.length == 0
+                        ? Center(child:CircularProgressIndicator())
+                        : ListView.builder(
+                            itemCount: savedBooks.length,
+                            itemBuilder: (context, i) {
+                              final currentBookReference = savedBooks[i];
+                              final String currentBookIdDouble = (currentBookReference.id) as String;
+                              final String currentBookId = currentBookIdDouble;
+                              final currentBook =
+                                  getBook(booksInfo, currentBookId.trim());
+                              if(currentBook == null){
+                                return Center(child: Column(
+                                  children: [
+                                    // Text(currentBookId.value.runtimeType()),
+                                    Text(currentBookId.trim()), //prints book id so that means the book list is not being fetched right
+                                    Text(booksInfo[i].toString()), //Book List is also being fetched so not an issue
+                                    Text((booksInfo[i]['id'] == currentBookId).toString()), // returns false :/
+                                    CircularProgressIndicator()
+                                  ]
+                                ));
+                              }
+                              return Card(
+                                margin: EdgeInsets.symmetric(vertical: 2),
+                                child: ListTile(
+                                  //TODO: put image holder or link to book image
+                                  leading: Image(
+                                      image: AssetImage(
+                                          'assets/bookPlacehoolder.jpg')),
+                                  title: Text(
+                                    currentBook['book_name'],
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(currentBook['author']),
+                                  trailing: Wrap(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(currentBook['price']),
+                                      IconButton(
+                                        onPressed: () {
+                                          // TODO: delete the current book from the wish list
+                                          // deleteTask(currentTask['id']);
+                                          List<dynamic> cartArray =
+                                              currentUser['cart'];
+                                          cartArray
+                                              .remove(currentBookId); //???????
+                                        },
+                                        icon: Icon(
+                                          Icons.delete_forever,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      IconButton(
+                                          onPressed: () {
+                                            //TODO: put current book in cart array instead of wishlist array
+                                            List<dynamic> cartArray =
+                                                currentUser['cart'];
+                                            cartArray.add(currentBookId);
+                                          },
+                                          icon: Icon(
+                                            Icons.add_shopping_cart,
+                                            color: Colors.brown,
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          )),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.popAndPushNamed(context, '/');
+                            },
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.brown.shade500)),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "LogOut",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                                Icon(
+                                  Icons.logout,
+                                  color: Colors.white,
+                                )
+                              ],
+                            )),
+                      ],
+                    ),
+                  ],
+                )
+              ],
             );
           },
         ),
