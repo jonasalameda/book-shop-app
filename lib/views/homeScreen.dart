@@ -34,29 +34,42 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 50,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Flexible(
                   flex: 1,
-                  fit: FlexFit.tight,
+                  fit: FlexFit.loose,
                   child: Container(
+                    width: 500,
+                    height: 110,
                     padding: EdgeInsets.all(0),
-                    child: Text(
-                      "Featured Books",
-                      textAlign: TextAlign.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Featured Books",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 24),
+                        ),
+                      ],
                     ),
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage("assets/dashboardBg.jpg"))),
+                            image: AssetImage("assets/homeTitleDecoration.png"),
+                            fit: BoxFit.fitWidth)),
                   ),
                 ),
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 50,
             ),
 
             Row(
@@ -110,33 +123,28 @@ Widget? _generateFeatured() {
             'genres': d['genres'],
             'price': d['price'],
             'quantity': d['quantity'],
+            'image': d['image'] ?? '',
           },
         ),
       ];
+
+      print(booksMap);
       return ListView.builder(
         shrinkWrap: true,
-        itemCount: booksMap.length,
+        itemCount: FEATURED_BOOKS_LIMIT,
+        scrollDirection: Axis.horizontal,
         itemBuilder: (context, i) {
           final item = booksMap[i];
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return CheckboxListTile(
-                title: Text(item['name']),
-                onChanged: (value) {
-                  setState(() {
-                    item['done'] = value;
-                    FirebaseFirestore.instance
-                        .collection('Books')
-                        .doc(item['id'])
-                        .set(item)
-                        .onError((e, _) => item['done'] = value);
-                  });
-                },
-                value: item['done'],
-                enableFeedback: true,
-                enabled: true,
-              );
-            },
+          return Card(
+            shadowColor: Colors.black,
+            child: Column(
+              children: [
+                // booksMap['image'].isEmpty
+                // ? Image(image: AssetImage('bookPlaceholder.jpg'))
+                // : Image(image: NetworkImage(booksMap['image']))
+              ],
+            ),
+            semanticContainer: false,
           );
         },
       );

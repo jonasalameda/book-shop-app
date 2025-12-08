@@ -1,4 +1,5 @@
 import 'package:bookshop/views/dashboardView.dart';
+import 'package:bookshop/views/homeScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar.dart';
@@ -73,7 +74,7 @@ class _LogInPageState extends State<LogInPage> {
                       'password_hash': data?['password_hash'] ?? '',
                       'wishlist': data?['wishlist'] ?? [],
                       'cart': data?['cart'] ?? [],
-                      'role':data?['role'] ?? '',
+                      'role': data?['role'] ?? '',
                       'type': 'user'
                     };
                   }),
@@ -192,8 +193,8 @@ class _LogInPageState extends State<LogInPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        // builder: (context) => AccountPage(userID: currentUserID)));
-                                        builder: (context) => AccountPage()));
+                                          // builder: (context) => AccountPage(userID: currentUserID)));
+                                          builder: (context) => HomeScreen()));
                                 }
                               }
                             },
@@ -238,7 +239,7 @@ class _LogInPageState extends State<LogInPage> {
   }
 
   Future<void> _initUser() async {
-    if(currentUserID.isNotEmpty) {
+    if (currentUserID.isNotEmpty) {
       currentUser = await getUserById(currentUserID);
     }
   }
