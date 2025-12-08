@@ -23,7 +23,6 @@ class BookModel {
   /// Maps without the ID
   Map<String, Object?> toMap() {
     return {
-      'id': id,
       'isbn': isbn,
       'book_name': book_name,
       'author': author,
@@ -36,8 +35,8 @@ class BookModel {
     };
   }
 
-  BookModel.fromMap(Map<String, dynamic> map)
-      : id =  map['id'],
+  BookModel.fromMap(Map<String, dynamic> map, String docId)
+      : id = docId,
         isbn = map['isbn'],
         book_name = map['book_name'],
         author = map['author'],

@@ -1,8 +1,9 @@
 import '../models/BookModel.dart';
+import 'package:bookshop/controllers/DbController.dart';
 
 //TODO: link controller to model and view --> Better to just use the controller functions in the view no?
 /// BookController communicates with the view to render logic on the code
-class _BookController {
+class BookController {
   // List books =;
   //
   // Future<void> addBook(name, author, country, List<String> genres, description, qtt, price, available) async {
@@ -14,6 +15,14 @@ class _BookController {
   //   }
   //     await books.add({'name': name, ...});
   // }
+  Future<List<BookModel>> getAllBooks() async {
+    final List books = await getTableList("Books");
+
+    return books.map((map) => BookModel.fromMap(map)).toList()
+        // .cast<BookModel>()
+    ;
+  }
+
 }
 
 /*

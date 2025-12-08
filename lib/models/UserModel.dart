@@ -50,10 +50,10 @@ class UserModel {
         email = map['email'],
         password_hash = map['password_hash'],
         wishList = (map['wishList'] as List)
-            .map((item) => BookModel.fromMap(item))
+            .map((item) => BookModel.fromMap(item, item['id'] ?? ''))
             .toList(),
         cart = (map['cart'] as List)
-            .map((item) => BookModel.fromMap(item))
+            .map((item) => BookModel.fromMap(item, item['id'] ?? ''))
             .toList(),
         role = map['role'] ?? Role.customer;
 }
