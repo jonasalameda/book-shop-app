@@ -22,13 +22,26 @@ class _AccountPageState extends State<AccountPage> {
    */
   deleteSavedBook(String userId, List usersInfo, var bookReferenceID) async {
     var user = getUser(usersInfo, widget.userID);
-    print(user.toString());
-    List savedBooks = user['wishlist'];
-    print(savedBooks);
+    // print(user.toString());
+    // List savedBooks = user['wishlist'];
+    // print(savedBooks);
     await FirebaseFirestore.instance.collection('Users').doc(userId).update({
       'wishlist': FieldValue.arrayRemove([bookReferenceID])
     });
   }
+  // addToCart(String userId, List usersInfo, var bookReferenceID) async {
+  //   // var user = getUser(usersInfo, widget.userID);
+  //   // print(user.toString());
+  //   // // List savedBooks = user['wishlist'];
+  //   // // print(savedBooks);
+  //   // CollectionReference users = FirebaseFirestore.instance.collection('Users');
+  //   // var currentCart = [];
+  //   // var referencesList = users.doc(userId).get();
+  //   // print(referencesList.toString());
+  //   await FirebaseFirestore.instance.collection('Users').doc(userId).update({
+  //     'cart': FieldValue.arrayUnion([bookReferenceID])
+  //   });
+  // }
 
   buildBodyList() {
     return Expanded(
@@ -158,18 +171,24 @@ class _AccountPageState extends State<AccountPage> {
                               final currentBook = getBook(booksInfo, currentBookId);
                               if (currentBook == null) {
                                 return Center(
-                                    child: Column(children: [
+                                    child:SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                        child: Column(children: [
                                   // Text(currentBookId.value.runtimeType()),
-                                  Text('${currentBookId.runtimeType}'), //prints book id so that means the book list is not being fetched right
+                                  Text('${currentBookId.runtimeType}'), // prints a string so id is String but error is double
                                   Text('${currentBookId}'), //prints book id so that means the book list is not being fetched right
+                                  SizedBox(height: 30,),
                                   Text(savedBooks[i].toString()), //WishList List is also being fetched so not an issue
                                   Text(currentBook.toString()),
+                                  SizedBox(height: 30,),
                                   Text(booksInfo[i].toString()), //Book List is also being fetched so not an issue
                                   Text('${booksInfo[i]['id'].runtimeType}'), //Book List is also being fetched so not an issue
                                   Text("${booksInfo[i]['id'] == currentBookId}"), // returns false :/
+                                  // returns trueeeeeeeeee!!!
                                   CircularProgressIndicator()
-                                ]));
+                                ])));
                               }
+                              //currentBook  is not null and exists
                               return Card(
                                 margin: EdgeInsets.symmetric(vertical: 2),
                                 child: ListTile(
@@ -186,15 +205,11 @@ class _AccountPageState extends State<AccountPage> {
                                   trailing: Wrap(
                                     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Text(currentBook['price']),
+                                      Text(currentBook['price'].toString()),
                                       IconButton(
                                         onPressed: () {
                                           // TODO: delete the current book from the wish list
-                                          // deleteTask(currentTask['id']);
-                                          List<dynamic> cartArray =
-                                              currentUser['cart'];
-                                          cartArray
-                                              .remove(currentBookId); //???????
+                                          deleteSavedBook(widget.userID, usersInfo, currentBookReference);
                                         },
                                         icon: Icon(
                                           Icons.delete_forever,
@@ -202,11 +217,21 @@ class _AccountPageState extends State<AccountPage> {
                                         ),
                                       ),
                                       IconButton(
-                                          onPressed: () {
+                                          onPressed: () async {
                                             //TODO: put current book in cart array instead of wishlist array
                                             List<dynamic> cartArray =
                                                 currentUser['cart'];
-                                            cartArray.add(currentBookId);
+                                            // cartArray.add(currentBookId);
+                                            // addToCart(widget.userID, usersInfo, currentBookReference);
+                                            await FirebaseFirestore.instance.collection('Users').doc(widget.userID).update({
+                                              'cart': FieldValue.arrayUnion([currentBookReference])
+                                            });
+                                            if(cartArray.contains(currentBookReference)){
+                                              showErrorDialog('Item already in cart', 'It seems like you have already added this item to your cart', context, 'Okay');
+                                            }
+                                            else{
+                                              showSuccess('Item added Successfully', 'Item is now in your cart you can checkout', context);
+                                            }
                                           },
                                           icon: Icon(
                                             Icons.add_shopping_cart,
@@ -269,7 +294,9 @@ class _AccountPageState extends State<AccountPage> {
       drawer: customerDrawer(context, _selectedIndex),
       backgroundColor: Colors.orange.shade100,
       body: Center(child:Column(
-        children: [ buildBodyList()],
+        children: [
+          buildBodyList()
+        ],
       )),
     );
   }

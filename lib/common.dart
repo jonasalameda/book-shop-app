@@ -14,7 +14,7 @@ void unloadCurrentUser() {
   currentUserAppBar = null;
 }
 
-showErrorDialog(String error, String message, BuildContext context) {
+showErrorDialog(String error, String message,BuildContext context,[String textbutton = 'Try Again']) {
   showDialog(
       context: context,
       builder: (builder) {
@@ -24,7 +24,7 @@ showErrorDialog(String error, String message, BuildContext context) {
           actions: [
             TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text("Try Again")),
+                child: Text(textbutton)),
           ],
         );
       });
@@ -45,6 +45,28 @@ void showSuccessDialog(BuildContext context) {
               Navigator.pushReplacementNamed(context, '/login'); // Go to login
             },
             child: Text('Login Now'),
+          )
+        ],
+      );
+    },
+  );
+}
+
+
+void showSuccess(String title, String message,BuildContext context,[String textbutton = 'okay']) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+            },
+            child: Text(textbutton),
           )
         ],
       );
