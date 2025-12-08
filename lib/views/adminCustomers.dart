@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar2.dart';
-import 'package:bookshop/main.dart';
 
-class AdminPage extends StatefulWidget {
-  const AdminPage({super.key});
+class AdminCustomersPage extends StatefulWidget {
+  const AdminCustomersPage({super.key});
 
   @override
-  State<AdminPage> createState() => _AdminPageState();
+  State<AdminCustomersPage> createState() => _AdminCustomersPageState();
 }
 
-class _AdminPageState extends State<AdminPage> {
-  int _selectedIndex = 0;
+class _AdminCustomersPageState extends State<AdminCustomersPage> {
+  int _selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class _AdminPageState extends State<AdminPage> {
       body:
       Column(
         children: [
-
+            
         ],
       ),
     );

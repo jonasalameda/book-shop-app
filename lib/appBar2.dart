@@ -6,7 +6,7 @@ import 'controllers/DbController.dart';
 // enum Options {genres, authors, saved, cart, logout}
 enum Options { search, myCart, wishList, logout, filter }
 
-enum AdminOptions { search, books, archive, customers }
+enum AdminOptions { search, library, customers, logout }
 
 var _popUpMenuIndex = 0;
 int _selectedIndex = 0;
@@ -145,6 +145,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
   );
 }
 
+//enum AdminOptions { search, library, archive?, customers, logout }
 Drawer adminDrawer(BuildContext context, int selectedIndex) {
   // search, books, archive, customers
   return Drawer(
@@ -152,45 +153,68 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
       children: [
-        // const DrawerHeader(
-        //   decoration: BoxDecoration(color: Colors.blue),
-        //   child: Text('Drawer'),
+        DrawerHeader(
+          decoration: BoxDecoration(color: Color(0xFFAE9674)),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.transparent,
+                foregroundImage: AssetImage('assets/avatarExample.jpg'),
+              ),
+              SizedBox(width: 10),
+              // Use Expanded to prevent infinite width
+              Expanded(
+                child: currentUser == null
+                    ? Center(child: CircularProgressIndicator())
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${currentUser!.first_name} ${currentUser!.last_name}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            "${currentUser!.email}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+              ),
+            ],
+          ),
+        ),
+        // ListTile(
+        //   title: const Text('Home'),
+        //   selected: selectedIndex == 0,
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //     Navigator.pushNamed(context, '/library');
+        //   },
         // ),
         ListTile(
-          title: const Text('Search'),
+          title: const Text('Library'),
           selected: selectedIndex == 0,
           onTap: () {
             Navigator.pop(context);
-            // Navigator.pushNamed(context, '/logout');
+            Navigator.pushNamed(context, '/library');
           },
         ),
         ListTile(
-          title: const Text('My Cart'),
+          title: const Text('Customers'),
           selected: selectedIndex == 1,
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/cart');
-          },
-        ),
-        ListTile(
-          title: const Text('Account and Wishlist'),
-          selected: selectedIndex == 2,
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/account');
-          },
-        ),
-        ListTile(
-          title: const Text('Apply Filters'),
-          selected: selectedIndex == 3,
-          onTap: () {
-            Navigator.pop(context);
-            // Navigator.pushNamed(context, '/logout');
+            Navigator.pushNamed(context, '/adminCustomers');
           },
         ),
         ListTile(
           title: const Text('Logout'),
-          selected: selectedIndex == 4,
+          selected: selectedIndex == 2,
           onTap: () {
             currentUserID = '';
             Navigator.pop(context);
