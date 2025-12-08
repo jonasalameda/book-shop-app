@@ -5,12 +5,11 @@ import 'package:bookshop/models/UserModel.dart';
 
 //TODO: Initialize all collections/tables
 class BookDB {
-  final CollectionReference books =
+  late final CollectionReference books =
       FirebaseFirestore.instance.collection('Books');
-
-  final CollectionReference users =
+  late final CollectionReference users =
       FirebaseFirestore.instance.collection('Users');
-  final CollectionReference cart =
+  late final CollectionReference cart =
       FirebaseFirestore.instance.collection('Cart');
 
   void initializeDB() async {
@@ -36,6 +35,36 @@ Future<List> getTableList(String tableName) async {
   } catch (e) {
     throw Exception(e.toString());
   }
+}
+
+updateElement(CollectionReference collection, String id, String elementName,
+    dynamic elementToChange) async {
+  await collection.doc(id).update({elementName : elementToChange});
+}
+
+getUser(List users, String wantedUser) {
+  for (int i = 0; i < users.length; i++) {
+    if (users[i]['id'] == (wantedUser)) {
+      return users[i];
+    }
+  }
+  // return await usersList.doc(widget.userID).get();
+}
+String? findUser(List users, String email){
+  for(int i = 0; i < users.length; i++){
+    if( users[i]['email'] == (email)){
+      return users[i]['id'];
+    }
+  }
+  return null;
+}
+getBook(List books, String bookId){
+  for (int i = 0; i < books.length; i++) {
+    if (books[i]['id'] == (bookId)) {
+      return books[i];
+    }
+  }
+  // return null;
 }
 
 /// Adds a column from the input reference collection with the inserted newObject.

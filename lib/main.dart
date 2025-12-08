@@ -3,8 +3,7 @@ import 'package:bookshop/controllers/DbController.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:bookshop/views/loginpage.dart';
-
-// import 'package:bookshop/controllers/DbController.dart';
+import 'package:bookshop/controllers/DbController.dart';
 import 'package:bookshop/views/registerUser.dart';
 import 'package:bookshop/views/accountView.dart';
 import 'package:bookshop/views/adminView.dart';
@@ -35,6 +34,7 @@ UserModel? currentUser = null;
 // }
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
@@ -45,8 +45,6 @@ void main() async {
     ),
   );
   // BookDB().initializeDB();
-  await loadCurrentUser();
-  print("AAAAAAAAAAAAAAAA: $currentUser");
   runApp(MyApp());
 
 }
@@ -81,17 +79,17 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const SplashScreen(),
         '/login': (context) => LogInPage(),
         '/home': (context) => DashboardPage(),
         '/registerUser': (context) => RegisterUserPage(),
         '/admin': (context) => AdminPage(),
         '/account': (context) => AccountPage(),
+        // '/cart': (context) => CartPage(userID: currentUserId),
         '/cart': (context) => CartPage(),
         '/description': (context) => DescriptionPage(),
         // add more routes as needed
       },
-      // home: SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }
