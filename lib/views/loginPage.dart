@@ -31,23 +31,6 @@ class _LogInPageState extends State<LogInPage> {
   bool verifyPassword(String passwordInDB, String inputPassword) {
     return passwordInDB == inputPassword;
   }
-
-  _showErrorDialog(String error, String message) {
-    showDialog(
-        context: context,
-        builder: (builder) {
-          return AlertDialog(
-            title: Text(error),
-            content: Text(message),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text("Try Again"))
-            ],
-          );
-        });
-  }
-
   buildLoginPage() {
     return Expanded(
         child: Padding(
@@ -143,8 +126,8 @@ class _LogInPageState extends State<LogInPage> {
                               final userEmail = _emailController.text.toLowerCase();
                               final userPassword = _passwordController.text;
                               if (userEmail.isEmpty || userPassword.isEmpty) {
-                                _showErrorDialog('Empty Fields',
-                                    'Please enter both email and password');
+                                showErrorDialog('Empty Fields',
+                                    'Please enter both email and password', context);
                               }
                               String userID = findUser(
                                   usersList, userEmail)!;
@@ -191,8 +174,8 @@ class _LogInPageState extends State<LogInPage> {
                                     currentUser['password_hash'], userPassword);
                                 // User exists but password is incorrect
                                 if (!isCorrectPassword) {
-                                  _showErrorDialog('Password incorrect',
-                                      'Oops! Seems like it was the wrong password');
+                                  showErrorDialog('Password incorrect',
+                                      'Oops! Seems like it was the wrong password', context);
                                 } else {
                                   // Password is correct
                                   Navigator.push(

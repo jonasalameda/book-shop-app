@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bookshop/models/UserModel.dart';
 import 'package:bookshop/controllers/UserController.dart';
+import 'package:bookshop/common.dart';
 
 class RegisterUserPage extends StatefulWidget {
   const RegisterUserPage({super.key});
@@ -57,31 +58,31 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
         email.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty) {
-      _showErrorDialog('Empty Fields', 'Please fill in all fields');
+      showErrorDialog('Empty Fields', 'Please fill in all fields', context);
       return;
     }
 
     // check email is valid
     if (!_isValidEmail(email)) {
-      _showErrorDialog('Invalid Email', 'Please enter a valid email address');
+      showErrorDialog('Invalid Email', 'Please enter a valid email address', context);
       return;
     }
     //check if phone is put correctly
     if (!_isValidPhone(phoneNumber)) {
-      _showErrorDialog('Invalid Phone Format', 'Please enter your phone number in this format: 123-123-1234');
+      showErrorDialog('Invalid Phone Format', 'Please enter your phone number in this format: 123-123-1234', context);
       return;
     }
 
     if (password.length < 8) {
-      _showErrorDialog(
-          'Weak Password', 'Password must be at least 8 characters long');
+      showErrorDialog(
+          'Weak Password', 'Password must be at least 8 characters long', context);
       return;
     }
 
     // passwords have to be the same
     if (password != confirmPassword) {
-      _showErrorDialog(
-          'Passwords must match', 'Passwords must match please check and try again');
+      showErrorDialog(
+          'Passwords must match', 'Passwords must match please check and try again', context);
       return;
     }
 
@@ -98,8 +99,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
         setState(() {
           _isLoading = false;
         });
-        _showErrorDialog('Email Already Exists',
-            'An account with this email already exists. Please login instead.');
+        showErrorDialog('Email Already Exists',
+            'An account with this email already exists. Please login instead.', context);
         return;
       }
 
@@ -110,56 +111,15 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
            _isLoading = false;
          });
          // show that registration was successfull
-         _showSuccessDialog();
+         showSuccessDialog(context);
        }
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
-      _showErrorDialog('Registration Error', 'An error occurred: $e');
+      showErrorDialog('Registration Error', 'An error occurred: $e', context);
     }
   }
-
-  void _showErrorDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Try again'),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Registration Successful!'),
-          content: Text('Your account has been created. Please login.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
-                Navigator.pushReplacementNamed(context, '/login'); // Go to login
-              },
-              child: Text('Login Now'),
-            )
-          ],
-        );
-      },
-    );
-  }
-
   @override
   void dispose() {
     // Clean up controllers

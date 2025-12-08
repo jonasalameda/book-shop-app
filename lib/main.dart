@@ -16,8 +16,8 @@ import 'package:bookshop/views/splashScreen.dart';
 String? currentUserID;
 
 
-void main() async {
-  loadCurrentUser();
+Future<void> main() async {
+  await loadCurrentUser();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
