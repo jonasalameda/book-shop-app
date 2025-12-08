@@ -7,6 +7,7 @@ import 'package:bookshop/models/BookModel.dart';
 import 'package:bookshop/models/UserModel.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:bookshop/common.dart';
 
 class CartPage extends StatefulWidget {
   final String userID;
@@ -18,36 +19,41 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  CollectionReference allBooks =  FirebaseFirestore.instance.collection('Books');
+  CollectionReference allBooks = FirebaseFirestore.instance.collection('Books');
   final _selectedIndex = 1;
   late var booksInCart;
-  double cartSubtotal = 0;
-  double federalTax = 5 / 100;
-  double provincialTax = 9.975 / 100;
-  late double totalCart = cartSubtotal * (federalTax + provincialTax);
+  late double cartSubtotal = 0;
+  late double federalTax = 0;
+  late double provincialTax = 0;
+  late double totalCart = 0;
 
   /**
    * Update the user's wish list, remove the current book from the list
    */
-  Future<void>deleteBookFromCart(String userId, List usersInfo, var bookReferenceID) async {
+  Future<void> deleteBookFromCart(
+      String userId, List usersInfo, var bookReferenceID) async {
     var user = getUser(usersInfo, widget.userID);
     // List booksInCart = user['cart'];
-      try {
+    try {
       await FirebaseFirestore.instance.collection('Users').doc(userId).update({
         'cart': FieldValue.arrayRemove([bookReferenceID])
       });
+    } catch (e) {
+      log(e.toString());
     }
-      catch(e){
-        log(e.toString());
-      }
   }
 
-  Future<void> decreaseBookQuantity( int currentQuantity,
-       String currentBookID) async {
+  Future<bool> decreaseBookQuantity(
+      int currentQuantity, String currentBookID) async {
+    if(currentQuantity <= 0){
+      // showErrorDialog("Sorry can't checkout", "We are currently out of stock for this item please come back another time", context);
+      return false;
+    }
     int newBookQuantity = currentQuantity - 1;
     await updateElement(allBooks, currentBookID, 'quantity', newBookQuantity);
-    // return newBookQuantity;
+    return true;
   }
+
   loadBooks() {
     return Expanded(
       child: Padding(
@@ -101,21 +107,31 @@ class _CartPageState extends State<CartPage> {
               var userCart = currentUser['cart'];
               // String? bookId;
 
-              for(var bookRef in userCart){
-                var bookId = bookRef.id;
-                var book = getBook(booksInfo, bookId!);
-                if(book != null){
-                  cartSubtotal += (book['price'] as num).toDouble();
+              double setcartSubtotal() {
+                double subtotal = 0;
+                for (var bookRef in userCart) {
+                  var bookId = bookRef.id;
+                  var book = getBook(booksInfo, bookId!);
+                  if (book != null) {
+                    subtotal += (book['price'] as num).toDouble();
+                  }
                 }
+                return subtotal;
               }
+
               return Column(
                 children: [
-                  SizedBox(height: 15,),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       //TODO either fetch image file from user or put a aplace holder
-                      Image(image: AssetImage('assets/profilePlaceHolder.jpg'), width: 200,),
+                      Image(
+                        image: AssetImage('assets/profilePlaceHolder.jpg'),
+                        width: 200,
+                      ),
                       Column(
                         children: [
                           Text(
@@ -123,146 +139,225 @@ class _CartPageState extends State<CartPage> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           ),
-                          Text(currentUser['phone_number'], style: TextStyle(fontSize: 15),),
-                          Text(currentUser['email'], style: TextStyle(fontSize: 15),),
-                          Text('Montreal, QC', style: TextStyle(fontSize: 15),),
+                          Text(
+                            currentUser['phone_number'],
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          Text(
+                            currentUser['email'],
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          Text(
+                            'Montreal, QC',
+                            style: TextStyle(fontSize: 15),
+                          ),
                         ],
                       )
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
+
                   // Text(userCart.toString()),
                   // Text(currentUser.toString()),
                   // is workin now
                   // Text(bookId.toString()),
-                  // Text(cartSubtotal.toStringAsFixed(2)), !!!can access the price
-                  Column(
-                    children: [
-                      Expanded(
-                          child: userCart.length == 0 ? Center(child: Text('Your cart is currently empty')) : ListView.builder(
+                  // Text(cartSubtotal.toStringAsFixed(2)), //!!!can access the price
+                  Row(
+                    children: [Text("Your Cart:")],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  // Column(children: [
+                  Expanded(
+                      child: userCart.length == 0
+                          ? Center(child: Text('Your cart is currently empty'))
+                          : ListView.builder(
                               itemCount: userCart.length,
                               itemBuilder: (context, i) {
                                 final currentBookReference = userCart[i];
-                                final String currentBookId = currentBookReference.id;
-                                final currentBookInfo = getBook(booksInfo, currentBookId);
-                                final bookQuantity = currentBookInfo['quantity'];
+                                final String currentBookId =
+                                    currentBookReference.id;
+                                final currentBookInfo =
+                                    getBook(booksInfo, currentBookId);
+                                final bookQuantity =
+                                    currentBookInfo['quantity'];
                                 final bookPrice = currentBookInfo['price'];
-                                final bookImage = AssetImage( 'assets/bookPlacehoolder.jpg');
+                                final bookImage = currentBookInfo['image']?? 'assets/bookPlacehoolder.jpg';
+                                cartSubtotal = setcartSubtotal();
+                                federalTax = 5 / 100 * cartSubtotal;
+                                provincialTax = 9.975 / 100 * cartSubtotal;
+                                totalCart =
+                                    cartSubtotal + federalTax + provincialTax;
 
                                 return Card(
+                                  margin: EdgeInsets.symmetric(vertical: 2),
                                   child: ListTile(
-                                    leading: Image(image: bookImage, width: 100,),
-                                    title: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(currentBookInfo['book_name'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                        Text(currentBookInfo['author'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-                                      ],
+                                    //TODO: put image holder or link to book image
+                                    leading: Image(
+                                        image: AssetImage(
+                                            bookImage)),
+                                    title: Text(
+                                      currentBookInfo['book_name'],
+                                      style:
+                                      TextStyle(fontWeight: FontWeight.bold),
                                     ),
-                                    subtitle: Column(
+                                    subtitle: Text(currentBookInfo['author']),
+                                    trailing: Wrap(
+                                      direction: Axis.vertical,
+                                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Text(currentBookInfo['isbn'],style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400)),
                                         IconButton(
-                                          onPressed: ()=>deleteBookFromCart(widget.userID, usersInfo, currentBookReference),
+                                          onPressed: () {
+                                            // TODO: delete the current book from the wish list
+                                            deleteBookFromCart(widget.userID, usersInfo, currentBookReference);
+                                            setcartSubtotal();
+                                          },
                                           icon: Icon(
-                                            Icons.delete_forever_outlined,
+                                            Icons.delete_forever,
                                             color: Colors.red,
                                           ),
-                                          tooltip: 'Remove from cart',)
-                                      ],
-                                    ),
-                                    trailing: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
+                                        ),
                                         Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.brown.shade300,
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          // ! it is referencing the amount of books in stock
-                                          child: Text('Currently in Stock: $bookQuantity'),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          bookPrice,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        )
+                                                decoration: BoxDecoration(
+                                                  color: Colors.brown.shade300,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                // ! it is referencing the amount of books in stock
+                                                child: Text(
+                                                    'Currently in Stock: $bookQuantity', style: TextStyle(fontSize: 12),),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                bookPrice.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
                                       ],
                                     ),
                                   ),
                                 );
-                              })
+                              })),
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Subtotal: ',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Subtotal: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
-                          Text('\$${cartSubtotal.toStringAsFixed(2)}: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
-                        ],
+                      Text(
+                        '\$${cartSubtotal.toStringAsFixed(2)}: ',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w700),
                       ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Federal Tax (5%): ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
-                          Text('\$${federalTax.toStringAsFixed(2)}: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Provincial Tax (9.975%): ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
-                          Text('\$${provincialTax.toStringAsFixed(2)}: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Total (5%): ', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
-                          Text('\$${totalCart.toStringAsFixed(2)}: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Flexible(
-                        fit: FlexFit.tight,
-                          child: ElevatedButton(
-                          onPressed: (){
-                            for(var bookRef in userCart){
-                              var bookId = bookRef.id;
-                              var book = getBook(booksInfo, bookId);
-                              if(book != null){
-                                decreaseBookQuantity(book['quantity'], bookId);
-                              }
-                            }
-                            // decreaseBookQuantity(books, booksInfo['quantit'], currentBookID)
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.brown.shade700
-                          ),
-                          child: Text('CheckOut', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-              ))
                     ],
-                  )
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Federal Tax (5%): ',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        '\$${(cartSubtotal * (5 / 100)).toStringAsFixed(2)}: ',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Provincial Tax (9.975%): ',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        '\$${provincialTax.toStringAsFixed(2)}: ',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total: ',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '\$${totalCart.toStringAsFixed(2)}: ',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Flexible(
+                      fit: FlexFit.tight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async{
+                              var itemsInStock;
+                              for (var bookRef in userCart) {
+                                var bookId = bookRef.id;
+                                var book = getBook(booksInfo, bookId);
+                                if (book != null) {
+                                itemsInStock = await  decreaseBookQuantity(
+                                      book['quantity'], bookId);
+                                }
+                              }
+                              if(itemsInStock){
+                                showSuccess(
+                                    'Order Received',
+                                    'Thank you for choosing the library of Ruina \n Your total is ${totalCart.toStringAsFixed(2)}',
+                                    context,
+                                    'Proceed with payment');
+                                cartSubtotal = 0;
+                              }
+                              else{
+                                showErrorDialog("Error", "Some of the items in your cart are currently out of stock please try again later", context);
+                              }
+
+                              // decreaseBookQuantity(books, booksInfo['quantit'], currentBookID)
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.brown.shade700,
+                                minimumSize: Size(300, 100)),
+                            child: Text(
+                              'CheckOut',
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      ))
+                  // ],)
                 ],
               );
             }),
       ),
     );
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
