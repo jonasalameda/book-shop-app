@@ -6,11 +6,11 @@ import 'package:bookshop/models/UserModel.dart';
 //TODO: Initialize all collections/tables
 class BookDB {
   late final CollectionReference books =
-  FirebaseFirestore.instance.collection('Books');
+      FirebaseFirestore.instance.collection('Books');
   late final CollectionReference users =
-  FirebaseFirestore.instance.collection('Users');
+      FirebaseFirestore.instance.collection('Users');
   late final CollectionReference cart =
-  FirebaseFirestore.instance.collection('Cart');
+      FirebaseFirestore.instance.collection('Cart');
 
   void initializeDB() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +28,7 @@ class BookDB {
 Future<List> getTableList(String tableName) async {
   try {
     final tableData =
-    await FirebaseFirestore.instance.collection(tableName).get();
+        await FirebaseFirestore.instance.collection(tableName).get();
     return tableData.docs
         .map((doc) => doc.data() as Map<String, dynamic>)
         .toList();
@@ -39,7 +39,7 @@ Future<List> getTableList(String tableName) async {
 
 updateElement(CollectionReference collection, String id, String elementName,
     dynamic elementToChange) async {
-  await collection.doc(id).update({elementName : elementToChange});
+  await collection.doc(id).update({elementName: elementToChange});
 }
 
 getUser(List users, String wantedUser) {
@@ -50,15 +50,17 @@ getUser(List users, String wantedUser) {
   }
   // return await usersList.doc(widget.userID).get();
 }
-String? findUser(List users, String email){
-  for(int i = 0; i < users.length; i++){
-    if( users[i]['email'] == (email)){
+
+String? findUser(List users, String email) {
+  for (int i = 0; i < users.length; i++) {
+    if (users[i]['email'] == (email)) {
       return users[i]['id'];
     }
   }
   return null;
 }
-getBook(List books, String bookId){
+
+getBook(List books, String bookId) {
   for (int i = 0; i < books.length; i++) {
     if (books[i]['id'] == (bookId)) {
       return books[i];
@@ -75,6 +77,7 @@ Future<bool> addRow(CollectionReference collection, newObject) async {
     await collection.add(newObject.toMap());
     return true;
   } catch (e) {
+    print(e.toString());
     return false;
   }
 }
@@ -102,7 +105,8 @@ Future<bool> updateRow(
 
 Future<UserModel?> getUserById(String userId) async {
   try {
-    final doc = await FirebaseFirestore.instance.collection('Users').doc(userId).get();
+    final doc =
+        await FirebaseFirestore.instance.collection('Users').doc(userId).get();
     if (!doc.exists) return null;
     return UserModel.fromMap(doc.data()!, doc.id);
   } catch (e) {

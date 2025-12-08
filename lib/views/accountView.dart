@@ -15,7 +15,6 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-
   final _selectedIndex = 2;
 
   /**
@@ -24,10 +23,7 @@ class _AccountPageState extends State<AccountPage> {
   deleteSavedBook(String userId, List usersInfo, var bookReferenceID) async {
     var user = getUser(usersInfo, widget.userID);
     // List savedBooks = user['wishlist'];
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(userId)
-        .update({
+    await FirebaseFirestore.instance.collection('Users').doc(userId).update({
       'wishlist': FieldValue.arrayRemove([bookReferenceID])
     });
   }
@@ -79,17 +75,17 @@ class _AccountPageState extends State<AccountPage> {
                 };
               }),
             ];
-
             // loadCurrentUser();
             var currentUser = getUser(usersInfo, widget.userID);
             var savedBooks = currentUser['wishlist'];
+
             return Column(
               children: [
                 SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height:10),
+                    SizedBox(height: 10),
                     Text(
                       'Welcome back ${currentUser['first_name']} ',
                       style: TextStyle(
@@ -99,34 +95,39 @@ class _AccountPageState extends State<AccountPage> {
                     )
                   ],
                 ),
-               Row(
-                    children: [
-                      //TODO: image link from db if it has
-                      Image(image: AssetImage('assets/profilePlaceHolder.jpg'),
-                        width: 200,),
-                      Column(
-                        children: [
-                          Text(
-                            '${currentUser['last_name']}, ${currentUser['first_name']}',style: TextStyle(fontSize: 20)),
-                          Text('${currentUser['email']}'),
-                          Text('${currentUser['phone_number']}')
-                        ],
-                      )
-                    ],
-                  ),
+                Row(
+                  children: [
+                    //TODO: image link from db if it has
+                    Image(
+                      image: AssetImage('assets/profilePlaceHolder.jpg'),
+                      width: 200,
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                            '${currentUser['last_name']}, ${currentUser['first_name']}',
+                            style: TextStyle(fontSize: 20)),
+                        Text('${currentUser['email']}'),
+                        Text('${currentUser['phone_number']}')
+                      ],
+                    )
+                  ],
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(children: [
-                      SizedBox(width: 15),
-                      Text(
-                        "Your wishlist!",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.brown.shade900),
-                      ),
-                    ],),
+                    Row(
+                      children: [
+                        SizedBox(width: 15),
+                        Text(
+                          "Your wishlist!",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown.shade900),
+                        ),
+                      ],
+                    ),
                     Row(
                       children: [
                         Icon(
@@ -139,32 +140,38 @@ class _AccountPageState extends State<AccountPage> {
                     )
                   ],
                 ),
-                SizedBox(height:15),
+                SizedBox(height: 15),
                 Expanded(
                     child: savedBooks.length == 0
-                        ? Center(child:CircularProgressIndicator())
+                        ? Center(child: CircularProgressIndicator())
                         : ListView.builder(
                             itemCount: savedBooks.length,
                             itemBuilder: (context, i) {
                               final currentBookReference = savedBooks[i];
                               // final String currentBookIdDouble = (currentBookReference.id.toString()) as String;
-                              final String currentBookId = currentBookReference.id.toString();
+                              final String currentBookId =
+                                  currentBookReference.id.toString();
                               final currentBook =
                                   getBook(booksInfo, currentBookId);
-                              if(currentBook == null){
-                                return Center(child: Column(
-                                  children: [
-                                    // Text(currentBookId.value.runtimeType()),
-                                    Text('${currentBookId.runtimeType}'), //prints book id so that means the book list is not being fetched right
-                                    Text('${currentBookId}'), //prints book id so that means the book list is not being fetched right
-                                    Text(savedBooks[i].toString()), //WishList List is also being fetched so not an issue
-                                    Text(currentBook.toString()),
-                                    Text(booksInfo[i].toString()), //Book List is also being fetched so not an issue
-                                    Text('${booksInfo[i]['id'].runtimeType}'), //Book List is also being fetched so not an issue
-                                    Text("${booksInfo[i]['id'] == currentBookId}"), // returns false :/
-                                    CircularProgressIndicator()
-                                  ]
-                                ));
+                              if (currentBook == null) {
+                                return Center(
+                                    child: Column(children: [
+                                  // Text(currentBookId.value.runtimeType()),
+                                  Text(
+                                      '${currentBookId.runtimeType}'), //prints book id so that means the book list is not being fetched right
+                                  Text(
+                                      '${currentBookId}'), //prints book id so that means the book list is not being fetched right
+                                  Text(savedBooks[i]
+                                      .toString()), //WishList List is also being fetched so not an issue
+                                  Text(currentBook.toString()),
+                                  Text(booksInfo[i]
+                                      .toString()), //Book List is also being fetched so not an issue
+                                  Text(
+                                      '${booksInfo[i]['id'].runtimeType}'), //Book List is also being fetched so not an issue
+                                  Text(
+                                      "${booksInfo[i]['id'] == currentBookId}"), // returns false :/
+                                  CircularProgressIndicator()
+                                ]));
                               }
                               return Card(
                                 margin: EdgeInsets.symmetric(vertical: 2),

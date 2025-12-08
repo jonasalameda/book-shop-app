@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 Future<void> loadCurrentUser() async {
   // currentUserID = userID;
-  if (currentUserID!.isEmpty) return;
+  if (currentUserID == null) return;
   currentUserAppBar = await getUserById(currentUserID!);
 }
 

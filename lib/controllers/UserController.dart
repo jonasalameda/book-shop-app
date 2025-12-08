@@ -57,7 +57,8 @@ class Usercontroller {
         password,
         [],
         [],
-        Role.customer);
+        Role.customer.toString());
+
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
     try {
@@ -67,5 +68,4 @@ class Usercontroller {
     }
     return ""; // Empty string means success
   }
-
 }

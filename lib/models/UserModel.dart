@@ -14,7 +14,7 @@ class UserModel {
   String password_hash;
   List<BookModel> wishList;
   List<BookModel> cart;
-  Role role;
+  String role;
 
   UserModel(this.id, this.first_name, this.last_name, this.phone_number,
       this.email, this.password_hash, this.wishList, this.cart, this.role);
@@ -38,7 +38,7 @@ class UserModel {
       'password_hash': password_hash,
       'wishList': wishList.map((book) => book.toMap()).toList(),
       'cart': cart.map((book) => book.toMap()).toList(),
-      'role': role
+      'role': role.toString()
     };
   }
 
@@ -55,5 +55,5 @@ class UserModel {
         cart = (map['cart'] as List)
             .map((item) => BookModel.fromMap(item))
             .toList(),
-        role = map['role'] ?? Role.customer;
+        role = map['role'] ?? Role.customer.toString();
 }
