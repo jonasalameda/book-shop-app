@@ -4,7 +4,7 @@ import 'main.dart';
 import 'controllers/DbController.dart';
 
 // enum Options {genres, authors, saved, cart, logout}
-enum Options { search, myCart, wishList, logout, filter }
+enum Options { search, myCart, wishList, logout, filter, home }
 
 enum AdminOptions { search, library, customers, logout }
 
@@ -140,6 +140,15 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
+        ListTile(
+          title: const Text('Home'),
+          selected: selectedIndex == 5,
+          onTap: () {
+            currentUserID = '';
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/home');
+          },
+        ),
       ],
     ),
   );
@@ -217,8 +226,17 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           selected: selectedIndex == 2,
           onTap: () {
             currentUserID = '';
+            currentUser = null;
             Navigator.pop(context);
             Navigator.pushNamed(context, '/login');
+          },
+        ),
+        ListTile(
+          title: const Text('Home'),
+          selected: selectedIndex == 5,
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/home');
           },
         ),
       ],

@@ -3,9 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar.dart';
 import 'package:bookshop/views/registerUser.dart';
+import 'package:bookshop/main.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:bookshop/views/registerUser.dart';
 import 'package:bookshop/views/accountView.dart';
 
 class LogInPage extends StatefulWidget {
@@ -229,6 +229,18 @@ class _LogInPageState extends State<LogInPage> {
                 return loginColumnView;
               },
             )));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initUser();
+  }
+
+  Future<void> _initUser() async {
+    if(currentUserID.isNotEmpty) {
+      currentUser = await getUserById(currentUserID);
+    }
   }
 
   @override
