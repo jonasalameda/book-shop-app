@@ -22,7 +22,9 @@ class _AccountPageState extends State<AccountPage> {
    */
   deleteSavedBook(String userId, List usersInfo, var bookReferenceID) async {
     var user = getUser(usersInfo, widget.userID);
-    // List savedBooks = user['wishlist'];
+    print(user.toString());
+    List savedBooks = user['wishlist'];
+    print(savedBooks);
     await FirebaseFirestore.instance.collection('Users').doc(userId).update({
       'wishlist': FieldValue.arrayRemove([bookReferenceID])
     });
@@ -143,33 +145,28 @@ class _AccountPageState extends State<AccountPage> {
                 SizedBox(height: 15),
                 Expanded(
                     child: savedBooks.length == 0
-                        ? Center(child: CircularProgressIndicator())
+                        ? Center(
+                        child: Column(
+                        children:[
+                          CircularProgressIndicator()]))
                         : ListView.builder(
                             itemCount: savedBooks.length,
                             itemBuilder: (context, i) {
                               final currentBookReference = savedBooks[i];
                               // final String currentBookIdDouble = (currentBookReference.id.toString()) as String;
-                              final String currentBookId =
-                                  currentBookReference.id.toString();
-                              final currentBook =
-                                  getBook(booksInfo, currentBookId);
+                              final String currentBookId = currentBookReference.id.toString();
+                              final currentBook = getBook(booksInfo, currentBookId);
                               if (currentBook == null) {
                                 return Center(
                                     child: Column(children: [
                                   // Text(currentBookId.value.runtimeType()),
-                                  Text(
-                                      '${currentBookId.runtimeType}'), //prints book id so that means the book list is not being fetched right
-                                  Text(
-                                      '${currentBookId}'), //prints book id so that means the book list is not being fetched right
-                                  Text(savedBooks[i]
-                                      .toString()), //WishList List is also being fetched so not an issue
+                                  Text('${currentBookId.runtimeType}'), //prints book id so that means the book list is not being fetched right
+                                  Text('${currentBookId}'), //prints book id so that means the book list is not being fetched right
+                                  Text(savedBooks[i].toString()), //WishList List is also being fetched so not an issue
                                   Text(currentBook.toString()),
-                                  Text(booksInfo[i]
-                                      .toString()), //Book List is also being fetched so not an issue
-                                  Text(
-                                      '${booksInfo[i]['id'].runtimeType}'), //Book List is also being fetched so not an issue
-                                  Text(
-                                      "${booksInfo[i]['id'] == currentBookId}"), // returns false :/
+                                  Text(booksInfo[i].toString()), //Book List is also being fetched so not an issue
+                                  Text('${booksInfo[i]['id'].runtimeType}'), //Book List is also being fetched so not an issue
+                                  Text("${booksInfo[i]['id'] == currentBookId}"), // returns false :/
                                   CircularProgressIndicator()
                                 ]));
                               }
@@ -271,7 +268,9 @@ class _AccountPageState extends State<AccountPage> {
       appBar: buildAppBar(context),
       drawer: customerDrawer(context, _selectedIndex),
       backgroundColor: Colors.orange.shade100,
-      body: Center(child: buildBodyList()),
+      body: Center(child:Column(
+        children: [ buildBodyList()],
+      )),
     );
   }
 }

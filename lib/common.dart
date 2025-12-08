@@ -24,7 +24,7 @@ showErrorDialog(String error, String message, BuildContext context) {
           actions: [
             TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text("Try Again"))
+                child: Text("Try Again")),
           ],
         );
       });

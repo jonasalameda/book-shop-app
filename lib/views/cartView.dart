@@ -99,10 +99,11 @@ class _CartPageState extends State<CartPage> {
 
               var currentUser = getUser(usersInfo, widget.userID);
               var userCart = currentUser['cart'];
+              // String? bookId;
 
               for(var bookRef in userCart){
                 var bookId = bookRef.id;
-                var book = getBook(booksInfo, bookId);
+                var book = getBook(booksInfo, bookId!);
                 if(book != null){
                   cartSubtotal += (book['price'] as num).toDouble();
                 }
@@ -132,76 +133,74 @@ class _CartPageState extends State<CartPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  Expanded(
-                      child: userCart.length == 0 ? Center(child: Text('Your cart is currently empty')) : ListView.builder(
-                          itemCount: userCart.lenght,
-                          itemBuilder: (context, i) {
-                            final currentBookReference = userCart[i];
-                            final String currentBookId = currentBookReference.id;
-                            final currentBookInfo = getBook(booksInfo, currentBookId);
-                            final bookQuantity = currentBookInfo['quantity'];
-                            final bookPrice = currentBookInfo['price'];
-                            final bookImage = AssetImage( 'assets/bookPlacehoolder.jpg');
-
-                            return Card(
-                              child: ListTile(
-                                leading: Image(image: bookImage, width: 100,),
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(currentBookInfo['book_name'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                    Text(currentBookInfo['author'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-                                  ],
-                                ),
-                                subtitle: Column(
-                                  children: [
-                                    //TODO discuss book quantity inside the cart
-                                    // IconButton(onPressed: decreaseBookQuantity(bookQuantity, ), icon: icon)
-                                    // IconButton(
-                                    //     onPressed: () {},
-                                    //     icon: Icon(
-                                    //       Icons.add_box,
-                                    //       color: Colors.brown,
-                                    //     )),
-                                    Text(currentBookInfo['isbn'],style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400)),
-                                    IconButton(
-                                        onPressed: ()=>deleteBookFromCart(widget.userID, usersInfo, currentBookReference),
-                                        icon: Icon(
-                                          Icons.delete_forever_outlined,
-                                          color: Colors.red,
-                                        ),
-                                      tooltip: 'Remove from cart',)
-                                  ],
-                                ),
-                                trailing: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.brown.shade300,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      // ! it is referencing the amount of books in stock
-                                      child: Text('Currently in Stock: $bookQuantity'),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      bookPrice,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          })
-                  ),
+                  // Text(userCart.toString()),
+                  // Text(currentUser.toString()),
+                  // is workin now
+                  // Text(bookId.toString()),
+                  // Text(cartSubtotal.toStringAsFixed(2)), !!!can access the price
                   Column(
                     children: [
+                      Expanded(
+                          child: userCart.length == 0 ? Center(child: Text('Your cart is currently empty')) : ListView.builder(
+                              itemCount: userCart.length,
+                              itemBuilder: (context, i) {
+                                final currentBookReference = userCart[i];
+                                final String currentBookId = currentBookReference.id;
+                                final currentBookInfo = getBook(booksInfo, currentBookId);
+                                final bookQuantity = currentBookInfo['quantity'];
+                                final bookPrice = currentBookInfo['price'];
+                                final bookImage = AssetImage( 'assets/bookPlacehoolder.jpg');
+
+                                return Card(
+                                  child: ListTile(
+                                    leading: Image(image: bookImage, width: 100,),
+                                    title: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(currentBookInfo['book_name'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                        Text(currentBookInfo['author'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                                      ],
+                                    ),
+                                    subtitle: Column(
+                                      children: [
+                                        Text(currentBookInfo['isbn'],style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400)),
+                                        IconButton(
+                                          onPressed: ()=>deleteBookFromCart(widget.userID, usersInfo, currentBookReference),
+                                          icon: Icon(
+                                            Icons.delete_forever_outlined,
+                                            color: Colors.red,
+                                          ),
+                                          tooltip: 'Remove from cart',)
+                                      ],
+                                    ),
+                                    trailing: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.brown.shade300,
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          // ! it is referencing the amount of books in stock
+                                          child: Text('Currently in Stock: $bookQuantity'),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          bookPrice,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              })
+                      ),
+                      SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -272,7 +271,7 @@ class _CartPageState extends State<CartPage> {
       drawer: customerDrawer(context, _selectedIndex),
       backgroundColor: Colors.orange.shade100,
       body: Center(
-        child: loadBooks(),
+        child: Column(children: [loadBooks()]),
       ),
     );
   }

@@ -129,12 +129,16 @@ class _LogInPageState extends State<LogInPage> {
                                 showErrorDialog('Empty Fields',
                                     'Please enter both email and password', context);
                               }
-                              String userID = findUser(
-                                  usersList, userEmail)!;
+                              String? userID = findUser(
+                                  usersList, userEmail);
                                currentUserID = userID; // Changed to nullable
 
+                              //needed to check
+                              // print(userID);
+                              // showErrorDialog(userID.toString(), usersList.toString(), context);
                               await loadCurrentUser();
-                              if (currentUserID == null) {
+                              if (userID == null) {
+                                //showErrorDialog('User is not registered', 'Sorry to inform you, we do not have an account registered to this email please check again or register today!', context);
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -226,7 +230,10 @@ class _LogInPageState extends State<LogInPage> {
       appBar: buildAppBar(context),
       backgroundColor: Colors.brown.shade200,
       body: Center(
-        child: buildLoginPage(),
+
+        child: SingleChildScrollView(
+          child: buildLoginPage(),
+        ),
       ),
     );
   }
