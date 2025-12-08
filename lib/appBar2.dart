@@ -19,10 +19,7 @@ var appBarHeight = AppBar().preferredSize.height;
 
 final String title = "";
 
-
-
 AppBar buildAppBar(BuildContext context) {
-
   return AppBar(
     backgroundColor: barColor,
     title: const Text(
@@ -82,22 +79,22 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
                 child: currentUser == null
                     ? Center(child: CircularProgressIndicator())
                     : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "${currentUser!.first_name} ${currentUser!.last_name}",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                    Text(
-                      "${currentUser!.email}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${currentUser!.first_name} ${currentUser!.last_name}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            "${currentUser!.email}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),
