@@ -47,189 +47,194 @@ class _LogInPageState extends State<LogInPage> {
   }
 
   buildLoginPage() {
-    return Expanded(
-        child: Padding(
-            padding: EdgeInsets.all(10),
-            child: StreamBuilder<List<QuerySnapshot>>(
-              stream: CombineLatestStream.list([allUsers.snapshots()]),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
+    return Column(children: [
+      Expanded(
+          child: Padding(
+              padding: EdgeInsets.all(10),
+              child: StreamBuilder<List<QuerySnapshot>>(
+                stream: CombineLatestStream.list([allUsers.snapshots()]),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
 
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                }
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
 
-                var dbUsers = snapshot.data![0].docs;
-                var usersList = [
-                  ...dbUsers.map((customer) {
-                    var data = customer.data() as Map<String, dynamic>?;
-                    return {
-                      'id': customer.id,
-                      'first_name': data?['first_name'] ?? '',
-                      'last_name': data?['last_name'] ?? '',
-                      'phone_number': data?['phone_number'] ?? '',
-                      'email': data?['email'] ?? '',
-                      'password_hash': data?['password_hash'] ?? '',
-                      'wishlist': data?['wishlist'] ?? [],
-                      'cart': data?['cart'] ?? [],
-                      'role': data?['role'] ?? '',
-                      'type': 'user'
-                    };
-                  }),
-                ];
+                  var dbUsers = snapshot.data![0].docs;
+                  var usersList = [
+                    ...dbUsers.map((customer) {
+                      var data = customer.data() as Map<String, dynamic>?;
+                      return {
+                        'id': customer.id,
+                        'first_name': data?['first_name'] ?? '',
+                        'last_name': data?['last_name'] ?? '',
+                        'phone_number': data?['phone_number'] ?? '',
+                        'email': data?['email'] ?? '',
+                        'password_hash': data?['password_hash'] ?? '',
+                        'wishlist': data?['wishlist'] ?? [],
+                        'cart': data?['cart'] ?? [],
+                        'role': data?['role'] ?? '',
+                        'type': 'user'
+                      };
+                    }),
+                  ];
 
-                var loginColumnView = Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.yellow.shade50,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: TextField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            labelText: 'Email:',
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.all(10),
+                  var loginColumnView = Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.yellow.shade50,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: TextField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              labelText: 'Email:',
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.all(10),
+                            ),
+                            keyboardType: TextInputType.emailAddress,
                           ),
-                          keyboardType: TextInputType.emailAddress,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.yellow.shade50,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: TextField(
-                          controller: _passwordController,
-                          obscureText: _obscured,
-                          decoration: InputDecoration(
-                            labelText: 'Password:',
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.all(10),
-                            suffixIcon: IconButton(
+                      Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.yellow.shade50,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: TextField(
+                            controller: _passwordController,
+                            obscureText: _obscured,
+                            decoration: InputDecoration(
+                              labelText: 'Password:',
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.all(10),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _obscured = !_obscured;
+                                  });
+                                },
+                                icon: Icon(
+                                  _obscured
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.brown,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 35),
+                      Row(
+                        children: [
+                          SizedBox(width: 30),
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: ElevatedButton(
                               onPressed: () {
-                                setState(() {
-                                  _obscured = !_obscured;
-                                });
-                              },
-                              icon: Icon(
-                                _obscured
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Colors.brown,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 35),
-                    Row(
-                      children: [
-                        SizedBox(width: 30),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              final userEmail = _emailController.text;
-                              final userPassword = _passwordController.text;
-                              if (userEmail.isEmpty || userPassword.isEmpty) {
-                                _showErrorDialog('Empty Fields',
-                                    'Please enter both email and password');
-                              }
-                              String? currentUserID = findUser(
-                                  usersList, userEmail); // Changed to nullable
-
-                              if (currentUserID == null) {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text('User is not registered'),
-                                        content: Text(
-                                            'Sorry to inform you, we do not have an account '
-                                            'registered to this email please check again or register today!'),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () =>
-                                                  Navigator.of(context).pop(),
-                                              child: Text('Try again')),
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            RegisterUserPage()));
-                                              },
-                                              child: Text(
-                                                'Register Now',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ))
-                                        ],
-                                      );
-                                    });
-                              } else {
-                                var currentUser =
-                                    getUser(usersList, currentUserID);
-
-                                bool isCorrectPassword = verifyPassword(
-                                    currentUser['password_hash'], userPassword);
-                                // User exists but password is incorrect
-                                if (!isCorrectPassword) {
-                                  _showErrorDialog('Password incorrect',
-                                      'Oops! Seems like it was the wrong password');
-                                } else {
-                                  // Password is correct
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          // builder: (context) => AccountPage(userID: currentUserID)));
-                                          builder: (context) => HomeScreen()));
+                                final userEmail = _emailController.text;
+                                final userPassword = _passwordController.text;
+                                if (userEmail.isEmpty || userPassword.isEmpty) {
+                                  _showErrorDialog('Empty Fields',
+                                      'Please enter both email and password');
                                 }
-                              }
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.brown.shade500,
+                                String? currentUserID = findUser(usersList,
+                                    userEmail); // Changed to nullable
+
+                                if (currentUserID == null) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('User is not registered'),
+                                          content: Text(
+                                              'Sorry to inform you, we do not have an account '
+                                              'registered to this email please check again or register today!'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                child: Text('Try again')),
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              RegisterUserPage()));
+                                                },
+                                                child: Text(
+                                                  'Register Now',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ))
+                                          ],
+                                        );
+                                      });
+                                } else {
+                                  var currentUser =
+                                      getUser(usersList, currentUserID);
+
+                                  bool isCorrectPassword = verifyPassword(
+                                      currentUser['password_hash'],
+                                      userPassword);
+                                  // User exists but password is incorrect
+                                  if (!isCorrectPassword) {
+                                    _showErrorDialog('Password incorrect',
+                                        'Oops! Seems like it was the wrong password');
+                                  } else {
+                                    // Password is correct
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            // builder: (context) => AccountPage(userID: currentUserID)));
+                                            builder: (context) =>
+                                                HomeScreen()));
+                                  }
+                                }
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Colors.brown.shade500,
+                                ),
                               ),
-                            ),
-                            child: Text(
-                              'Login',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30,
-                                color: Colors.white,
+                              child: Text(
+                                'Login',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    TextButton(
-                      onPressed: () =>
-                          Navigator.popAndPushNamed(context, '/registerUser'),
-                      child: Text(
-                        'New to Ruina?',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        ],
                       ),
-                    ),
-                    SizedBox(width: 40),
-                  ],
-                );
-                return loginColumnView;
-              },
-            )));
+                      SizedBox(height: 10),
+                      TextButton(
+                        onPressed: () =>
+                            Navigator.popAndPushNamed(context, '/registerUser'),
+                        child: Text(
+                          'New to Ruina?',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                    ],
+                  );
+                  return loginColumnView;
+                },
+              )))
+    ]);
   }
 
   @override

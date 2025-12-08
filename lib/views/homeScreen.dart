@@ -71,22 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 50,
             ),
-
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsetsGeometry.all(8.0),
-                  child: _generateFeatured(),
-                )
-              ],
+            Padding(
+              padding: EdgeInsetsGeometry.all(8.0),
+              child: _generateFeatured(),
             )
-            // ListView.builder(
-            //   shrinkWrap: true,
-            //   scrollDirection: Axis.horizontal,
-            //     itemCount: FEATURED_BOOKS_LIMIT,
-            //     itemBuilder: (builder, index) {
-
-            //     })
           ],
         ),
       ),
@@ -95,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 Widget? _generateFeatured() {
-  StreamBuilder<List<QuerySnapshot>>(
+  return StreamBuilder<List<QuerySnapshot>>(
     // time to use combinedstream from RXdart
     stream: CombineLatestStream.list([
       FirebaseFirestore.instance
@@ -104,11 +92,20 @@ Widget? _generateFeatured() {
           .snapshots(),
     ]),
     builder: (context, snapshot) {
+      print('firebase alguma ocisa aqui');
+      print(FirebaseFirestore.instance
+          .collection('Books')
+          .orderBy("name")
+          .snapshots());
       if (!snapshot.hasData) {
+        print(
+            'a todos os agentes da overwatch, aqui é o wintom haha... obviamente');
         return Center(child: CircularProgressIndicator());
       }
-      var booksData = snapshot.data![0].docs;
 
+      print('roda... viva??');
+      var booksData = snapshot.data![0].docs;
+      print(booksData.toString());
       //merge into one combined list
       var booksMap = [
         // use spread operator
@@ -127,26 +124,34 @@ Widget? _generateFeatured() {
           },
         ),
       ];
-
+      print('maps aqui ooo');
       print(booksMap);
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: FEATURED_BOOKS_LIMIT,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, i) {
-          final item = booksMap[i];
-          return Card(
-            shadowColor: Colors.black,
-            child: Column(
-              children: [
-                // booksMap['image'].isEmpty
-                // ? Image(image: AssetImage('bookPlaceholder.jpg'))
-                // : Image(image: NetworkImage(booksMap['image']))
-              ],
-            ),
-            semanticContainer: false,
-          );
-        },
+      return Container(
+        width: double.infinity,
+        height: 200.0,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: booksMap.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, i) {
+            final item = booksMap[i];
+            return Card(
+              semanticContainer: false,
+              shadowColor: Colors.black,
+              child: Column(
+                children: [
+                  item['image'].isEmpty
+                      ? Image(image: AssetImage('bookPlaceholder.jpg'))
+                      : Image(
+                          image: NetworkImage(item['image']),
+                          width: 100,
+                          height: 100,
+                        )
+                ],
+              ),
+            );
+          },
+        ),
       );
     },
   );

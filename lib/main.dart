@@ -15,9 +15,7 @@ import 'package:bookshop/models/UserModel.dart';
 String currentUserID = "0W9tQfd131ribtU2cw4P"; //default user
 UserModel? currentUser = null;
 
-
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
@@ -29,14 +27,12 @@ void main() async {
   );
   // BookDB().initializeDB();
   runApp(MyApp());
-
 }
 
 Future<void> loadCurrentUser() async {
   if (currentUserID.isEmpty) return;
   currentUser = await getUserById(currentUserID);
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -49,7 +45,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown.shade400),
       ),
-      initialRoute: '/',
       routes: {
         '/login': (context) => LogInPage(),
         '/home': (context) => DashboardPage(),
