@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:bookshop/appBar.dart';
+import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:bookshop/common.dart';
 
 class AccountPage extends StatefulWidget {
   final String userID;
@@ -15,12 +16,20 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
 
+  final _selectedIndex = 2;
+
   /**
    * Update the user's wish list, remove the current book from the list
    */
-  deleteSavedBook(String userId, List usersInfo) async {
+  deleteSavedBook(String userId, List usersInfo, var bookReferenceID) async {
     var user = getUser(usersInfo, widget.userID);
-    List savedBooks = user['wishlist'];
+    // List savedBooks = user['wishlist'];
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .update({
+      'wishlist': FieldValue.arrayRemove([bookReferenceID])
+    });
   }
 
   buildBodyList() {
@@ -71,6 +80,7 @@ class _AccountPageState extends State<AccountPage> {
               }),
             ];
 
+            // loadCurrentUser();
             var currentUser = getUser(usersInfo, widget.userID);
             var savedBooks = currentUser['wishlist'];
             return Column(
@@ -92,10 +102,8 @@ class _AccountPageState extends State<AccountPage> {
                Row(
                     children: [
                       //TODO: image link from db if it has
-                      Image(
-                        image: AssetImage('assets/profilePlaceHolder.jpg'),
-                        width: 200,
-                      ),
+                      Image(image: AssetImage('assets/profilePlaceHolder.jpg'),
+                        width: 200,),
                       Column(
                         children: [
                           Text(
@@ -214,6 +222,9 @@ class _AccountPageState extends State<AccountPage> {
                       children: [
                         ElevatedButton(
                             onPressed: () {
+                              unloadCurrentUser();
+                              Navigator.pop(context);
+                              // Navigator.pushNamed(context, '/login');
                               Navigator.popAndPushNamed(context, '/');
                             },
                             style: ButtonStyle(
@@ -250,7 +261,8 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context),
+      drawer: customerDrawer(context, _selectedIndex),
       backgroundColor: Colors.orange.shade100,
       body: Center(child: buildBodyList()),
     );

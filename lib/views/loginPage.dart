@@ -1,12 +1,15 @@
 import 'package:bookshop/views/dashboardView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:bookshop/appBar.dart';
+// import 'package:bookshop/appBar.dart';
 import 'package:bookshop/views/registerUser.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bookshop/views/registerUser.dart';
 import 'package:bookshop/views/accountView.dart';
+import 'package:bookshop/main.dart';
+import 'package:bookshop/appBar2.dart';
+import 'package:bookshop/common.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
@@ -136,16 +139,18 @@ class _LogInPageState extends State<LogInPage> {
                         Flexible(
                           fit: FlexFit.tight,
                           child: ElevatedButton(
-                            onPressed: () {
-                              final userEmail = _emailController.text;
+                            onPressed: () async {
+                              final userEmail = _emailController.text.toLowerCase();
                               final userPassword = _passwordController.text;
                               if (userEmail.isEmpty || userPassword.isEmpty) {
                                 _showErrorDialog('Empty Fields',
                                     'Please enter both email and password');
                               }
-                              String? currentUserID = findUser(
-                                  usersList, userEmail); // Changed to nullable
+                              String userID = findUser(
+                                  usersList, userEmail)!;
+                               currentUserID = userID; // Changed to nullable
 
+                              await loadCurrentUser();
                               if (currentUserID == null) {
                                 showDialog(
                                     context: context,
@@ -179,8 +184,9 @@ class _LogInPageState extends State<LogInPage> {
                                     });
                               } else {
                                 var currentUser =
-                                    getUser(usersList, currentUserID);
+                                    getUser(usersList, currentUserID!);
 
+                                 await loadCurrentUser();
                                 bool isCorrectPassword = verifyPassword(
                                     currentUser['password_hash'], userPassword);
                                 // User exists but password is incorrect
@@ -193,7 +199,7 @@ class _LogInPageState extends State<LogInPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => AccountPage(
-                                              userID: currentUserID)));
+                                              userID: currentUserID!)));
                                 }
                               }
                             },
@@ -234,7 +240,7 @@ class _LogInPageState extends State<LogInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context),
       backgroundColor: Colors.brown.shade200,
       body: Center(
         child: buildLoginPage(),

@@ -1,24 +1,13 @@
-import '../models/BookModel.dart';
+/**
+ * Here lies all functionalities/back-end logic of Book class
+ */
 
-//TODO: link controller to model and view --> Better to just use the controller functions in the view no?
-/// BookController communicates with the view to render logic on the code
-class _BookController {
-  // List books =;
-  //
-  // Future<void> addBook(name, author, country, List<String> genres, description, qtt, price, available) async {
-  //   try{
-  //     _BookModel _newBook = new _BookModel(name, author, country, genres, description, qtt, price, available);
-  //   } catch(Exception) {
-  //     print('invalid Fields');
-  //     return;
-  //   }
-  //     await books.add({'name': name, ...});
-  // }
-}
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-/*
-class _BookModel {
-  int book_id;
+class BookModel {
+  String id;
+  int isbn;
   String book_name;
   String author;
   String country;
@@ -27,4 +16,35 @@ class _BookModel {
   int quantity;
   double price;
   bool available;
- */
+
+  BookModel(this.id, this.isbn, this.book_name, this.author, this.country, this.genres,
+      this.description, this.quantity, this.price, this.available);
+
+  /// Maps without the ID
+  Map<String, Object?> toMap() {
+    return {
+      'id': id,
+      'isbn': isbn,
+      'book_name': book_name,
+      'author': author,
+      'country': country,
+      'genres': genres,
+      'description': description,
+      'quantity': quantity,
+      'price': price,
+      'available': available,
+    };
+  }
+
+  BookModel.fromMap(Map<String, dynamic> map)
+      : id =  map['id'],
+        isbn = map['isbn'],
+        book_name = map['book_name'],
+        author = map['author'],
+        country = map['country'],
+        genres = List<String>.from(map['genres'] ?? []),
+        description = map['description'],
+        quantity = map['quantity'],
+        price = map['price'].toDouble(),
+        available = map['available'];
+}

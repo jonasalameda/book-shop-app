@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:bookshop/views/loginpage.dart';
 // import 'package:bookshop/controllers/DbController.dart';
+import 'common.dart';
 import 'package:bookshop/views/registerUser.dart';
 import 'package:bookshop/views/accountView.dart';
 import 'package:bookshop/views/adminView.dart';
@@ -12,10 +13,11 @@ import 'package:bookshop/views/dashboardView.dart';
 import 'package:bookshop/views/descriptionPage.dart';
 import 'package:bookshop/views/splashScreen.dart';
 
-String currentUserID = '';
+String? currentUserID;
+
 
 void main() async {
-
+  loadCurrentUser();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
@@ -47,8 +49,8 @@ class MyApp extends StatelessWidget {
         '/home': (context) => DashboardPage(),
         '/registerUser': (context) => RegisterUserPage(),
         '/admin': (context) => AdminPage(),
-        // '/account': (context) => AccountPage(),
-        // '/cart': (context) => CartPage(),
+        '/account': (context) => AccountPage(userID: currentUserID!,),
+        '/cart': (context) => CartPage(userID: currentUserID!,),
         '/description': (context) => DescriptionPage(),
         // add more routes as needed
       },

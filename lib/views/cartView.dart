@@ -1,6 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:bookshop/appBar.dart';
+import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/models/BookModel.dart';
 import 'package:bookshop/models/UserModel.dart';
 import 'package:bookshop/controllers/DbController.dart';
@@ -16,31 +18,36 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  CollectionReference allBooks =  FirebaseFirestore.instance.collection('Books');
+  final _selectedIndex = 1;
   late var booksInCart;
   double cartSubtotal = 0;
   double federalTax = 5 / 100;
   double provincialTax = 9.975 / 100;
   late double totalCart = cartSubtotal * (federalTax + provincialTax);
 
-  List<String> options = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-  ];
+  /**
+   * Update the user's wish list, remove the current book from the list
+   */
+  Future<void>deleteBookFromCart(String userId, List usersInfo, var bookReferenceID) async {
+    var user = getUser(usersInfo, widget.userID);
+    // List booksInCart = user['cart'];
+      try {
+      await FirebaseFirestore.instance.collection('Users').doc(userId).update({
+        'cart': FieldValue.arrayRemove([bookReferenceID])
+      });
+    }
+      catch(e){
+        log(e.toString());
+      }
+  }
 
-  // !!!!!!!!!
-  // ????????????????????????????
-  // void initState() {
-  //   super.initState();
-  //   getTableList('cart').then((results) {
-  //     setState(() {
-  //       userItems = results;
-  //     });
-  //   });
-  // }
-
+  Future<void> decreaseBookQuantity( int currentQuantity,
+       String currentBookID) async {
+    int newBookQuantity = currentQuantity - 1;
+    await updateElement(allBooks, currentBookID, 'quantity', newBookQuantity);
+    // return newBookQuantity;
+  }
   loadBooks() {
     return Expanded(
       child: Padding(
@@ -55,55 +62,59 @@ class _CartPageState extends State<CartPage> {
               var dbBooks = snapshot.data![1].docs;
 
               var usersInfo = [
-                ...dbUsers.map((usr) => {
-                      'id': usr.id,
-                      'first_name': usr['first_name'],
-                      'last_name': usr['last_name'],
-                      'phone_number': usr['phone_number'],
-                      'email': usr['email'],
-                      'password_hash': usr['password_hash'],
-                      'wishList': usr['wishList'],
-                      'cart': usr['cart'],
-                      'type': 'user'
-                    })
+                ...dbUsers.map((customer) {
+                  var data = customer.data() as Map<String, dynamic>?;
+                  return {
+                    'id': customer.id,
+                    'first_name': data?['first_name'] ?? '',
+                    'last_name': data?['last_name'] ?? '',
+                    'phone_number': data?['phone_number'] ?? '',
+                    'email': data?['email'] ?? '',
+                    'password_hash': data?['password_hash'] ?? '',
+                    'wishlist': data?['wishlist'] ?? [],
+                    'cart': data?['cart'] ?? [],
+                    'role': data?['role'] ?? '',
+                    'type': 'user'
+                  };
+                }),
               ];
-
               var booksInfo = [
-                ...dbBooks.map((book) => {
-                      'id': book.id,
-                      'isbn': book['isbn'],
-                      'book_name': book['book_name'],
-                      'author': book['author'],
-                      'country': book['country'],
-                      'genres': book['genres'],
-                      'description': book['description'],
-                      'quantity': book['quantity'],
-                      'price': book['price'],
-                      'available': book['available'],
-                      'type': 'book'
-                    }),
+                ...dbBooks.map((book) {
+                  var data = book.data() as Map<String, dynamic>?;
+                  return {
+                    'id': book.id,
+                    'isbn': data?['isbn'] ?? '',
+                    'book_name': data?['book_name'] ?? '',
+                    'author': data?['author'] ?? '',
+                    'country': data?['country'] ?? '',
+                    'genres': data?['genres'] ?? [],
+                    'description': data?['description'] ?? '',
+                    'quantity': data?['quantity'] ?? 0,
+                    'price': data?['price'] ?? 0.00,
+                    'available': data?['available'] ?? false,
+                    'type': 'book'
+                  };
+                }),
               ];
 
               var currentUser = getUser(usersInfo, widget.userID);
-              var usersCart = currentUser['cart'];
+              var userCart = currentUser['cart'];
 
+              for(var bookRef in userCart){
+                var bookId = bookRef.id;
+                var book = getBook(booksInfo, bookId);
+                if(book != null){
+                  cartSubtotal += (book['price'] as num).toDouble();
+                }
+              }
               return Column(
                 children: [
-                  SizedBox(
-                    height: 30,
-                  ),
+                  SizedBox(height: 15,),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        children: [
-                          //TODO either fetch image file from user or put a aplace holder
-                          Image(image: AssetImage('assetName')),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
+                      //TODO either fetch image file from user or put a aplace holder
+                      Image(image: AssetImage('assets/profilePlaceHolder.jpg'), width: 200,),
                       Column(
                         children: [
                           Text(
@@ -111,18 +122,9 @@ class _CartPageState extends State<CartPage> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           ),
-                          Text(
-                            currentUser['address'],
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(
-                            currentUser['phone_number'],
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(
-                            'Montreal, QC',
-                            style: TextStyle(fontSize: 15),
-                          ),
+                          Text(currentUser['phone_number'], style: TextStyle(fontSize: 15),),
+                          Text(currentUser['email'], style: TextStyle(fontSize: 15),),
+                          Text('Montreal, QC', style: TextStyle(fontSize: 15),),
                         ],
                       )
                     ],
@@ -131,59 +133,127 @@ class _CartPageState extends State<CartPage> {
                     height: 20,
                   ),
                   Expanded(
-                      child: ListView.builder(
-                          itemCount: usersCart.lenght,
+                      child: userCart.length == 0 ? Center(child: Text('Your cart is currently empty')) : ListView.builder(
+                          itemCount: userCart.lenght,
                           itemBuilder: (context, i) {
-                            final currentBookInCart = usersCart[i];
-                            final currentBookInfo =
-                                getBook(booksInfo, currentBookInCart);
+                            final currentBookReference = userCart[i];
+                            final String currentBookId = currentBookReference.id;
+                            final currentBookInfo = getBook(booksInfo, currentBookId);
                             final bookQuantity = currentBookInfo['quantity'];
                             final bookPrice = currentBookInfo['price'];
-                            final bookImage = currentBookInfo['book_image'];
+                            final bookImage = AssetImage( 'assets/bookPlacehoolder.jpg');
 
-                            return ListTile(
-                              leading: Image(image: AssetImage(bookImage)),
-                              title: Column(
-                                children: [
-                                  Text(currentBookInfo['book_name']),
-                                  Text(currentBookInfo['author']),
-                                ],
-                              ),
-                              subtitle: Wrap(
-                                children: [
-                                  //TODO discuss book quantity inside the cart
-                                  // IconButton(onPressed: decreaseBookQuantity(bookQuantity, ), icon: icon)
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.add_box,
-                                        color: Colors.brown,
-                                      )),
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.delete_forever_outlined,
-                                        color: Colors.red,
-                                      ))
-                                ],
-                              ),
-                              trailing: Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.brown.shade300,
-                                      borderRadius: BorderRadius.circular(10),
+                            return Card(
+                              child: ListTile(
+                                leading: Image(image: bookImage, width: 100,),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(currentBookInfo['book_name'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                    Text(currentBookInfo['author'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                                  ],
+                                ),
+                                subtitle: Column(
+                                  children: [
+                                    //TODO discuss book quantity inside the cart
+                                    // IconButton(onPressed: decreaseBookQuantity(bookQuantity, ), icon: icon)
+                                    // IconButton(
+                                    //     onPressed: () {},
+                                    //     icon: Icon(
+                                    //       Icons.add_box,
+                                    //       color: Colors.brown,
+                                    //     )),
+                                    Text(currentBookInfo['isbn'],style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400)),
+                                    IconButton(
+                                        onPressed: ()=>deleteBookFromCart(widget.userID, usersInfo, currentBookReference),
+                                        icon: Icon(
+                                          Icons.delete_forever_outlined,
+                                          color: Colors.red,
+                                        ),
+                                      tooltip: 'Remove from cart',)
+                                  ],
+                                ),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.brown.shade300,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      // ! it is referencing the amount of books in stock
+                                      child: Text('Currently in Stock: $bookQuantity'),
                                     ),
-                                    //TODO !!!! this is wrong it is supposed to be the amount of books in the crt
-                                    // TODO but it is referencing the amount of books in stock
-                                    child: Text(bookQuantity),
-                                  ),
-                                  SizedBox(height: 30,),
-                                  Text(bookPrice, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)
-                                ],
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      bookPrice,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               ),
                             );
-                          }))
+                          })
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Subtotal: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
+                          Text('\$${cartSubtotal.toStringAsFixed(2)}: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Federal Tax (5%): ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
+                          Text('\$${federalTax.toStringAsFixed(2)}: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Provincial Tax (9.975%): ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
+                          Text('\$${provincialTax.toStringAsFixed(2)}: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Total (5%): ', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                          Text('\$${totalCart.toStringAsFixed(2)}: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Flexible(
+                        fit: FlexFit.tight,
+                          child: ElevatedButton(
+                          onPressed: (){
+                            for(var bookRef in userCart){
+                              var bookId = bookRef.id;
+                              var book = getBook(booksInfo, bookId);
+                              if(book != null){
+                                decreaseBookQuantity(book['quantity'], bookId);
+                              }
+                            }
+                            // decreaseBookQuantity(books, booksInfo['quantit'], currentBookID)
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.brown.shade700
+                          ),
+                          child: Text('CheckOut', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+              ))
+                    ],
+                  )
                 ],
               );
             }),
@@ -191,125 +261,18 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  int decreaseBookQuantity(CollectionReference books, int currentQuantity, int booksCheckedOut, String currentBookID){
-    int newBookQuantity =  currentQuantity - booksCheckedOut;
-    updateElement(books, currentBookID , 'quantity', newBookQuantity);
-    return newBookQuantity;
-  }
 
-  //TODO:get user information from database and store it in variable
-  ListTile bookInfoCart() {
-    //TODO:fetch book quantity from db
-    // int bookQuantity = bookInfo['quantity'];
-    //TODO:fetch book price from db
-    double bookPrice = 29.99;
-    return ListTile(
-      //TODO: fetch book link info from db
-      // leading: Image(image: AssetImage('assetName')),
-      // title: Text(
-      //   userItems['cart'][booksInCart][''],
-      //   style: TextStyle(fontWeight: FontWeight.bold),
-      // ),
-      // subtitle: Column(
-      //   children: [
-      //     Text(
-      //       'Author Name',
-      //       style: TextStyle(fontWeight: FontWeight.w500),
-      //     ),
-      //     SizedBox(
-      //       height: 15,
-      //     ),
-      //     Container(
-      //         child: Row(children: [
-      //       TextButton(
-      //           onPressed: () {
-      //             setState(() {
-      //               bookQuantity -= 1;
-      //               cartSubtotal -= bookPrice;
-      //               if (bookQuantity <= 0) {
-      //                 //remove book from cart table in db
-      //               }
-      //             });
-      //           },
-      //           child: Row(
-      //             children: [
-      //               Icon(Icons.delete_forever),
-      //               Text('Remove'),
-      //             ],
-      //           )),
-      //       SizedBox(
-      //         width: 10,
-      //       ),
-      //       TextButton(
-      //         onPressed: () {
-      //           setState(() {
-      //             bookQuantity += 1;
-      //             cartSubtotal += bookPrice;
-      //           });
-      //         },
-      //         child: Row(children: [
-      //           Icon(Icons.add),
-      //           Text('Add'),
-      //         ]),
-      //       )
-      //     ]))
-      //   ],
-      // ),
-      // trailing: Column(
-      //   children: [
-      //     Padding(
-      //       padding: EdgeInsets.all(2),
-      //       child: Text(bookQuantity.toString()),
-      //     ),
-      //     SizedBox(
-      //       height: 20,
-      //     ),
-      //     Padding(
-      //       padding: EdgeInsets.all(2),
-      //       child: Text(bookPrice.toString()),
-      //     ),
-      //   ],
-      // ),
-    );
-  }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context),
+      drawer: customerDrawer(context, _selectedIndex),
+      backgroundColor: Colors.orange.shade100,
       body: Center(
         child: loadBooks(),
-        // child: Column(
-        //   children: [
-        //     Padding(
-        //       padding: EdgeInsets.all(5.5),
-        //       child: Row(
-        //         children: [
-        //           //Either have a place holder or let users upload an image
-        //           Image(
-        //             image: AssetImage('assets/profilePic.jpg'),
-        //           ),
-        //           Column(
-        //             children: [
-        //               //Import user info from db
-        //               Text(
-        //                 'First Name, LastName',
-        //                 style: TextStyle(
-        //                   fontWeight: FontWeight.bold,
-        //                 ),
-        //               ),
-        //               Text(userItems['first_name']),
-        //               Text('Postal Code'),
-        //               Text('Montreal, QC')
-        //             ],
-        //           )
-        //         ],
-        //       ),
-        //     ),
-        //     //book info Row SHould be a for loop
-        //     // Expanded(child: loadBooks()),
-        //   ],
-        // ),
       ),
     );
   }

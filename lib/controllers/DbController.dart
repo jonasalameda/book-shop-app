@@ -1,17 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:mvc_application/controller.dart' show ControllerMVC;
+import 'package:bookshop/models/UserModel.dart';
 
 //TODO: Initialize all collections/tables
 class BookDB {
-  final CollectionReference books =
-      FirebaseFirestore.instance.collection('Books');
-
-  final CollectionReference users =
-      FirebaseFirestore.instance.collection('Users');
-  final CollectionReference cart =
-      FirebaseFirestore.instance.collection('Cart');
+  late final CollectionReference books =
+  FirebaseFirestore.instance.collection('Books');
+  late final CollectionReference users =
+  FirebaseFirestore.instance.collection('Users');
+  late final CollectionReference cart =
+  FirebaseFirestore.instance.collection('Cart');
 
   void initializeDB() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +28,7 @@ class BookDB {
 Future<List> getTableList(String tableName) async {
   try {
     final tableData =
-        await FirebaseFirestore.instance.collection(tableName).get();
+    await FirebaseFirestore.instance.collection(tableName).get();
     return tableData.docs
         .map((doc) => doc.data() as Map<String, dynamic>)
         .toList();
@@ -61,13 +60,11 @@ String? findUser(List users, String email){
 }
 getBook(List books, String bookId){
   for (int i = 0; i < books.length; i++) {
-    if (books[i]['id'] == bookId) {
-      print('Found Match at index $i, ${books[i]['id']} and $bookId are the same');
+    if (books[i]['id'] == (bookId)) {
       return books[i];
     }
   }
-  print('No match found in list');
-  return null;
+  // return null;
 }
 
 /// Adds a column from the input reference collection with the inserted newObject.
@@ -100,5 +97,33 @@ Future<bool> updateRow(
     return true;
   } catch (e) {
     return false;
+  }
+}
+
+Future<UserModel?> getUserById(String userId) async {
+  try {
+    final doc = await FirebaseFirestore.instance.collection('Users').doc(userId).get();
+    if (!doc.exists) return null;
+    return UserModel.fromMap(doc.data()!, doc.id);
+  } catch (e) {
+    print("Error fetching user: $e");
+    return null;
+  }
+}
+
+Future<UserModel?> getUserByEmail(String email) async {
+  try {
+    final query = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+
+    if (query.docs.isEmpty) return null;
+    final doc = query.docs.first;
+    return UserModel.fromMap(doc.data(), doc.id);
+  } catch (e) {
+    print("Error fetching user by email: $e");
+    return null;
   }
 }

@@ -12,7 +12,8 @@ class Usercontroller {
       String phone_number, String email, String password) async {
     // final phoneRegex = RegExp(r'^[0-9]{3}-[0-9]{3}-[0-9]{4}$');
     // // final emailRegex = ; //Use email_validator
-    // final emailRegex = RegExp(r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+    // final emailRegex = RegExp(
+    //     r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     // // List<String> errors = [];
     //
     // if (first_name.isEmpty ||
@@ -32,17 +33,31 @@ class Usercontroller {
     // if (!emailRegex.hasMatch(email.trim())) {
     //   return "Please enter a correct email like abc@example.com";
     // }
-
-    //!Put all the validation logic in register user
-    //! instead since that is the time they have to add and
-    //! also because i can show the dialog from there
-
-    //Define the ID later
-    //Empty wishlist
-    //Empty cart
-    //TODO hash the psw
+    //
+    // //Define the ID later
+    // //Empty wishlist
+    // //TODO hash the psw
+    // UserModel newUser = new UserModel(
+    //     "0", first_name, last_name, phone_number, email, password, [], []);
+    // CollectionReference users = FirebaseFirestore.instance.collection('Users');
+    //
+    //   try {
+    //     await addRow(users, newUser);
+    //   } catch (e) {
+    //     return "Db failure to add the user!";
+    //   }
+    //   return ""; // Empty string means success
+    // }
     UserModel newUser = new UserModel(
-         first_name, last_name, phone_number, email, password,[],[], 'customer'), role;
+        "", //tempId, firestore will give one later
+        first_name,
+        last_name,
+        phone_number,
+        email,
+        password,
+        [],
+        [],
+        Role.customer);
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
     try {
@@ -52,4 +67,5 @@ class Usercontroller {
     }
     return ""; // Empty string means success
   }
+
 }
