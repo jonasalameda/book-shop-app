@@ -49,7 +49,7 @@ class Usercontroller {
     //   return ""; // Empty string means success
     // }
     UserModel newUser = new UserModel(
-      "", //tempId, firestore will give one later
+        "", //tempId, firestore will give one later
         first_name,
         last_name,
         phone_number,
@@ -57,7 +57,7 @@ class Usercontroller {
         password,
         [],
         [],
-        Role.customer);
+        "customer");
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
     try {
@@ -67,5 +67,4 @@ class Usercontroller {
     }
     return ""; // Empty string means success
   }
-
 }

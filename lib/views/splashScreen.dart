@@ -19,20 +19,19 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initUser() async {
-    if(currentUserID.isNotEmpty) {
+    if (currentUserID.isNotEmpty) {
       currentUser = await getUserById(currentUserID);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: buildAppBar(),
-      backgroundColor: Color.fromARGB(255, 104, 87, 61),
+      backgroundColor: const Color.fromARGB(255, 104, 87, 61),
       body: Center(
         child: DecoratedBox(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage("assets/loginPageBg.jpg"),
                 fit: BoxFit.fitHeight),
@@ -46,16 +45,16 @@ class _SplashScreenState extends State<SplashScreen> {
                     //     MaterialPageRoute(builder: (builder) => LogInPage()));
                     Navigator.of(context).pushNamed("/login");
                   },
-                  style: ButtonStyle(
+                  style: const ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(
                           Color.fromRGBO(140, 118, 83, 1.0)),
                       fixedSize: WidgetStatePropertyAll(Size(200, 65)),
                       enableFeedback: true),
-                  child: Text("Log in")),
-              SizedBox(
+                  child: const Text("Log in")),
+              const SizedBox(
                 height: 20,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -75,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 70,
               ),
             ],

@@ -45,8 +45,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     width: 500,
                     height: 110,
-                    padding: EdgeInsets.all(0),
-                    child: Column(
+                    padding: const EdgeInsets.all(0),
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("assets/homeTitleDecoration.png"),
+                            fit: BoxFit.fitWidth)),
+                    child: const Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -60,15 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("assets/homeTitleDecoration.png"),
-                            fit: BoxFit.fitWidth)),
                   ),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Padding(
@@ -93,10 +93,7 @@ Widget? _generateFeatured() {
     ]),
     builder: (context, snapshot) {
       print('firebase alguma ocisa aqui');
-      print(FirebaseFirestore.instance
-          .collection('Books')
-          .orderBy("name")
-          .snapshots());
+      print(snapshot.data![0]);
       if (!snapshot.hasData) {
         print(
             'a todos os agentes da overwatch, aqui é o wintom haha... obviamente');
