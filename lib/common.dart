@@ -2,6 +2,7 @@ import 'main.dart';
 import 'appBar2.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:flutter/material.dart';
+import 'package:bookshop/views/paymentPage.dart';
 
 Future<void> loadCurrentUser() async {
   // currentUserID = userID;
@@ -67,6 +68,30 @@ void showSuccess(String title, String message,BuildContext context,[String textb
               Navigator.of(context).pop(); // Close dialog
             },
             child: Text(textbutton),
+          )
+        ],
+      );
+    },
+  );
+}
+void showSuccessPayment(String title, String message,BuildContext context, double totalcart) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          PaymentPage(totalPayment: totalcart))); // Close dialog
+            },
+            child: Text("Proceed with payment"),
           )
         ],
       );

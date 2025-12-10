@@ -8,6 +8,7 @@ import 'package:bookshop/models/UserModel.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bookshop/common.dart';
+import 'paymentPage.dart';
 
 class CartPage extends StatefulWidget {
   final String userID;
@@ -40,6 +41,14 @@ class _CartPageState extends State<CartPage> {
       });
     } catch (e) {
       log(e.toString());
+    }
+  }
+
+  emptyCart(List userCart, List booksInfo, List usersInfo) async{
+    for(var bookRef in userCart){
+      var bookId = bookRef.id;
+      var book = getBook(booksInfo, bookId);
+      await deleteBookFromCart(widget.userID, usersInfo, bookId);
     }
   }
 
@@ -325,12 +334,14 @@ class _CartPageState extends State<CartPage> {
                                 }
                               }
                               if(itemsInStock){
-                                showSuccess(
+                                showSuccessPayment(
                                     'Order Received',
                                     'Thank you for choosing the library of Ruina \n Your total is ${totalCart.toStringAsFixed(2)}',
                                     context,
-                                    'Proceed with payment');
+                                    totalCart);
                                 cartSubtotal = 0;
+
+                                emptyCart(userCart, booksInfo, usersInfo);
                               }
                               else{
                                 showErrorDialog("Error", "Some of the items in your cart are currently out of stock please try again later", context);
