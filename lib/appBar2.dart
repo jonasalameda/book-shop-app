@@ -1,3 +1,4 @@
+import 'package:bookshop/l10n/app_localizations.dart';
 import 'package:bookshop/models/UserModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'main.dart';
 import 'common.dart';
 import 'controllers/DbController.dart';
 import 'package:bookshop/models/UserModel.dart';
+import 'setLocaleMaterialApp.dart';
 
 // enum Options {genres, authors, saved, cart, logout}
 enum Options { search, myCart, wishList, logout, filter }
@@ -148,6 +150,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
+
       ],
     ),
   );
@@ -165,7 +168,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
         //   child: Text('Drawer'),
         // ),
         ListTile(
-          title: const Text('Search'),
+          title: Text(AppLocalizations.of(context)!.drawerSearch),
           selected: selectedIndex == 0,
           onTap: () {
             Navigator.pop(context);
@@ -216,6 +219,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
+        buildLanguageSwitcher(context),
       ],
     ),
   );

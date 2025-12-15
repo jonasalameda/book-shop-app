@@ -1,0 +1,15 @@
+{
+  "@@locale": "fr",
+  "hello": "Bonjour!",
+  "greeting": "Bienvenu, {name}!",
+  "@greeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "drawerSearch": "Rechercher",
+  "drawerCart": "Mon Panier",
+  "drawerAccount": "Mon Compte et Liste de Souhait",
+  "drawerFilters": "Appliquer les Filtres",
+  "drawerLogout": "Déconnexion"
+}
