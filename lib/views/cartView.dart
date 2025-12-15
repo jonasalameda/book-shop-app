@@ -104,6 +104,7 @@ class _CartPageState extends State<CartPage> {
                     'country': data?['country'] ?? '',
                     'genres': data?['genres'] ?? [],
                     'description': data?['description'] ?? '',
+                    'image': data?['image'] ?? '',
                     'quantity': data?['quantity'] ?? 0,
                     'price': data?['price'] ?? 0.00,
                     'available': data?['available'] ?? false,
@@ -194,7 +195,7 @@ class _CartPageState extends State<CartPage> {
                                 final bookQuantity =
                                     currentBookInfo['quantity'];
                                 final bookPrice = currentBookInfo['price'];
-                                final bookImage = currentBookInfo['image']?? 'assets/bookPlacehoolder.jpg';
+                                // final bookImage = currentBookInfo['image']?? 'assets/bookPlacehoolder.jpg';
                                 cartSubtotal = setcartSubtotal();
                                 federalTax = 5 / 100 * cartSubtotal;
                                 provincialTax = 9.975 / 100 * cartSubtotal;
@@ -205,9 +206,11 @@ class _CartPageState extends State<CartPage> {
                                   margin: EdgeInsets.symmetric(vertical: 2),
                                   child: ListTile(
                                     //TODO: put image holder or link to book image
-                                    leading: Image(
-                                        image: AssetImage(
-                                            bookImage)),
+                                    leading :Image.network(
+                                      currentBookInfo['image'],
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Image(image: AssetImage('assets/images/placeholder.png'));
+                                      }),
                                     title: Text(
                                       currentBookInfo['book_name'],
                                       style:

@@ -5,6 +5,8 @@ import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bookshop/common.dart';
 
+import '../l10n/app_localizations.dart';
+
 class AccountPage extends StatefulWidget {
   final String userID;
 
@@ -103,7 +105,7 @@ class _AccountPageState extends State<AccountPage> {
                   children: [
                     SizedBox(height: 10),
                     Text(
-                      'Welcome back ${currentUser['first_name']} ',
+                      AppLocalizations.of(context)!.accountGreeting(currentUser['first_name']),
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -136,7 +138,7 @@ class _AccountPageState extends State<AccountPage> {
                       children: [
                         SizedBox(width: 15),
                         Text(
-                          "Your wishlist!",
+                          AppLocalizations.of(context)!.accountWishList,
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -194,10 +196,11 @@ class _AccountPageState extends State<AccountPage> {
                                 margin: EdgeInsets.symmetric(vertical: 2),
                                 child: ListTile(
                                   //TODO: put image holder or link to book image
-                                  leading: Image(
-
-                                      image: AssetImage(
-                                          currentBook['image'])),
+                                  leading: Image.network(
+                                      currentBook['image'],
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Image(image: AssetImage('assets/images/placeholder.png'));
+                                      }),
                                   title: Text(
                                     currentBook['book_name'],
                                     style:
@@ -265,7 +268,7 @@ class _AccountPageState extends State<AccountPage> {
                             child: Row(
                               children: [
                                 Text(
-                                  "LogOut",
+                                  AppLocalizations.of(context)!.accountLogOut,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,

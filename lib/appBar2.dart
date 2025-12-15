@@ -110,7 +110,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           ),
         ),
         ListTile(
-          title: const Text('Search'),
+          title: Text(AppLocalizations.of(context)!.drawerSearch),
           selected: selectedIndex == 0,
           onTap: () {
             Navigator.pop(context);
@@ -118,7 +118,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('My Cart'),
+          title:  Text(AppLocalizations.of(context)!.drawerCart),
           selected: selectedIndex == 1,
           onTap: () {
             Navigator.pop(context);
@@ -126,7 +126,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('Account and Wishlist'),
+          title:  Text(AppLocalizations.of(context)!.drawerAccount),
           selected: selectedIndex == 2,
           onTap: () {
             Navigator.pop(context);
@@ -134,7 +134,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('Apply Filters'),
+          title:  Text(AppLocalizations.of(context)!.drawerFilters),
           selected: selectedIndex == 3,
           onTap: () {
             Navigator.pop(context);
@@ -142,7 +142,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('Logout'),
+          title: Text(AppLocalizations.of(context)!.drawerLogout),
           selected: selectedIndex == 4,
           onTap: () {
             unloadCurrentUser();
@@ -150,6 +150,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
+        buildLanguageSwitcher(context),
 
       ],
     ),

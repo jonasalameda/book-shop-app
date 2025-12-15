@@ -29,7 +29,7 @@ Widget buildMaterialApp(BuildContext context) {
       locale: _locale,
       supportedLocales: const [
         Locale('en'),
-        Locale('es'),
+        Locale('fr'),
       ],
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -56,18 +56,26 @@ Widget buildMaterialApp(BuildContext context) {
 }
 
 Widget buildLanguageSwitcher(BuildContext context) {
-  return DropdownButton<Locale>(
-    value: Localizations.localeOf(context),
-    items: const [
-      DropdownMenuItem(value: Locale('en'), child: Text("English")),
-      DropdownMenuItem(value: Locale('fr'), child: Text("Francais")),
-    ],
-    onChanged: (locale) {
-      setLocale(locale!); // ← FIXED
-    },
-  );
+  return ValueListenableBuilder<Locale>(
+    valueListenable: localeNotifier,
+    builder: (context, locale,child)
+  {
+    return DropdownButton<Locale>(
+      value: Localizations.localeOf(context),
+      items: [
+        DropdownMenuItem(value: Locale('en'), child: Text("English")),
+        DropdownMenuItem(value: Locale('fr'), child: Text("Francais")),
+      ],
+      onChanged: (newLocale) {
+        setLocale(newLocale!);
+      },
+    );
+  });
 }
 
-void setLocale(Locale locale) {
-  _locale = locale;
+final ValueNotifier<Locale> localeNotifier = ValueNotifier(const Locale('en'));
+
+void setLocale(Locale newLocale) {
+  _locale = newLocale;
+  localeNotifier.value = newLocale;
 }
