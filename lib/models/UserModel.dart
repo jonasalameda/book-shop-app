@@ -38,7 +38,7 @@ class UserModel {
       'password_hash': password_hash,
       'wishList': wishList.map((book) => book.toMap()).toList(),
       'cart': cart.map((book) => book.toMap()).toList(),
-      'role': role
+      'role': role.name
     };
   }
 
@@ -49,11 +49,11 @@ class UserModel {
         phone_number = map['phone_number'],
         email = map['email'],
         password_hash = map['password_hash'],
-        wishList = (map['wishList'] as List)
-            .map((item) => BookModel.fromMap(item, item['id'] ?? ''))
+        wishList = (map['wishList'] as List ?? [])
+            .map((item) => BookModel.fromMap(item, item['id']))
             .toList(),
-        cart = (map['cart'] as List)
-            .map((item) => BookModel.fromMap(item, item['id'] ?? ''))
+        cart = (map['cart'] as List ?? [])
+            .map((item) => BookModel.fromMap(item, item['id']))
             .toList(),
         role = map['role'] ?? Role.customer;
 }

@@ -43,7 +43,10 @@ class _AdminPageState extends State<AdminPage> {
       body:
       Column(
         children: [
-          Text("${allBooks[0].book_name}"),
+          if (allBooks.isNotEmpty)
+            Text(allBooks[0].book_name)
+          else
+            const CircularProgressIndicator(),
         ],
       ),
     );

@@ -16,11 +16,10 @@ class BookController {
   //     await books.add({'name': name, ...});
   // }
   Future<List<BookModel>> getAllBooks() async {
-    final List books = await getTableList("Books");
+    final books = await getTableList("Books");
 
-    return books.map((map) => BookModel.fromMap(map)).toList()
-        // .cast<BookModel>()
-    ;
+    return books.map((map) => BookModel.fromMap(map, map['id'])).toList();
+        // .cast<BookModel>();
   }
 
 }

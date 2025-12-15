@@ -23,6 +23,7 @@ class BookModel {
   /// Maps without the ID
   Map<String, Object?> toMap() {
     return {
+      'id': id,
       'isbn': isbn,
       'book_name': book_name,
       'author': author,
@@ -46,4 +47,16 @@ class BookModel {
         quantity = map['quantity'],
         price = map['price'].toDouble(),
         available = map['available'];
+
+  // BookModel.fromDoc(DocumentSnapshot map)
+  //     : id = map.id,
+  //       isbn = map['isbn'],
+  //       book_name = map['book_name'],
+  //       author = map['author'],
+  //       country = map['country'],
+  //       genres = List<String>.from(map['genres'] ?? []),
+  //       description = map['description'],
+  //       quantity = map['quantity'],
+  //       price = map['price'].toDouble(),
+  //       available = map['available'];
 }

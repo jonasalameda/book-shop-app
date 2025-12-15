@@ -6,7 +6,7 @@ import 'controllers/DbController.dart';
 // enum Options {genres, authors, saved, cart, logout}
 enum Options { search, myCart, wishList, logout, filter, home }
 
-enum AdminOptions { search, library, customers, logout }
+enum AdminOptions { library, customers, logout }
 
 var _popUpMenuIndex = 0;
 int _selectedIndex = 0;
@@ -210,7 +210,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           selected: selectedIndex == 0,
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/library');
+            Navigator.pushNamed(context, '/admin');
           },
         ),
         ListTile(
@@ -231,14 +231,14 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
-        ListTile(
-          title: const Text('Home'),
-          selected: selectedIndex == 5,
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/home');
-          },
-        ),
+        // ListTile(
+        //   title: const Text('Home'),
+        //   selected: selectedIndex == 5,
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //     Navigator.pushNamed(context, '/home');
+        //   },
+        // ),
       ],
     ),
   );

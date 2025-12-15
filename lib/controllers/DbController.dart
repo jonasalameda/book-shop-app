@@ -25,13 +25,28 @@ class BookDB {
   }
 }
 
-Future<List> getTableList(String tableName) async {
+// Future<List> getTableList(String tableName) async {
+//   try {
+//     final tableData =
+//         await FirebaseFirestore.instance.collection(tableName).get();
+//     return tableData.docs
+//         .map((doc) => doc.data() as Map<String, dynamic>)
+//         .toList();
+//   } catch (e) {
+//     throw Exception(e.toString());
+//   }
+// }
+
+Future<List<Map<String, dynamic>>> getTableList(String tableName) async {
   try {
     final tableData =
-        await FirebaseFirestore.instance.collection(tableName).get();
-    return tableData.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
+    await FirebaseFirestore.instance.collection(tableName).get();
+
+    return tableData.docs.map((doc) {
+      final data = doc.data() as Map<String,dynamic>;
+      data['id'] = doc.id;
+      return data;
+    }).toList();
   } catch (e) {
     throw Exception(e.toString());
   }
