@@ -30,4 +30,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get drawerLogout => 'Déconnexion';
+
+  @override
+  String accountGreeting(Object name) {
+    return 'On est Content de te revoir $name!';
+  }
+
+  @override
+  String get accountWishList => 'Voici votre liste de souhaites';
+
+  @override
+  String get accountLogOut => 'Déconnexion';
 }

@@ -66,6 +66,7 @@ class _AccountPageState extends State<AccountPage> {
                   'country': data?['country'] ?? '',
                   'genres': data?['genres'] ?? [],
                   'description': data?['description'] ?? '',
+                  'image': data?['image'] ?? 'assets/bookPlacehoolder.jpg',
                   'quantity': data?['quantity'] ?? 0,
                   'price': data?['price'] ?? 0.00,
                   'available': data?['available'] ?? false,
@@ -194,8 +195,9 @@ class _AccountPageState extends State<AccountPage> {
                                 child: ListTile(
                                   //TODO: put image holder or link to book image
                                   leading: Image(
+
                                       image: AssetImage(
-                                          'assets/bookPlacehoolder.jpg')),
+                                          currentBook['image'])),
                                   title: Text(
                                     currentBook['book_name'],
                                     style:

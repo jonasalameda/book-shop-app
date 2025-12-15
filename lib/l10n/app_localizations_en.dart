@@ -30,4 +30,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get drawerLogout => 'Logout';
+
+  @override
+  String accountGreeting(Object name) {
+    return 'We are delighted to see you back $name!';
+  }
+
+  @override
+  String get accountWishList => 'Here is your wishList';
+
+  @override
+  String get accountLogOut => 'LogOut';
 }

@@ -139,6 +139,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logout'**
   String get drawerLogout;
+
+  /// No description provided for @accountGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'We are delighted to see you back {name}!'**
+  String accountGreeting(Object name);
+
+  /// No description provided for @accountWishList.
+  ///
+  /// In en, this message translates to:
+  /// **'Here is your wishList'**
+  String get accountWishList;
+
+  /// No description provided for @accountLogOut.
+  ///
+  /// In en, this message translates to:
+  /// **'LogOut'**
+  String get accountLogOut;
 }
 
 class _AppLocalizationsDelegate
