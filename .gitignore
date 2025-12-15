@@ -11,6 +11,8 @@
 .svn/
 .swiftpm/
 migrate_working_dir/
+l10n.yaml
+pubspec.yaml
 
 # IntelliJ related
 *.iml

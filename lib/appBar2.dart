@@ -210,16 +210,6 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
-        ListTile(
-          title: const Text('Logout'),
-          selected: selectedIndex == 4,
-          onTap: () {
-            currentUserID = '';
-            currentUserAppBar = null;
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/login');
-          },
-        ),
         buildLanguageSwitcher(context),
       ],
     ),
