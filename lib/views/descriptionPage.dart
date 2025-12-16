@@ -143,7 +143,28 @@ class _DescriptionPageState extends State<DescriptionPage> {
                                       showSuccess("item added successfully to cart", "Book is now in your cart check out before stock ends :)", context);
                                     }
                                   },
-                                  icon: Icon(Icons.favorite)),
+                                  icon: Icon(Icons.shopping_cart)
+                              ),
+                              IconButton(
+                                  onPressed: () async {
+                                    List<dynamic> wishListArray =
+                                        currentUser['wishlist'];
+                                    await FirebaseFirestore.instance
+                                        .collection('Users')
+                                        .doc(currentUserID!)
+                                        .update({
+                                      'wishlist':
+                                          FieldValue.arrayUnion([currentBook])
+                                    });
+                                    if(wishListArray.contains(currentBook)){
+                                      showErrorDialog("Item already in wishList", "This item is already in your wishlist you can add it to your cart any time", context);
+                                    }
+                                    else{
+                                      showSuccess("Item added successfully to wishlist", "Book is now in your wishlist :)", context);
+                                    }
+                                  },
+                                  icon: Icon(Icons.favorite)
+                              ),
                             ],
                           )
                         ],
