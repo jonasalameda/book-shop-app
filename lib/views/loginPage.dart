@@ -1,3 +1,4 @@
+import 'package:bookshop/views/adminView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/views/registerUser.dart';
@@ -30,6 +31,7 @@ class _LogInPageState extends State<LogInPage> {
   bool verifyPassword(String passwordInDB, String inputPassword) {
     return passwordInDB == inputPassword;
   }
+
   buildLoginPage() {
     return Expanded(
         child: Padding(
@@ -58,7 +60,7 @@ class _LogInPageState extends State<LogInPage> {
                       'password_hash': data?['password_hash'] ?? '',
                       'wishlist': data?['wishlist'] ?? [],
                       'cart': data?['cart'] ?? [],
-                      'role':data?['role'] ?? '',
+                      'role': data?['role'] ?? '',
                       'type': 'user'
                     };
                   }),
@@ -122,15 +124,17 @@ class _LogInPageState extends State<LogInPage> {
                           fit: FlexFit.tight,
                           child: ElevatedButton(
                             onPressed: () async {
-                              final userEmail = _emailController.text.toLowerCase();
+                              final userEmail =
+                                  _emailController.text.toLowerCase();
                               final userPassword = _passwordController.text;
                               if (userEmail.isEmpty || userPassword.isEmpty) {
-                                showErrorDialog('Empty Fields',
-                                    'Please enter both email and password', context);
+                                showErrorDialog(
+                                    'Empty Fields',
+                                    'Please enter both email and password',
+                                    context);
                               }
-                              String? userID = findUser(
-                                  usersList, userEmail);
-                               currentUserID = userID; // Changed to nullable
+                              String? userID = findUser(usersList, userEmail);
+                              currentUserID = userID; // Changed to nullable
 
                               //needed to check
                               // print(userID);
@@ -172,20 +176,33 @@ class _LogInPageState extends State<LogInPage> {
                                 var currentUser =
                                     getUser(usersList, currentUserID!);
 
-                                 await loadCurrentUser();
+                                await loadCurrentUser();
                                 bool isCorrectPassword = verifyPassword(
                                     currentUser['password_hash'], userPassword);
                                 // User exists but password is incorrect
                                 if (!isCorrectPassword) {
-                                  showErrorDialog('Password incorrect',
-                                      'Oops! Seems like it was the wrong password', context);
+                                  showErrorDialog(
+                                      'Password incorrect',
+                                      'Oops! Seems like it was the wrong password',
+                                      context);
                                 } else {
                                   // Password is correct
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => AccountPage(
-                                              userID: currentUserID!)));
+                                  // if(currentUser['id'] == 'cpWtMJprI1mqtNey7XGf') //admin
+                                  if (currentUser['user_role'] ==
+                                      'admin') //admin
+                                  {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => AdminPage(
+                                                userID: currentUserID!)));
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => AccountPage(
+                                                userID: currentUserID!)));
+                                  }
                                 }
                               }
                             },
@@ -229,7 +246,6 @@ class _LogInPageState extends State<LogInPage> {
       appBar: buildAppBar(context),
       backgroundColor: Colors.brown.shade200,
       body: Center(
-
         child: SingleChildScrollView(
           child: buildLoginPage(),
         ),

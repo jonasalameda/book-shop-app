@@ -43,7 +43,9 @@ Widget buildMaterialApp(BuildContext context) {
         '/login': (context) => LogInPage(),
         '/home': (context) => DashboardPage(),
         '/registerUser': (context) => RegisterUserPage(),
-        '/admin': (context) => AdminPage(),
+        // '/admin': (context) => AdminPage(userID: 'cpWtMJprI1mqtNey7XGf',), //Only one admin, so we hard-code
+        '/admin': (context) => AdminPage(userID: '',),
+        //customer: Xzw3cOOpQJ2DFSTKHQh2  - admin: cpWtMJprI1mqtNey7XGf
         '/account': (context) => AccountPage(
               userID: currentUserID!,
             ),
