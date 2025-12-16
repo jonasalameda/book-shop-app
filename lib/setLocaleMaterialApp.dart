@@ -18,6 +18,8 @@ import 'package:bookshop/views/descriptionPage.dart';
 import 'package:bookshop/views/splashScreen.dart';
 import 'l10n/app_localizations.dart';
 import 'main.dart';
+import 'views/fullLibrary.dart';
+
 
 Locale _locale = const Locale('en');
 
@@ -57,6 +59,7 @@ Widget buildMaterialApp(BuildContext context) {
               userID: currentUserID!,
             ),
         '/map': (context) => MapPage(),
+        '/library': (context) => fullLibrary(),
         // add more routes as needed
       });
 }

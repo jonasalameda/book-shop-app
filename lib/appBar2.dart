@@ -116,9 +116,9 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           onTap: () {
             // Navigator.pop(context);
 
-            Navigator.push(
-                context, MaterialPageRoute(builder: (builder) => HomeScreen()));
-            // Navigator.pushNamed(context, '/logout');
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (builder) => HomeScreen()));
+            Navigator.pushNamed(context, '/library');
           },
         ),
         ListTile(
@@ -236,7 +236,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           selected: selectedIndex == 0,
           onTap: () {
             Navigator.pop(context);
-            // Navigator.pushNamed(context, '/admin');
+            Navigator.pushNamed(context, '/admin');
           },
         ),
         ListTile(
