@@ -7,6 +7,7 @@ class MapPage extends StatefulWidget {
   _MapPageState createState() => _MapPageState();
 }
 
+
 class _MapPageState extends State<MapPage> {
   late GoogleMapController mapController;
   static final LatLng _center = const LatLng(45.5144626, -73.6755719);
@@ -63,13 +64,12 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: buildAppBar(context),
-        backgroundColor: Colors.brown.shade200,
-        body: Center(
-
-            child: SingleChildScrollView(
-              child: buildGoogleMapsBody(),
-            )
-        ));
-    }
+      appBar: buildAppBar(context),
+      drawer: customerDrawer(context, 5),
+      backgroundColor: Colors.orange.shade100,
+      body: Center(
+        child: Column(children:[buildGoogleMapsBody()]),
+      ),
+    );
+  }
 }
