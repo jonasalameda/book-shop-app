@@ -1,5 +1,6 @@
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:bookshop/controllers/DbController.dart';
+import 'package:bookshop/views/googleMap.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:bookshop/views/loginpage.dart';
@@ -54,6 +55,7 @@ Widget buildMaterialApp(BuildContext context) {
         '/cart': (context) => CartPage(
               userID: currentUserID!,
             ),
+        '/map': (context) => MapPage(),
         '/description': (context) => DescriptionPage(),
         // add more routes as needed
       });

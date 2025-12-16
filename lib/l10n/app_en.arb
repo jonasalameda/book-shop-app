@@ -7,11 +7,42 @@
       "name": {}
     }
   },
+  "appTitle" : "Library Of Ruina",
+  "tryAgain" : "Try Again",
+
   "drawerSearch": "Search",
   "drawerCart": "My Cart",
   "drawerAccount": "My Account and Wishlist",
   "drawerFilters": "Apply Filters",
+  "drawerFindUs": "Where to find us",
   "drawerLogout": "Logout",
+
+  "loginEmail" : "Email",
+  "loginPassword" : "Password",
+  "loginBtn": "Login",
+  "loginNew" : "New to Ruina?",
+  "loginNewAccount" : "Create an Account",
+  "loginEmptyTitle" : "Empty Fields",
+  "loginEmptyContent" : "Please enter both email and password",
+  "loginUserNotregister" : "User is not registered",
+  "loginUserInexistentContent" : "Sorry to inform you, we do not have an account registered to this email please check again or register today!",
+  "loginWrongPasswordTitle": "Incorrect Password",
+  "loginWrongPasswordContent": "Oops! Seems like it was the wrong password",
+
+
+
+  "registerFName": "First Name",
+  "registerLName" : "Last Name",
+  "registerPhone" : "PhoneNumber",
+  "registerConfirmPassword": "ConfirmPassword",
+  "registerBtn" : "Register",
+  "registerHaveAccount" : "Already have an account?",
+  "registerSuccess" : "Registration Successful!",
+  "registerSuccessContent" : "Your account has been created. Please login.",
+
+
+  "bookQuantity" : "Currently in stock",
+  "bookPrice" : "Price",
 
   "accountGreeting" : "We are delighted to see you back {name}!",
   "@accountGreeting": {
@@ -20,5 +51,32 @@
     }
   },
   "accountWishList" : "Here is your wishList",
-  "accountLogOut" : "LogOut"
+  "accountLogOut" : "LogOut",
+
+  "cart" : "Your Cart :",
+  "cartEmpty" : "Your cart is currently empty.",
+  "cartSubtotal": "Subtotal",
+  "cartFederal": "Federal Taxes",
+  "cartProvincial": "Provincial Taxes",
+  "cartCheckout": "Complete my order",
+  "cartOrderReceived" : "We have received your order",
+  "cartThankYou" : "Thank you for choosing the library of Ruina \n Your total is ${totalCart}",
+  "@cartThankYou" : {
+    "placeholders": {
+      "totalCart": {}
+    }
+  },
+  "cartPayment": "Proceed with payment",
+  "cartError" : "Error",
+  "cartOutOfStock": "Some of the items in your cart are currently out of stock please try again later",
+
+  "paymentCard" : "Card Number",
+  "paymentCardExpiry": "Expiry (MM/YY)",
+  "paymentSuccess" : "Payment Successful!",
+  "paymentEnd": "Back to my page",
+  "pay": "Pay",
+  "payError" : "Please fill in all fields",
+
+
+  "mapsFindUs" : "Join us here to pickup or enjoy a book"
 }

@@ -1,25 +1,79 @@
 {
   "@@locale": "fr",
   "hello": "Bonjour!",
-  "greeting": "Bienvenu, {name}!",
+  "greeting": "Bienvenue, {name}!",
   "@greeting": {
     "placeholders": {
       "name": {}
     }
   },
+  "appTitle": "Bibliothèque de Ruina",
+  "tryAgain": "Réessayer",
+
   "drawerSearch": "Rechercher",
   "drawerCart": "Mon Panier",
-  "drawerAccount": "Mon Compte et Liste de Souhait",
+  "drawerAccount": "Mon Compte et Liste de Souhaits",
   "drawerFilters": "Appliquer les Filtres",
+  "drawerFindUs": "Où nous trouver",
   "drawerLogout": "Déconnexion",
 
-  "accountGreeting" : "On est Content de te revoir {name}!",
+  "loginEmail": "Courriel",
+  "loginPassword": "Mot de passe",
+  "loginBtn": "Connexion",
+  "loginNew": "Nouveau chez Ruina?",
+  "loginNewAccount": "Créer un compte",
+  "loginEmptyTitle": "Champs vides",
+  "loginEmptyContent": "Veuillez entrer votre courriel et mot de passe",
+  "loginUserNotregister": "L'utilisateur n'est pas enregistré",
+  "loginUserInexistentContent": "Désolé de vous informer que nous n'avons pas de compte enregistré à ce courriel. Veuillez vérifier à nouveau ou vous inscrire dès aujourd'hui!",
+  "loginWrongPasswordTitle": "Mot de passe incorrect",
+  "loginWrongPasswordContent": "Oups! Il semble que le mot de passe soit incorrect",
+
+  "registerFName": "Prénom",
+  "registerLName": "Nom de famille",
+  "registerPhone": "Numéro de téléphone",
+  "registerConfirmPassword": "Confirmer le mot de passe",
+  "registerBtn": "S'inscrire",
+  "registerHaveAccount": "Vous avez déjà un compte?",
+  "registerSuccess": "Inscription réussie!",
+  "registerSuccessContent": "Votre compte a été créé. Veuillez vous connecter.",
+
+  "bookQuantity": "Actuellement en stock",
+  "bookPrice": "Prix",
+
+  "accountGreeting": "Nous sommes ravis de vous revoir {name}!",
   "@accountGreeting": {
     "placeholders": {
       "name": {}
     }
   },
+  "accountWishList": "Voici votre liste de souhaits",
+  "accountLogOut": "Déconnexion",
 
-  "accountWishList" : "Voici votre liste de souhaites",
-  "accountLogOut" : "Déconnexion"
+  "cart": "Votre panier :",
+  "cartEmpty": "Votre panier est actuellement vide.",
+  "cartSubtotal": "Sous-total",
+  "cartFederal": "Taxes fédérales",
+  "cartProvincial": "Taxes provinciales",
+  "cartCheckout": "Compléter ma commande",
+  "cartOrderReceived": "Nous avons reçu votre commande",
+  "cartThankYou": "Merci d'avoir choisi la bibliothèque de Ruina\nVotre total est de {totalCart}",
+  "@cartThankYou": {
+    "placeholders": {
+      "totalCart": {}
+    }
+  },
+  "cartPayment": "Procéder au paiement",
+  "cartError": "Erreur",
+  "cartOutOfStock": "Certains articles dans votre panier sont actuellement en rupture de stock. Veuillez réessayer plus tard",
+
+  "paymentCard": "Numéro de carte",
+  "paymentCardExpiry": "Expiration (MM/AA)",
+  "paymentSuccess": "Paiement réussi!",
+  "paymentEnd": "Retour à ma page",
+  "pay": "Payer",
+  "payError" : "S'il vous plait de remplir tout les champs",
+
+
+  "mapsFindUs": "Rejoignez-nous ici pour récupérer ou profiter d'un livre"
 }

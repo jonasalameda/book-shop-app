@@ -78,7 +78,7 @@ class _LogInPageState extends State<LogInPage> {
                         child: TextField(
                           controller: _emailController,
                           decoration: InputDecoration(
-                            labelText: 'Email:',
+                            labelText: AppLocalizations.of(context)!.loginEmail,
                             border: OutlineInputBorder(),
                             contentPadding: EdgeInsets.all(10),
                           ),
@@ -96,7 +96,7 @@ class _LogInPageState extends State<LogInPage> {
                           controller: _passwordController,
                           obscureText: _obscured,
                           decoration: InputDecoration(
-                            labelText: 'Password:',
+                            labelText: AppLocalizations.of(context)!.loginPassword,
                             border: OutlineInputBorder(),
                             contentPadding: EdgeInsets.all(10),
                             suffixIcon: IconButton(
@@ -128,10 +128,8 @@ class _LogInPageState extends State<LogInPage> {
                                   _emailController.text.toLowerCase();
                               final userPassword = _passwordController.text;
                               if (userEmail.isEmpty || userPassword.isEmpty) {
-                                showErrorDialog(
-                                    'Empty Fields',
-                                    'Please enter both email and password',
-                                    context);
+                                showErrorDialog(AppLocalizations.of(context)!.loginEmptyTitle,
+                                    AppLocalizations.of(context)!.loginEmptyContent, context);
                               }
 
                               String? userID = findUser(usersList, userEmail);
@@ -148,15 +146,13 @@ class _LogInPageState extends State<LogInPage> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: Text('User is not registered'),
-                                        content: Text(
-                                            'Sorry to inform you, we do not have an account '
-                                            'registered to this email please check again or register today!'),
+                                        title: Text(AppLocalizations.of(context)!.loginUserNotregister),
+                                        content: Text(AppLocalizations.of(context)!.loginUserInexistentContent),
                                         actions: [
                                           TextButton(
                                               onPressed: () =>
                                                   Navigator.of(context).pop(),
-                                              child: Text('Try again')),
+                                              child: Text(AppLocalizations.of(context)!.tryAgain)),
                                           TextButton(
                                               onPressed: () {
                                                 Navigator.push(
@@ -166,7 +162,7 @@ class _LogInPageState extends State<LogInPage> {
                                                             RegisterUserPage()));
                                               },
                                               child: Text(
-                                                'Register Now',
+                                                AppLocalizations.of(context)!.registerBtn,
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -183,10 +179,8 @@ class _LogInPageState extends State<LogInPage> {
                                     currentUser['password_hash'], userPassword);
                                 // User exists but password is incorrect
                                 if (!isCorrectPassword) {
-                                  showErrorDialog(
-                                      'Password incorrect',
-                                      'Oops! Seems like it was the wrong password',
-                                      context);
+                                  showErrorDialog(AppLocalizations.of(context)!.loginWrongPasswordTitle,
+                                      AppLocalizations.of(context)!.loginWrongPasswordContent, context);
                                 } else {
                                   // Password is correct
                                   if (currentUser['id'] ==
@@ -214,7 +208,7 @@ class _LogInPageState extends State<LogInPage> {
                               ),
                             ),
                             child: Text(
-                              'Login',
+                              AppLocalizations.of(context)!.loginBtn,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 30,
@@ -230,7 +224,7 @@ class _LogInPageState extends State<LogInPage> {
                       onPressed: () =>
                           Navigator.popAndPushNamed(context, '/registerUser'),
                       child: Text(
-                        'New to Ruina?',
+                        AppLocalizations.of(context)!.loginNew,
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
