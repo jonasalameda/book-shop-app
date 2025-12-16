@@ -15,7 +15,6 @@ import 'package:bookshop/l10n/app_localizations.dart';
 class CartPage extends StatefulWidget {
   final String userID;
 
-
   const CartPage({Key? key, required this.userID}) : super(key: key);
 
   @override
@@ -31,7 +30,6 @@ class _CartPageState extends State<CartPage> {
   late double federalTax = 0;
   late double provincialTax = 0;
   late double totalCart = 0;
-
 
   /**
    * Update the user's wish list, remove the current book from the list
@@ -71,8 +69,6 @@ class _CartPageState extends State<CartPage> {
   }
 
   loadBooks() {
-    // print ("lalallalallalaledficowiehcfowehpochewo");
-    // print (widget.userID);
     return Expanded(
       child: Padding(
         padding: EdgeInsets.all(10),
@@ -82,10 +78,6 @@ class _CartPageState extends State<CartPage> {
               FirebaseFirestore.instance.collection('Books').snapshots()
             ]),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
-
               var dbUsers = snapshot.data![0].docs;
               var dbBooks = snapshot.data![1].docs;
 
@@ -147,7 +139,6 @@ class _CartPageState extends State<CartPage> {
                   SizedBox(
                     height: 15,
                   ),
-                  // Text(currentUser.toString()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -185,8 +176,8 @@ class _CartPageState extends State<CartPage> {
 
                   // Text(userCart.toString()),
                   // Text(currentUser.toString()),
-                  // // is workin now
-                  // // Text(bookId.toString()),
+                  // is workin now
+                  // Text(bookId.toString()),
                   // Text(cartSubtotal.toStringAsFixed(2)), //!!!can access the price
                   Row(
                     children: [Text(AppLocalizations.of(context)!.cart)],
@@ -195,7 +186,6 @@ class _CartPageState extends State<CartPage> {
                     height: 10,
                   ),
                   // Column(children: [
-
                   Expanded(
                       child: userCart.length == 0
                           ? Center(child: Text(AppLocalizations.of(context)!.cartEmpty))
@@ -221,18 +211,13 @@ class _CartPageState extends State<CartPage> {
                                   margin: EdgeInsets.symmetric(vertical: 2),
                                   child: ListTile(
                                     //TODO: put image holder or link to book image
-                                    // leading:
-                                    // Image.network(
-                                    //     currentBookInfo['image'], errorBuilder:
-                                    //         (context, error, stackTrace) {
-                                    //   return
-                                    //     Image(
-                                    //       image: AssetImage(
-                                    //           'assets/images/Placeholder.png'));
-                                    // }),
-                                    leading:Image(
-                                            image: AssetImage(
-                                                'assets/bookPlaceholder.png')) ,
+                                    leading: Image.network(
+                                        currentBookInfo['image'], errorBuilder:
+                                            (context, error, stackTrace) {
+                                      return Image(
+                                          image: AssetImage(
+                                              'assets/bookPlaceholder.png'));
+                                    }),
                                     title: Text(
                                       currentBookInfo['book_name'],
                                       style: TextStyle(
