@@ -5,23 +5,8 @@ import 'setLocaleMaterialApp.dart';
 
 String? currentUserID;
 
-
 Future<void> main() async {
   await loadCurrentUser();
-import 'package:bookshop/views/loginpage.dart';
-import 'package:bookshop/views/registerUser.dart';
-import 'package:bookshop/views/accountView.dart';
-import 'package:bookshop/views/adminView.dart';
-import 'package:bookshop/views/cartView.dart';
-import 'package:bookshop/views/dashboardView.dart';
-import 'package:bookshop/views/descriptionPage.dart';
-import 'package:bookshop/views/splashScreen.dart';
-import 'package:bookshop/models/UserModel.dart';
-
-String currentUserID = "0W9tQfd131ribtU2cw4P"; //default user
-UserModel? currentUser = null;
-
-void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
@@ -35,36 +20,11 @@ void main() async {
   runApp(MyApp());
 }
 
-Future<void> loadCurrentUser() async {
-  if (currentUserID.isEmpty) return;
-  currentUser = await getUserById(currentUserID);
-}
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return buildMaterialApp(context);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Ruina Book Store',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown.shade400),
-      ),
-      routes: {
-        '/login': (context) => LogInPage(),
-        '/home': (context) => DashboardPage(),
-        '/registerUser': (context) => RegisterUserPage(),
-        '/admin': (context) => AdminPage(),
-        '/account': (context) => AccountPage(),
-        // '/cart': (context) => CartPage(userID: currentUserId),
-        '/cart': (context) => CartPage(),
-        '/description': (context) => DescriptionPage(),
-        '/adminCustomers': (context) => AdminCustomersPage(),
-        // add more routes as needed
-      },
-      home: SplashScreen(),
-    );
   }
 }

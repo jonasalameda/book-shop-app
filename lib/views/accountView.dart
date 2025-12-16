@@ -8,9 +8,9 @@ import 'package:bookshop/common.dart';
 import '../l10n/app_localizations.dart';
 
 class AccountPage extends StatefulWidget {
-  final String userID = currentUserID;
+  final String userID;
 
-  AccountPage({Key? key}) : super(key: key);
+  const AccountPage({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<AccountPage> createState() => _AccountPageState();

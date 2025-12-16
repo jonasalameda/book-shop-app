@@ -1,5 +1,3 @@
-import 'package:bookshop/controllers/DbController.dart';
-import 'package:bookshop/main.dart';
 import 'package:bookshop/views/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar.dart';
@@ -13,25 +11,13 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
-  void initState() {
-    super.initState();
-    _initUser();
-  }
-
-  Future<void> _initUser() async {
-    if (currentUserID.isNotEmpty) {
-      currentUser = await getUserById(currentUserID);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      backgroundColor: const Color.fromARGB(255, 104, 87, 61),
+      backgroundColor: Color.fromARGB(255, 104, 87, 61),
       body: Center(
         child: DecoratedBox(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage("assets/loginPageBg.jpg"),
                 fit: BoxFit.fitHeight),
@@ -45,16 +31,16 @@ class _SplashScreenState extends State<SplashScreen> {
                     //     MaterialPageRoute(builder: (builder) => LogInPage()));
                     Navigator.of(context).pushNamed("/login");
                   },
-                  style: const ButtonStyle(
+                  style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(
                           Color.fromRGBO(140, 118, 83, 1.0)),
                       fixedSize: WidgetStatePropertyAll(Size(200, 65)),
                       enableFeedback: true),
-                  child: const Text("Log in")),
-              const SizedBox(
+                  child: Text("Log in")),
+              SizedBox(
                 height: 20,
               ),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -74,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   )
                 ],
               ),
-              const SizedBox(
+              SizedBox(
                 height: 70,
               ),
             ],
