@@ -1,5 +1,6 @@
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:bookshop/controllers/DbController.dart';
+import 'package:bookshop/views/googleMap.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:bookshop/views/loginpage.dart';
@@ -44,7 +45,9 @@ Widget buildMaterialApp(BuildContext context) {
         '/home': (context) => DashboardPage(),
         '/registerUser': (context) => RegisterUserPage(),
         // '/admin': (context) => AdminPage(userID: 'cpWtMJprI1mqtNey7XGf',), //Only one admin, so we hard-code
-        '/admin': (context) => AdminPage(userID: '',),
+        '/admin': (context) => AdminPage(
+              userID: '',
+            ),
         //customer: Xzw3cOOpQJ2DFSTKHQh2  - admin: cpWtMJprI1mqtNey7XGf
         '/account': (context) => AccountPage(
               userID: currentUserID!,
@@ -52,6 +55,7 @@ Widget buildMaterialApp(BuildContext context) {
         '/cart': (context) => CartPage(
               userID: currentUserID!,
             ),
+        '/map': (context) => MapPage(),
         '/description': (context) => DescriptionPage(),
         // add more routes as needed
       });
@@ -59,20 +63,19 @@ Widget buildMaterialApp(BuildContext context) {
 
 Widget buildLanguageSwitcher(BuildContext context) {
   return ValueListenableBuilder<Locale>(
-    valueListenable: localeNotifier,
-    builder: (context, locale,child)
-  {
-    return DropdownButton<Locale>(
-      value: Localizations.localeOf(context),
-      items: [
-        DropdownMenuItem(value: Locale('en'), child: Text("English")),
-        DropdownMenuItem(value: Locale('fr'), child: Text("Francais")),
-      ],
-      onChanged: (newLocale) {
-        setLocale(newLocale!);
-      },
-    );
-  });
+      valueListenable: localeNotifier,
+      builder: (context, locale, child) {
+        return DropdownButton<Locale>(
+          value: Localizations.localeOf(context),
+          items: [
+            DropdownMenuItem(value: Locale('en'), child: Text("English")),
+            DropdownMenuItem(value: Locale('fr'), child: Text("Francais")),
+          ],
+          onChanged: (newLocale) {
+            setLocale(newLocale!);
+          },
+        );
+      });
 }
 
 final ValueNotifier<Locale> localeNotifier = ValueNotifier(const Locale('en'));

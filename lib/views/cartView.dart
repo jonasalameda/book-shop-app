@@ -9,6 +9,8 @@ import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bookshop/common.dart';
 import 'paymentPage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:bookshop/l10n/app_localizations.dart';
 
 class CartPage extends StatefulWidget {
   final String userID;
@@ -44,8 +46,8 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  emptyCart(List userCart, List booksInfo, List usersInfo) async{
-    for(var bookRef in userCart){
+  emptyCart(List userCart, List booksInfo, List usersInfo) async {
+    for (var bookRef in userCart) {
       var bookId = bookRef.id;
       var book = getBook(booksInfo, bookId);
       await deleteBookFromCart(widget.userID, usersInfo, bookId);
@@ -54,7 +56,7 @@ class _CartPageState extends State<CartPage> {
 
   Future<bool> decreaseBookQuantity(
       int currentQuantity, String currentBookID) async {
-    if(currentQuantity <= 0){
+    if (currentQuantity <= 0) {
       // showErrorDialog("Sorry can't checkout", "We are currently out of stock for this item please come back another time", context);
       return false;
     }
@@ -175,7 +177,7 @@ class _CartPageState extends State<CartPage> {
                   // Text(bookId.toString()),
                   // Text(cartSubtotal.toStringAsFixed(2)), //!!!can access the price
                   Row(
-                    children: [Text("Your Cart:")],
+                    children: [Text(AppLocalizations.of(context)!.cart)],
                   ),
                   SizedBox(
                     height: 10,
@@ -183,7 +185,7 @@ class _CartPageState extends State<CartPage> {
                   // Column(children: [
                   Expanded(
                       child: userCart.length == 0
-                          ? Center(child: Text('Your cart is currently empty'))
+                          ? Center(child: Text(AppLocalizations.of(context)!.cartEmpty))
                           : ListView.builder(
                               itemCount: userCart.length,
                               itemBuilder: (context, i) {
@@ -206,15 +208,17 @@ class _CartPageState extends State<CartPage> {
                                   margin: EdgeInsets.symmetric(vertical: 2),
                                   child: ListTile(
                                     //TODO: put image holder or link to book image
-                                    leading :Image.network(
-                                      currentBookInfo['image'],
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Image(image: AssetImage('assets/images/placeholder.png'));
-                                      }),
+                                    leading: Image.network(
+                                        currentBookInfo['image'], errorBuilder:
+                                            (context, error, stackTrace) {
+                                      return Image(
+                                          image: AssetImage(
+                                              'assets/images/placeholder.png'));
+                                    }),
                                     title: Text(
                                       currentBookInfo['book_name'],
-                                      style:
-                                      TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     subtitle: Text(currentBookInfo['author']),
                                     trailing: Wrap(
@@ -224,7 +228,10 @@ class _CartPageState extends State<CartPage> {
                                         IconButton(
                                           onPressed: () {
                                             // TODO: delete the current book from the wish list
-                                            deleteBookFromCart(widget.userID, usersInfo, currentBookReference);
+                                            deleteBookFromCart(
+                                                widget.userID,
+                                                usersInfo,
+                                                currentBookReference);
                                             setcartSubtotal();
                                           },
                                           icon: Icon(
@@ -240,7 +247,7 @@ class _CartPageState extends State<CartPage> {
                                                 ),
                                                 // ! it is referencing the amount of books in stock
                                                 child: Text(
-                                                    'Currently in Stock: $bookQuantity', style: TextStyle(fontSize: 12),),
+                                                    AppLocalizations.of(context)!.bookQuantity + ': $bookQuantity', style: TextStyle(fontSize: 12),),
                                               ),
                                               SizedBox(
                                                 height: 10,
@@ -260,8 +267,8 @@ class _CartPageState extends State<CartPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Subtotal: ',
+                      Text(AppLocalizations.of(context)!.cartSubtotal +
+                        ': ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
@@ -276,8 +283,8 @@ class _CartPageState extends State<CartPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Federal Tax (5%): ',
+                      Text(AppLocalizations.of(context)!.cartFederal +
+                        '(5%): ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
@@ -292,8 +299,8 @@ class _CartPageState extends State<CartPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Provincial Tax (9.975%): ',
+                      Text(AppLocalizations.of(context)!.cart +
+                        '(9.975%): ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
@@ -326,20 +333,20 @@ class _CartPageState extends State<CartPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            onPressed: () async{
+                            onPressed: () async {
                               var itemsInStock;
                               for (var bookRef in userCart) {
                                 var bookId = bookRef.id;
                                 var book = getBook(booksInfo, bookId);
                                 if (book != null) {
-                                itemsInStock = await  decreaseBookQuantity(
+                                  itemsInStock = await decreaseBookQuantity(
                                       book['quantity'], bookId);
                                 }
                               }
-                              if(itemsInStock){
+                              if (itemsInStock) {
                                 showSuccessPayment(
-                                    'Order Received',
-                                    'Thank you for choosing the library of Ruina \n Your total is ${totalCart.toStringAsFixed(2)}',
+                                    AppLocalizations.of(context)!.cartOrderReceived,
+                                    AppLocalizations.of(context)!.cartThankYou(totalCart.toStringAsFixed(2)),
                                     context,
                                     totalCart);
                                 cartSubtotal = 0;
@@ -347,7 +354,10 @@ class _CartPageState extends State<CartPage> {
                                 emptyCart(userCart, booksInfo, usersInfo);
                               }
                               else{
-                                showErrorDialog("Error", "Some of the items in your cart are currently out of stock please try again later", context);
+                                showErrorDialog(
+                                    AppLocalizations.of(context)!.cartError,
+                                    AppLocalizations.of(context)!.cartOutOfStock,
+                                    context);
                               }
 
                               // decreaseBookQuantity(books, booksInfo['quantit'], currentBookID)
@@ -356,7 +366,7 @@ class _CartPageState extends State<CartPage> {
                                 backgroundColor: Colors.brown.shade700,
                                 minimumSize: Size(300, 100)),
                             child: Text(
-                              'CheckOut',
+                              AppLocalizations.of(context)!.cartCheckout,
                               style: TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,

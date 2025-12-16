@@ -10,7 +10,9 @@ import 'setLocaleMaterialApp.dart';
 
 // enum Options {genres, authors, saved, cart, logout}
 enum Options { search, myCart, wishList, logout, filter }
+
 UserModel? currentUserAppBar;
+
 enum AdminOptions { search, books, archive, customers }
 
 var _popUpMenuIndex = 0;
@@ -24,14 +26,11 @@ var appBarHeight = AppBar().preferredSize.height;
 
 final String title = "";
 
-
-
 AppBar buildAppBar(BuildContext context) {
-
   return AppBar(
     backgroundColor: barColor,
-    title: const Text(
-      'Library Of Ruina',
+    title: Text(
+      AppLocalizations.of(context)!.appTitle,
       style: TextStyle(color: Colors.white, fontSize: 30),
       textAlign: TextAlign.center,
     ),
@@ -49,7 +48,6 @@ AppBar buildAppBar(BuildContext context) {
 }
 
 Drawer customerDrawer(BuildContext context, int selectedIndex) {
-
   loadCurrentUser();
   return Drawer(
     child: ListView(
@@ -89,36 +87,37 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
                 child: currentUserAppBar == null
                     ? Center(child: CircularProgressIndicator())
                     : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                    Text(
-                      "${currentUserAppBar!.email}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            "${currentUserAppBar!.email}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),
         ),
+        buildLanguageSwitcher(context),
         ListTile(
           title: Text(AppLocalizations.of(context)!.drawerSearch),
           selected: selectedIndex == 0,
           onTap: () {
-            Navigator.pop(context);
+            Navigator.pushNamed(context, '/home');
             // Navigator.pushNamed(context, '/logout');
           },
         ),
         ListTile(
-          title:  Text(AppLocalizations.of(context)!.drawerCart),
+          title: Text(AppLocalizations.of(context)!.drawerCart),
           selected: selectedIndex == 1,
           onTap: () {
             Navigator.pop(context);
@@ -126,7 +125,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title:  Text(AppLocalizations.of(context)!.drawerAccount),
+          title: Text(AppLocalizations.of(context)!.drawerAccount),
           selected: selectedIndex == 2,
           onTap: () {
             Navigator.pop(context);
@@ -134,7 +133,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title:  Text(AppLocalizations.of(context)!.drawerFilters),
+          title: Text(AppLocalizations.of(context)!.drawerFilters),
           selected: selectedIndex == 3,
           onTap: () {
             Navigator.pop(context);
@@ -150,7 +149,15 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
-        buildLanguageSwitcher(context),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.drawerFindUs),
+          selected: selectedIndex == 5,
+          onTap: () {
+            unloadCurrentUser();
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/map');
+          },
+        ),
 
       ],
     ),
@@ -162,10 +169,16 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
 Drawer adminDrawer(BuildContext context, int selectedIndex) {
   // search, books, archive, customers
   return Drawer(
+
     child: ListView(
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
       children: [
+        buildLanguageSwitcher(context),
+        // const DrawerHeader(
+        //   decoration: BoxDecoration(color: Colors.blue),
+        //   child: Text('Drawer'),
+        // ),
         DrawerHeader(
           decoration: BoxDecoration(color: Color(0xFFAE9674)),
           child: Row(
@@ -181,22 +194,22 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
                 child: currentUserAppBar == null
                     ? Center(child: CircularProgressIndicator())
                     : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                    Text(
-                      "${currentUserAppBar!.email}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            "${currentUserAppBar!.email}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),
@@ -225,8 +238,9 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             // Navigator.pushNamed(context, '/account');
           },
         ),
+       
         ListTile(
-          title: const Text('Logout'),
+          title:  Text(AppLocalizations.of(context)!.drawerLogout),
           selected: selectedIndex == 3,
           onTap: () {
             currentUserID = '';
@@ -235,7 +249,17 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
-        buildLanguageSwitcher(context),
+       
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.drawerFindUs),
+          selected: selectedIndex == 4,
+          onTap: () {
+            currentUserID = '';
+            currentUserAppBar = null;
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/map');
+          },
+        ),
       ],
     ),
   );

@@ -1,3 +1,5 @@
+import 'package:bookshop/l10n/app_localizations.dart';
+
 import 'main.dart';
 import 'appBar2.dart';
 import 'package:bookshop/controllers/DbController.dart';
@@ -45,7 +47,7 @@ void showSuccessDialog(BuildContext context) {
               Navigator.of(context).pop(); // Close dialog
               Navigator.pushReplacementNamed(context, '/login'); // Go to login
             },
-            child: Text('Login Now'),
+            child: Text(AppLocalizations.of(context)!.loginBtn),
           )
         ],
       );
@@ -91,7 +93,7 @@ void showSuccessPayment(String title, String message,BuildContext context, doubl
                       builder: (context) =>
                           PaymentPage(totalPayment: totalcart))); // Close dialog
             },
-            child: Text("Proceed with payment"),
+            child: Text(AppLocalizations.of(context)!.cartPayment),
           )
         ],
       );
