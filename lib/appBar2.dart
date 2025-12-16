@@ -113,7 +113,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           selected: selectedIndex == 0,
           onTap: () {
             Navigator.pop(context);
-            // Navigator.pushNamed(context, '/logout');
+            Navigator.pushNamed(context, '/home');
           },
         ),
         ListTile(
@@ -158,7 +158,6 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/map');
           },
         ),
-
       ],
     ),
   );
@@ -169,7 +168,6 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
 Drawer adminDrawer(BuildContext context, int selectedIndex) {
   // search, books, archive, customers
   return Drawer(
-
     child: ListView(
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
@@ -238,9 +236,9 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             // Navigator.pushNamed(context, '/account');
           },
         ),
-       
+
         ListTile(
-          title:  Text(AppLocalizations.of(context)!.drawerLogout),
+          title: Text(AppLocalizations.of(context)!.drawerLogout),
           selected: selectedIndex == 3,
           onTap: () {
             currentUserID = '';
@@ -249,7 +247,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
-       
+
         ListTile(
           title: Text(AppLocalizations.of(context)!.drawerFindUs),
           selected: selectedIndex == 4,

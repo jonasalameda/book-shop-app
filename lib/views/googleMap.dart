@@ -66,10 +66,8 @@ class _MapPageState extends State<MapPage> {
         appBar: buildAppBar(context),
         backgroundColor: Colors.brown.shade200,
         body: Center(
-
             child: SingleChildScrollView(
-              child: buildGoogleMapsBody(),
-            )
-        ));
-    }
+          child: buildGoogleMapsBody(),
+        )));
+  }
 }
