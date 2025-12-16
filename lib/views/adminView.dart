@@ -39,8 +39,8 @@ class _AdminPageState extends State<AdminPage> {
               return const Center(child: CircularProgressIndicator());
             }
 
-            if (!snapshot.hasData || snapshot.data == null) {
-              return const Center(child: Text('No data available'));
+            if (!snapshot.hasData || snapshot.data == null || snapshot.data!.length < 2) {
+              return const Center(child: CircularProgressIndicator());
             }
 
             var dbUsers = snapshot.data![0].docs;
@@ -113,8 +113,8 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     SizedBox(height: 10),
                     Text(
-                      AppLocalizations.of(context)!
-                          .accountGreeting(currentUser['first_name']),
+                      AppLocalizations.of(context)?.accountGreeting(currentUser['first_name']) ?? '',
+                          // .accountGreeting(currentUser['first_name']),
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -219,7 +219,7 @@ class _AdminPageState extends State<AdminPage> {
                               Text(book['author']),
                               Text('Price: \$${book['price']}'),
                               Text('Qty: ${book['quantity']}'),
-                              Text('Genres: ${(book['genres'] as List).join(', ')}'),
+                              // Text('Genres: ${(book['genres'] as List).join(', ')}'),
                             ],
                           ),
                           trailing: Row(
