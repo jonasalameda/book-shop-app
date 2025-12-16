@@ -195,7 +195,7 @@ class _LogInPageState extends State<LogInPage> {
                                                 userID: currentUserID!)));
                                   } else {
                                     currentUserID = currentUser['id'];
-                                    currentUserAppBar = currentUser;
+                                    // currentUserAppBar = currentUser;
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
