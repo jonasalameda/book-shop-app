@@ -36,9 +36,10 @@ class UserModel {
       'phone_number': phone_number,
       'email': email,
       'password_hash': password_hash,
-      'wishList': wishList.map((book) => book.toMap()).toList(),
+      'wishlist': wishList.map((book) => book.toMap()).toList(),
+      // 'wishList': wishList.map((book) => book.toMap()).toList(),
       'cart': cart.map((book) => book.toMap()).toList(),
-      'role': role
+      'role': role == Role.customer ? 'customer' : 'admin'
     };
   }
 
@@ -49,11 +50,14 @@ class UserModel {
         phone_number = map['phone_number'],
         email = map['email'],
         password_hash = map['password_hash'],
-        wishList = (map['wishList'] as List)
+        wishList = (map['wishlist'] as List)
+            // wishList = (map['wishList'] as List) this bastard was the issue
             .map((item) => BookModel.fromMap(item))
             .toList(),
         cart = (map['cart'] as List)
             .map((item) => BookModel.fromMap(item))
             .toList(),
-        role = map['role'] ?? "customer";
+        role = map['role'] == "admin"
+            ? Role.admin.toString()
+            : Role.customer.toString();
 }

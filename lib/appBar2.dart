@@ -1,17 +1,24 @@
+import 'package:bookshop/l10n/app_localizations.dart';
 import 'package:bookshop/models/UserModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'common.dart';
 import 'controllers/DbController.dart';
+import 'package:bookshop/models/UserModel.dart';
+import 'setLocaleMaterialApp.dart';
 
 // enum Options {genres, authors, saved, cart, logout}
-enum Options { search, myCart, wishList, logout, filter, home }
+enum Options { search, myCart, wishList, logout, filter }
 
-enum AdminOptions { library, customers, logout }
+UserModel? currentUserAppBar;
+
+enum AdminOptions { search, books, archive, customers }
 
 var _popUpMenuIndex = 0;
 int _selectedIndex = 0;
-// final currentUser = getCurrentUser();
-// UserModel? currentUser;
+// final currentUserAppBar = getcurrentUserAppBar();
+// UserModel? currentUserAppBar;
 
 Color barColor = Color(0xFFAE9674);
 //let the App Bar control the height of the menu
@@ -41,6 +48,7 @@ AppBar buildAppBar(BuildContext context) {
 }
 
 Drawer customerDrawer(BuildContext context, int selectedIndex) {
+  loadCurrentUser();
   return Drawer(
     child: ListView(
       // Important: Remove any padding from the ListView.
@@ -55,11 +63,11 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
         //       //   backgroundColor: Colors.transparent,
         //       //   foregroundImage: AssetImage('assets/avatarExample.jpg'),
         //       // ),
-        //       currentUser == null
+        //       currentUserAppBar == null
         //           ? CircularProgressIndicator()
         //           :
-        //               // leading: Text("${currentUser!.id}"),
-        //  Text("${currentUser!.email ?? "unsefined"}"),
+        //               // leading: Text("${currentUserAppBar!.id}"),
+        //  Text("${currentUserAppBar!.email ?? "unsefined"}"),
         //
         //     ],
         //   ),
@@ -71,26 +79,26 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
               CircleAvatar(
                 radius: 40,
                 backgroundColor: Colors.transparent,
-                foregroundImage: AssetImage('assets/avatarExample.jpg'),
+                foregroundImage: AssetImage('assets/profilePlaceHolder.jpg'),
               ),
               SizedBox(width: 10),
               // Use Expanded to prevent infinite width
               Expanded(
-                child: currentUser == null
+                child: currentUserAppBar == null
                     ? Center(child: CircularProgressIndicator())
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "${currentUser!.first_name} ${currentUser!.last_name}",
+                            "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16),
                           ),
                           Text(
-                            "${currentUser!.email}",
+                            "${currentUserAppBar!.email}",
                             style: TextStyle(color: Colors.white),
                           ),
                         ],
@@ -100,7 +108,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           ),
         ),
         ListTile(
-          title: const Text('Search'),
+          title: Text(AppLocalizations.of(context)!.drawerSearch),
           selected: selectedIndex == 0,
           onTap: () {
             Navigator.pop(context);
@@ -108,7 +116,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('My Cart'),
+          title: Text(AppLocalizations.of(context)!.drawerCart),
           selected: selectedIndex == 1,
           onTap: () {
             Navigator.pop(context);
@@ -116,7 +124,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('Account and Wishlist'),
+          title: Text(AppLocalizations.of(context)!.drawerAccount),
           selected: selectedIndex == 2,
           onTap: () {
             Navigator.pop(context);
@@ -124,7 +132,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('Apply Filters'),
+          title: Text(AppLocalizations.of(context)!.drawerFilters),
           selected: selectedIndex == 3,
           onTap: () {
             Navigator.pop(context);
@@ -132,29 +140,22 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('Logout'),
+          title: Text(AppLocalizations.of(context)!.drawerLogout),
           selected: selectedIndex == 4,
           onTap: () {
-            currentUserID = '';
+            unloadCurrentUser();
             Navigator.pop(context);
             Navigator.pushNamed(context, '/login');
           },
         ),
-        ListTile(
-          title: const Text('Home'),
-          selected: selectedIndex == 5,
-          onTap: () {
-            currentUserID = '';
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/home');
-          },
-        ),
+        buildLanguageSwitcher(context),
       ],
     ),
   );
 }
 
-//enum AdminOptions { search, library, archive?, customers, logout }
+//enum AdminOptions { search, books, archive, customers }
+
 Drawer adminDrawer(BuildContext context, int selectedIndex) {
   // search, books, archive, customers
   return Drawer(
@@ -169,26 +170,26 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
               CircleAvatar(
                 radius: 40,
                 backgroundColor: Colors.transparent,
-                foregroundImage: AssetImage('assets/avatarExample.jpg'),
+                foregroundImage: AssetImage('assets/profilePlaceHolder.jpg'),
               ),
               SizedBox(width: 10),
               // Use Expanded to prevent infinite width
               Expanded(
-                child: currentUser == null
+                child: currentUserAppBar == null
                     ? Center(child: CircularProgressIndicator())
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "${currentUser!.first_name} ${currentUser!.last_name}",
+                            "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16),
                           ),
                           Text(
-                            "${currentUser!.email}",
+                            "${currentUserAppBar!.email}",
                             style: TextStyle(color: Colors.white),
                           ),
                         ],
@@ -197,17 +198,17 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             ],
           ),
         ),
-        // ListTile(
-        //   title: const Text('Home'),
-        //   selected: selectedIndex == 0,
-        //   onTap: () {
-        //     Navigator.pop(context);
-        //     Navigator.pushNamed(context, '/library');
-        //   },
-        // ),
         ListTile(
-          title: const Text('Library'),
+          title: Text(AppLocalizations.of(context)!.drawerSearch),
           selected: selectedIndex == 0,
+          onTap: () {
+            Navigator.pop(context);
+            // Navigator.pushNamed(context, '/admin');
+          },
+        ),
+        ListTile(
+          title: Text('Admin'),
+          selected: selectedIndex == 1,
           onTap: () {
             Navigator.pop(context);
             Navigator.pushNamed(context, '/admin');
@@ -215,30 +216,23 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
         ),
         ListTile(
           title: const Text('Customers'),
-          selected: selectedIndex == 1,
+          selected: selectedIndex == 2,
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/adminCustomers');
+            // Navigator.pushNamed(context, '/account');
           },
         ),
         ListTile(
           title: const Text('Logout'),
-          selected: selectedIndex == 2,
+          selected: selectedIndex == 3,
           onTap: () {
             currentUserID = '';
-            currentUser = null;
+            currentUserAppBar = null;
             Navigator.pop(context);
             Navigator.pushNamed(context, '/login');
           },
         ),
-        // ListTile(
-        //   title: const Text('Home'),
-        //   selected: selectedIndex == 5,
-        //   onTap: () {
-        //     Navigator.pop(context);
-        //     Navigator.pushNamed(context, '/home');
-        //   },
-        // ),
+        buildLanguageSwitcher(context),
       ],
     ),
   );

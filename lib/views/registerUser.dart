@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bookshop/models/UserModel.dart';
 import 'package:bookshop/controllers/UserController.dart';
+import 'package:bookshop/common.dart';
 
 class RegisterUserPage extends StatefulWidget {
   const RegisterUserPage({super.key});
@@ -27,15 +28,16 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
   bool _isLoading = false;
 
   final CollectionReference usersCollection =
-  FirebaseFirestore.instance.collection('Users');
+      FirebaseFirestore.instance.collection('Users');
 
   //i put it in register because i its the only time we need to validate
   bool _isValidEmail(String email) {
-    final emailRegex = RegExp(r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+    final emailRegex = RegExp(
+        r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     return emailRegex.hasMatch(email.trim());
   }
 
-  bool _isValidPhone(String phone){
+  bool _isValidPhone(String phone) {
     final phoneRegex = RegExp(r'^[0-9]{3}-[0-9]{3}-[0-9]{4}$');
     return phoneRegex.hasMatch(phone.trim());
   }
@@ -57,31 +59,35 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
         email.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty) {
-      _showErrorDialog('Empty Fields', 'Please fill in all fields');
+      showErrorDialog('Empty Fields', 'Please fill in all fields', context);
       return;
     }
 
     // check email is valid
     if (!_isValidEmail(email)) {
-      _showErrorDialog('Invalid Email', 'Please enter a valid email address');
+      showErrorDialog(
+          'Invalid Email', 'Please enter a valid email address', context);
       return;
     }
     //check if phone is put correctly
     if (!_isValidPhone(phoneNumber)) {
-      _showErrorDialog('Invalid Phone Format', 'Please enter your phone number in this format: 123-123-1234');
+      showErrorDialog(
+          'Invalid Phone Format',
+          'Please enter your phone number in this format: 123-123-1234',
+          context);
       return;
     }
 
     if (password.length < 8) {
-      _showErrorDialog(
-          'Weak Password', 'Password must be at least 8 characters long');
+      showErrorDialog('Weak Password',
+          'Password must be at least 8 characters long', context);
       return;
     }
 
     // passwords have to be the same
     if (password != confirmPassword) {
-      _showErrorDialog(
-          'Passwords must match', 'Passwords must match please check and try again');
+      showErrorDialog('Passwords must match',
+          'Passwords must match please check and try again', context);
       return;
     }
 
@@ -92,73 +98,36 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
 
     try {
       var existingUser =
-      await usersCollection.where('email', isEqualTo: email).limit(1).get();
+          await usersCollection.where('email', isEqualTo: email).limit(1).get();
 
       if (existingUser.docs.isNotEmpty) {
         setState(() {
           _isLoading = false;
         });
-        _showErrorDialog('Email Already Exists',
-            'An account with this email already exists. Please login instead.');
+        showErrorDialog(
+            'Email Already Exists',
+            'An account with this email already exists. Please login instead.',
+            context);
         return;
       }
 
       // Add a new customer
-      // final UserController userController = UserController();
-      String addingSuccess = await Usercontroller().addCustomer(fName, lName, phoneNumber, email, password);
-       if(addingSuccess.isEmpty){ //if empty registration is successful
-         setState(() {
-           _isLoading = false;
-         });
-         // show that registration was successfull
-         _showSuccessDialog();
-       }
+      String addingSuccess = await Usercontroller()
+          .addCustomer(fName, lName, phoneNumber, email, password);
+      if (addingSuccess.isEmpty) {
+        //if empty registration is successful
+        setState(() {
+          _isLoading = false;
+        });
+        // show that registration was successfull
+        showSuccessDialog(context);
+      }
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
-      _showErrorDialog('Registration Error', 'An error occurred: $e');
+      showErrorDialog('Registration Error', 'An error occurred: $e', context);
     }
-  }
-
-  void _showErrorDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Try again'),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Registration Successful!'),
-          content: Text('Your account has been created. Please login.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
-                Navigator.pushReplacementNamed(context, '/login'); // Go to login
-              },
-              child: Text('Login Now'),
-            )
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -189,9 +158,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                   padding: EdgeInsets.all(15.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.yellow.shade50,
-                      borderRadius:  BorderRadius.circular(10)
-                    ),
+                        color: Colors.yellow.shade50,
+                        borderRadius: BorderRadius.circular(10)),
                     child: TextField(
                       controller: _firstName,
                       decoration: InputDecoration(
@@ -207,8 +175,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.yellow.shade50,
-                        borderRadius:  BorderRadius.circular(10)
-                    ),                    child: TextField(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: TextField(
                       controller: _lastName,
                       decoration: InputDecoration(
                         labelText: 'Last Name:',
@@ -223,8 +191,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.yellow.shade50,
-                        borderRadius:  BorderRadius.circular(10)
-                    ),                    child: TextField(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: TextField(
                       controller: _phoneNumber,
                       decoration: InputDecoration(
                         labelText: 'Phone Number:',
@@ -240,8 +208,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.yellow.shade50,
-                        borderRadius:  BorderRadius.circular(10)
-                    ),                    child: TextField(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: 'Email:',
@@ -257,8 +225,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.yellow.shade50,
-                        borderRadius:  BorderRadius.circular(10)
-                    ),                    child: TextField(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: TextField(
                       controller: _passwordController,
                       obscureText: _obscuredPassword,
                       decoration: InputDecoration(
@@ -272,7 +240,9 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                             });
                           },
                           icon: Icon(
-                            _obscuredPassword ? Icons.visibility : Icons.visibility_off,
+                            _obscuredPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: Colors.brown,
                           ),
                         ),
@@ -285,8 +255,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.yellow.shade50,
-                        borderRadius:  BorderRadius.circular(10)
-                    ),                    child: TextField(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: TextField(
                       controller: _confirmPasswordController,
                       obscureText: _obscuredConfirm,
                       decoration: InputDecoration(
@@ -300,7 +270,9 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                             });
                           },
                           icon: Icon(
-                            _obscuredConfirm ? Icons.visibility : Icons.visibility_off,
+                            _obscuredConfirm
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: Colors.brown,
                           ),
                         ),
@@ -325,27 +297,28 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                       ),
                       child: _isLoading
                           ? SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
                           : Text(
-                        'Register',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          color: Colors.white,
-                        ),
-                      ),
+                              'Register',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                 ),
                 SizedBox(height: 10),
                 TextButton(
-                  onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, '/login'),
                   child: Text(
                     'Already have an account?',
                     style: TextStyle(color: Colors.white, fontSize: 20),

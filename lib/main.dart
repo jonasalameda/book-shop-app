@@ -1,7 +1,13 @@
-import 'package:bookshop/controllers/DbController.dart';
-import 'package:bookshop/views/adminCustomers.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'common.dart';
+import 'setLocaleMaterialApp.dart';
+
+String? currentUserID;
+
+
+Future<void> main() async {
+  await loadCurrentUser();
 import 'package:bookshop/views/loginpage.dart';
 import 'package:bookshop/views/registerUser.dart';
 import 'package:bookshop/views/accountView.dart';
@@ -39,6 +45,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return buildMaterialApp(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Ruina Book Store',

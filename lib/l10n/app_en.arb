@@ -1,0 +1,24 @@
+{
+  "@@locale": "en",
+  "hello": "Hello!",
+  "greeting": "Welcome, {name}!",
+  "@greeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "drawerSearch": "Search",
+  "drawerCart": "My Cart",
+  "drawerAccount": "My Account and Wishlist",
+  "drawerFilters": "Apply Filters",
+  "drawerLogout": "Logout",
+
+  "accountGreeting" : "We are delighted to see you back {name}!",
+  "@accountGreeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "accountWishList" : "Here is your wishList",
+  "accountLogOut" : "LogOut"
+}

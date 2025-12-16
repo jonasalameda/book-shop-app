@@ -1,0 +1,25 @@
+{
+  "@@locale": "fr",
+  "hello": "Bonjour!",
+  "greeting": "Bienvenu, {name}!",
+  "@greeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "drawerSearch": "Rechercher",
+  "drawerCart": "Mon Panier",
+  "drawerAccount": "Mon Compte et Liste de Souhait",
+  "drawerFilters": "Appliquer les Filtres",
+  "drawerLogout": "Déconnexion",
+
+  "accountGreeting" : "On est Content de te revoir {name}!",
+  "@accountGreeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+
+  "accountWishList" : "Voici votre liste de souhaites",
+  "accountLogOut" : "Déconnexion"
+}
