@@ -157,6 +157,8 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
   );
 }
 
+//enum AdminOptions { search, books, archive, customers }
+
 Drawer adminDrawer(BuildContext context, int selectedIndex) {
   // search, books, archive, customers
   return Drawer(
@@ -164,45 +166,68 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
       children: [
-        // const DrawerHeader(
-        //   decoration: BoxDecoration(color: Colors.blue),
-        //   child: Text('Drawer'),
-        // ),
+        DrawerHeader(
+          decoration: BoxDecoration(color: Color(0xFFAE9674)),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.transparent,
+                foregroundImage: AssetImage('assets/profilePlaceHolder.jpg'),
+              ),
+              SizedBox(width: 10),
+              // Use Expanded to prevent infinite width
+              Expanded(
+                child: currentUserAppBar == null
+                    ? Center(child: CircularProgressIndicator())
+                    : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                    Text(
+                      "${currentUserAppBar!.email}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
         ListTile(
           title: Text(AppLocalizations.of(context)!.drawerSearch),
           selected: selectedIndex == 0,
           onTap: () {
             Navigator.pop(context);
-            // Navigator.pushNamed(context, '/logout');
+            // Navigator.pushNamed(context, '/admin');
           },
         ),
         ListTile(
-          title: const Text('My Cart'),
+          title: Text('Admin'),
           selected: selectedIndex == 1,
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/cart');
+            Navigator.pushNamed(context, '/admin');
           },
         ),
         ListTile(
-          title: const Text('Account and Wishlist'),
+          title: const Text('Customers'),
           selected: selectedIndex == 2,
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/account');
-          },
-        ),
-        ListTile(
-          title: const Text('Apply Filters'),
-          selected: selectedIndex == 3,
-          onTap: () {
-            Navigator.pop(context);
-            // Navigator.pushNamed(context, '/logout');
+            // Navigator.pushNamed(context, '/account');
           },
         ),
         ListTile(
           title: const Text('Logout'),
-          selected: selectedIndex == 4,
+          selected: selectedIndex == 3,
           onTap: () {
             currentUserID = '';
             currentUserAppBar = null;

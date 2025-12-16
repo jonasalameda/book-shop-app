@@ -7,6 +7,8 @@ import 'package:bookshop/common.dart';
 
 import '../l10n/app_localizations.dart';
 
+//User: bookstore@admin.com, psw: 123123123
+
 class AdminPage extends StatefulWidget {
   final String userID;
 
@@ -283,11 +285,11 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      drawer: customerDrawer(context, _selectedIndex),
+      drawer: adminDrawer(context, _selectedIndex),
       backgroundColor: Colors.orange.shade100,
       body: Center(child:Column(
         children: [
-          buildBodyList()
+          // buildBodyList()
         ],
       )),
     );

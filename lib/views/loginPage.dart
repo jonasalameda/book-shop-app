@@ -187,9 +187,8 @@ class _LogInPageState extends State<LogInPage> {
                                       context);
                                 } else {
                                   // Password is correct
-                                  // if(currentUser['id'] == 'cpWtMJprI1mqtNey7XGf') //admin
-                                  if (currentUser['user_role'] ==
-                                      'admin') //admin
+                                  if(currentUser['id'] == 'cpWtMJprI1mqtNey7XGf') //admin
+                                  // if (currentUser['user_role'] == 'admin') //admin
                                   {
                                     Navigator.push(
                                         context,
