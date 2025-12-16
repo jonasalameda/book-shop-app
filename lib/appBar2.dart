@@ -1,5 +1,6 @@
 import 'package:bookshop/l10n/app_localizations.dart';
 import 'package:bookshop/models/UserModel.dart';
+import 'package:bookshop/views/cartView.dart';
 import 'package:bookshop/views/homeScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -125,7 +126,10 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           selected: selectedIndex == 1,
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/cart');
+            // Navigator.pushNamed(context, '/cart');
+            Navigator.push(context,
+                MaterialPageRoute(
+                    builder: (context) => CartPage(userID: currentUserID!)));
           },
         ),
         ListTile(
