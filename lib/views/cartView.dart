@@ -46,8 +46,8 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  emptyCart(List userCart, List booksInfo, List usersInfo) async{
-    for(var bookRef in userCart){
+  emptyCart(List userCart, List booksInfo, List usersInfo) async {
+    for (var bookRef in userCart) {
       var bookId = bookRef.id;
       var book = getBook(booksInfo, bookId);
       await deleteBookFromCart(widget.userID, usersInfo, bookId);
@@ -56,7 +56,7 @@ class _CartPageState extends State<CartPage> {
 
   Future<bool> decreaseBookQuantity(
       int currentQuantity, String currentBookID) async {
-    if(currentQuantity <= 0){
+    if (currentQuantity <= 0) {
       // showErrorDialog("Sorry can't checkout", "We are currently out of stock for this item please come back another time", context);
       return false;
     }
@@ -208,15 +208,17 @@ class _CartPageState extends State<CartPage> {
                                   margin: EdgeInsets.symmetric(vertical: 2),
                                   child: ListTile(
                                     //TODO: put image holder or link to book image
-                                    leading :Image.network(
-                                      currentBookInfo['image'],
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Image(image: AssetImage('assets/images/placeholder.png'));
-                                      }),
+                                    leading: Image.network(
+                                        currentBookInfo['image'], errorBuilder:
+                                            (context, error, stackTrace) {
+                                      return Image(
+                                          image: AssetImage(
+                                              'assets/images/placeholder.png'));
+                                    }),
                                     title: Text(
                                       currentBookInfo['book_name'],
-                                      style:
-                                      TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     subtitle: Text(currentBookInfo['author']),
                                     trailing: Wrap(
@@ -226,7 +228,10 @@ class _CartPageState extends State<CartPage> {
                                         IconButton(
                                           onPressed: () {
                                             // TODO: delete the current book from the wish list
-                                            deleteBookFromCart(widget.userID, usersInfo, currentBookReference);
+                                            deleteBookFromCart(
+                                                widget.userID,
+                                                usersInfo,
+                                                currentBookReference);
                                             setcartSubtotal();
                                           },
                                           icon: Icon(
@@ -328,17 +333,17 @@ class _CartPageState extends State<CartPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            onPressed: () async{
+                            onPressed: () async {
                               var itemsInStock;
                               for (var bookRef in userCart) {
                                 var bookId = bookRef.id;
                                 var book = getBook(booksInfo, bookId);
                                 if (book != null) {
-                                itemsInStock = await  decreaseBookQuantity(
+                                  itemsInStock = await decreaseBookQuantity(
                                       book['quantity'], bookId);
                                 }
                               }
-                              if(itemsInStock){
+                              if (itemsInStock) {
                                 showSuccessPayment(
                                     AppLocalizations.of(context)!.cartOrderReceived,
                                     AppLocalizations.of(context)!.cartThankYou(totalCart.toStringAsFixed(2)),

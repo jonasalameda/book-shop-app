@@ -51,11 +51,13 @@ class UserModel {
         email = map['email'],
         password_hash = map['password_hash'],
         wishList = (map['wishlist'] as List)
-        // wishList = (map['wishList'] as List) this bastard was the issue
+            // wishList = (map['wishList'] as List) this bastard was the issue
             .map((item) => BookModel.fromMap(item))
             .toList(),
         cart = (map['cart'] as List)
             .map((item) => BookModel.fromMap(item))
             .toList(),
-        role = map['role'] == "admin" ? Role.admin.toString() : Role.customer.toString();
+        role = map['role'] == "admin"
+            ? Role.admin.toString()
+            : Role.customer.toString();
 }

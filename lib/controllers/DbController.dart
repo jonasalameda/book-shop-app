@@ -48,6 +48,7 @@ getUser(List users, String wantedUser) {
       return users[i];
     }
   }
+  return null;
   // return await usersList.doc(widget.userID).get();
 }
 
