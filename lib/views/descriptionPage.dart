@@ -1,109 +1,145 @@
+import 'dart:developer';
+
 import 'package:bookshop/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar2.dart';
+
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:bookshop/common.dart';
-import '../l10n/app_localizations.dart';
-import 'package:bookshop/models/UserModel.dart';
-
-class DescriptionPage extends StatelessWidget {
-  const DescriptionPage({super.key});
 
 
+class Descriptionpage extends StatefulWidget {
+  const Descriptionpage({super.key});
+
+  @override
+  State<Descriptionpage> createState() => _DescriptionpageState();
+}
+
+class _DescriptionpageState extends State<Descriptionpage> {
+
+
+  buildDescription(BuildContext context){
+    final item = ModalRoute.of(context)!.settings.arguments as Map;
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: StreamBuilder<List<QuerySnapshot>>(
+            stream: CombineLatestStream.list([
+              FirebaseFirestore.instance.collection('Users').snapshots(),
+              FirebaseFirestore.instance.collection('Books').snapshots()
+            ]),
+            builder: (context, snapshot) {
+              var dbUsers = snapshot.data![0].docs;
+              var dbBooks = snapshot.data![1].docs;
+
+              var usersInfo = [
+                ...dbUsers.map((customer) {
+                  var data = customer.data() as Map<String, dynamic>?;
+                  return {
+                    'id': customer.id,
+                    'first_name': data?['first_name'] ?? '',
+                    'last_name': data?['last_name'] ?? '',
+                    'phone_number': data?['phone_number'] ?? '',
+                    'email': data?['email'] ?? '',
+                    'password_hash': data?['password_hash'] ?? '',
+                    'wishlist': data?['wishlist'] ?? [],
+                    'cart': data?['cart'] ?? [],
+                    'role': data?['role'] ?? '',
+                    'type': 'user'
+                  };
+                }),
+              ];
+              var booksInfo = [
+                ...dbBooks.map((book) {
+                  var data = book.data() as Map<String, dynamic>?;
+                  return {
+                    'id': book.id,
+                    'isbn': data?['isbn'] ?? '',
+                    'book_name': data?['book_name'] ?? '',
+                    'author': data?['author'] ?? '',
+                    'country': data?['country'] ?? '',
+                    'genres': data?['genres'] ?? [],
+                    'description': data?['description'] ?? '',
+                    'image': data?['image'] ?? '',
+                    'quantity': data?['quantity'] ?? 0,
+                    'price': data?['price'] ?? 0.00,
+                    'available': data?['available'] ?? false,
+                    'type': 'book'
+                  };
+                }),
+              ];
+
+              var currentUser = getUser(usersInfo, currentUserID!);
+              var userCart = currentUser['cart'];
+              // String? bookId;
+
+              double setcartSubtotal() {
+                double subtotal = 0;
+                for (var bookRef in userCart) {
+                  var bookId = bookRef.id;
+                  var book = getBook(booksInfo, bookId!);
+                  if (book != null) {
+                    subtotal += (book['price'] as num).toDouble();
+                  }
+                }
+                return subtotal;
+              }
+
+              return Column(
+                children: [
+                  SizedBox(height: 25,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      item['image'].isEmpty
+                          ? Image(image: AssetImage('bookPlaceholder.jpg'))
+                          : Image(
+                        image: NetworkImage(item['image']),
+                        width: 300,
+                        height: 300,
+                      ),
+                    ],
+                  ),
+                  Container(
+                      padding: EdgeInsets.all(32),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(item['name'], style: TextStyle(fontSize: 25, decoration: TextDecoration.underline),),
+                              Text("\$${item['price']}", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Author: ${item['author']}"),
+                              Text("Stock: ${item['quantity']}"),
+                            ],
+                          ),
+                        ],
+                      )
+                  )
+                ],
+              );
+            }),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-
     final item = ModalRoute.of(context)!.settings.arguments as Map;
-    // final dbUsers = FirebaseFirestore.instance.collection('Users').snapshots().data![0].docs;
-
-    UserModel user = getUserById(currentUserID!) as UserModel;
-    
-    
 
     return Scaffold(
       appBar: buildAppBar(context),
       drawer: customerDrawer(context, 0),
       body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 25,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                item['image'].isEmpty
-                    ? Image(image: AssetImage('bookPlaceholder.jpg'))
-                    : Image(
-                  image: NetworkImage(item['image']),
-                  width: 300,
-                  height: 300,
-                ),
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.all(32),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(item['name'], style: TextStyle(fontSize: 25, decoration: TextDecoration.underline),),
-                      Text("\$${item['price']}", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Author: ${item['author']}"),
-                      Text("Stock: ${item['quantity']}"),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      // IconButton(
-                      //     onPressed: () async {
-                      //       //TODO: put current book in cart array instead of wishlist array
-                      //       List<dynamic> cartArray =
-                      //       currentUser['cart'];
-                      //       // cartArray.add(currentBookId);
-                      //       // addToCart(widget.userID, usersInfo, currentBookReference);
-                      //       await FirebaseFirestore.instance
-                      //           .collection('Users')
-                      //           .doc(widget.userID)
-                      //           .update({
-                      //         'cart': FieldValue.arrayUnion(
-                      //             [currentBookReference])
-                      //       });
-                      //       if (cartArray.contains(
-                      //           currentBookReference)) {
-                      //         showErrorDialog(
-                      //             'Item already in cart',
-                      //             'It seems like you have already added this item to your cart',
-                      //             context,
-                      //             'Okay');
-                      //       } else {
-                      //         showSuccess(
-                      //             'Item added Successfully',
-                      //             'Item is now in your cart you can checkout',
-                      //             context);
-                      //       }
-                      //     },
-                      //     icon: Icon(
-                      //       Icons.add_shopping_cart,
-                      //       color: Colors.brown,
-                      //     )),
-                      Text("${user.id ?? 'undefined'}")
-                    ],
-                  )
-                ],
-              )
-            )
-          ],
-        ),
+        child:buildDescription(context)
       ),
     );
-  }
+}
 }

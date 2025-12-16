@@ -1,6 +1,7 @@
 // import 'package:bookshop/appBar.dart';
 import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/main.dart';
+import 'package:bookshop/views/descriptionPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/streams.dart';
@@ -18,77 +19,112 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context),
-      drawer: customerDrawer(context, 1),
-      body: Center(
-        child: Column(
-          children: [
-            Row(
+        appBar: buildAppBar(context),
+        backgroundColor: Color.fromRGBO(219, 206, 206, 1),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
               children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Container(
-                    padding: EdgeInsets.all(0),
-                    child: Image.asset('assets/dashboardBg.jpg'),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.loose,
-                  child: Container(
-                    width: 500,
-                    height: 110,
-                    padding: const EdgeInsets.all(0),
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("assets/homeTitleDecoration.png"),
-                            fit: BoxFit.fitWidth)),
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "Featured Books",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 24),
-                        ),
-                      ],
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: Container(
+                        padding: EdgeInsets.all(0),
+                        child: Image.asset('assets/dashboardBg.jpg'),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
+                SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.loose,
+                      child: Container(
+                        width: 500,
+                        height: 110,
+                        padding: const EdgeInsets.all(0),
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                    "assets/homeTitleDecoration.png"),
+                                fit: BoxFit.fitWidth)),
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "Featured Books",
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 24),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Padding(
+                  padding: EdgeInsetsGeometry.all(8.0),
+                  child: _generateFeatured(),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                const Text(
+                  "Best Sellers",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      decoration: TextDecoration.underline,
+                      fontSize: 32),
+                ),
+                Padding(
+                  padding: EdgeInsetsGeometry.all(8),
+                  child: _generateFeatured(),
+                ),
+                const Text(
+                  "Our Staff Recommendation",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      decoration: TextDecoration.underline,
+                      fontSize: 32),
+                ),
+                Padding(
+                  padding: EdgeInsetsGeometry.all(8),
+                  child: _generateFeatured(),
+                )
               ],
             ),
-            const SizedBox(
-              height: 50,
-            ),
-            Padding(
-              padding: EdgeInsetsGeometry.all(8.0),
-              child: _generateFeatured(),
-            )
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 
-Widget? _generateFeatured() {
+Widget? _generateFeatured({String? filter}) {
   return StreamBuilder<List<QuerySnapshot>>(
     // time to use combinedstream from RXdart
     stream: CombineLatestStream.list([
-      FirebaseFirestore.instance.collection('Books').snapshots(),
+      (filter != null)
+          ? FirebaseFirestore.instance
+              .collection('Books')
+              .orderBy(filter)
+              .snapshots()
+          : FirebaseFirestore.instance.collection('Books').snapshots(),
     ]),
     builder: (context, snapshot) {
       if (!snapshot.hasData) {
@@ -133,16 +169,29 @@ Widget? _generateFeatured() {
               padding: EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  item['image'].isEmpty
-                      ? Image(image: AssetImage('bookPlaceholder.jpg'))
-                      : Image(
-                          image: NetworkImage(item['image']),
-                          width: 100,
-                          height: 100,
-                        ),
-                  Text(item['name'] ?? ""),
+                  OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => Descriptionpage()));
+                    },
+                    child: item['image'].isEmpty
+                        ? Image(image: AssetImage('bookPlaceholder.jpg'))
+                        : Image(
+                            image: NetworkImage(item['image']),
+                            width: 100,
+                            height: 100,
+                          ),
+                  ),
+                  Text(
+                    item['name'] ?? "",
+                    style: TextStyle(
+                        color:
+                            (item['quantity'] > 0) ? Colors.black : Colors.red),
+                  ),
                   Text("${item['price']}"),
-                  Text("${item['quantity']}")
+                  Text("${item['quantity']}"),
                 ],
               ),
             );
