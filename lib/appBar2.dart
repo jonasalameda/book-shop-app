@@ -1,6 +1,5 @@
 import 'package:bookshop/l10n/app_localizations.dart';
 import 'package:bookshop/models/UserModel.dart';
-import 'package:bookshop/views/homeScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
@@ -113,10 +112,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           title: Text(AppLocalizations.of(context)!.drawerSearch),
           selected: selectedIndex == 0,
           onTap: () {
-            // Navigator.pop(context);
-
-            Navigator.push(
-                context, MaterialPageRoute(builder: (builder) => HomeScreen()));
+            Navigator.pushNamed(context, '/home');
             // Navigator.pushNamed(context, '/logout');
           },
         ),
@@ -163,15 +159,6 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
 
-        ListTile(
-          title: Text("Home"),
-          selected: selectedIndex == 6,
-          onTap: () {
-            unloadCurrentUser();
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/home');
-          },
-        ),
       ],
     ),
   );
@@ -182,6 +169,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
 Drawer adminDrawer(BuildContext context, int selectedIndex) {
   // search, books, archive, customers
   return Drawer(
+
     child: ListView(
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
@@ -227,14 +215,6 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           ),
         ),
         ListTile(
-          title: Text(AppLocalizations.of(context)!.drawerSearch),
-          selected: selectedIndex == 0,
-          onTap: () {
-            Navigator.pop(context);
-            // Navigator.pushNamed(context, '/admin');
-          },
-        ),
-        ListTile(
           title: Text('Admin'),
           selected: selectedIndex == 1,
           onTap: () {
@@ -250,9 +230,9 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             // Navigator.pushNamed(context, '/account');
           },
         ),
-
+       
         ListTile(
-          title: Text(AppLocalizations.of(context)!.drawerLogout),
+          title:  Text(AppLocalizations.of(context)!.drawerLogout),
           selected: selectedIndex == 3,
           onTap: () {
             currentUserID = '';
@@ -261,7 +241,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
-
+       
         ListTile(
           title: Text(AppLocalizations.of(context)!.drawerFindUs),
           selected: selectedIndex == 4,
