@@ -5,30 +5,6 @@ import 'setLocaleMaterialApp.dart';
 
 String? currentUserID;
 
-void showAlert(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(message),
-      duration: Duration(seconds: 10),
-      backgroundColor: Colors.redAccent,
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.all(15),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      action: SnackBarAction(
-        // optional action button
-        label: "Close",
-        textColor: Colors.grey,
-        onPressed: () {
-          ScaffoldMessenger.of(context)
-              .hideCurrentSnackBar(); //hide snack bar
-        },
-      ),
-    ),
-  );
-}
-
 Future<void> main() async {
   await loadCurrentUser();
   WidgetsFlutterBinding.ensureInitialized();

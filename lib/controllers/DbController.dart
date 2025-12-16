@@ -154,3 +154,12 @@ Future<bool> updateBook(String bookId, Map<String, dynamic> updatedData) async {
   }
 }
 
+Future<bool> addBook(Map<String, dynamic> bookData) async {
+  try {
+    await FirebaseFirestore.instance.collection('Books').add(bookData);
+    return true;
+  } catch (e) {
+    print('Error adding book: $e');
+    return false;
+  }
+}

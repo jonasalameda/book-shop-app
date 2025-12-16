@@ -1,4 +1,4 @@
- import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/controllers/DbController.dart';
@@ -22,7 +22,7 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   final _selectedIndex = 1;
   String _searchText = '';
-  final  _searchController = TextEditingController();
+  final _searchController = TextEditingController();
   MenuItem? selectedItem;
 
   buildBodyList() {
@@ -79,15 +79,22 @@ class _AdminPageState extends State<AdminPage> {
             if (currentUser == null) {
               return const Center(child: CircularProgressIndicator());
             }
-            final filteredBooks = _searchText.isEmpty ? booksInfo : booksInfo.where((book) {
-              final title = (book['book_name'] ?? '').toString().toLowerCase();
-              final author = (book['author'] ?? '').toString().toLowerCase();
-              final genres = (book['genres'] ?? []);
+            final filteredBooks = _searchText.isEmpty
+                ? booksInfo
+                : booksInfo.where((book) {
+                    final title =
+                        (book['book_name'] ?? '').toString().toLowerCase();
+                    final author =
+                        (book['author'] ?? '').toString().toLowerCase();
+                    final genres = (book['genres'] ?? []);
 
-              final bool genreMatches = genres.any((genre) => genre.toString().toLowerCase().contains(_searchText));
+                    final bool genreMatches = genres.any((genre) =>
+                        genre.toString().toLowerCase().contains(_searchText));
 
-              return title.contains(_searchText) || author.contains(_searchText) || genreMatches;
-            }).toList();
+                    return title.contains(_searchText) ||
+                        author.contains(_searchText) ||
+                        genreMatches;
+                  }).toList();
 
             return Column(
               children: [
@@ -124,10 +131,37 @@ class _AdminPageState extends State<AdminPage> {
                     )
                   ],
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 25),
                 Row(
                   children: [
-                    Text("Library Books:", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),),
+                    ElevatedButton(
+                      onPressed: () async{
+                        _updateOrAddBookDialog('', false);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.brown.shade500,
+                        ),
+                      ),
+                      child: Text(
+                        'Add Book',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 25),
+                Row(
+                  children: [
+                    Text(
+                      "Library Books:",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
+                    ),
                   ],
                 ),
                 TextField(
@@ -161,15 +195,14 @@ class _AdminPageState extends State<AdminPage> {
                             errorBuilder: (context, error, stackTrace) {
                               return const Image(
                                 image:
-                                AssetImage('assets/bookPlacehoolder.jpg'),
+                                    AssetImage('assets/bookPlacehoolder.jpg'),
                                 width: 60,
                               );
                             },
                           ),
                           title: Text(
                             book['book_name'],
-                            style:
-                            const TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,11 +213,16 @@ class _AdminPageState extends State<AdminPage> {
                             ],
                           ),
                           trailing: Row(
-                            mainAxisSize: MainAxisSize.min, // important, otherwise Row tries to expand
+                            mainAxisSize: MainAxisSize.min,
+                            // important, otherwise Row tries to expand
                             children: [
                               Icon(
-                                book['available'] ? Icons.check_circle : Icons.cancel,
-                                color: book['available'] ? Colors.green : Colors.red,
+                                book['available']
+                                    ? Icons.check_circle
+                                    : Icons.cancel,
+                                color: book['available']
+                                    ? Colors.green
+                                    : Colors.red,
                               ),
                               SizedBox(width: 8), // small spacing
                               getMenu(book['id']),
@@ -210,8 +248,8 @@ class _AdminPageState extends State<AdminPage> {
                             },
                             style: ButtonStyle(
                                 backgroundColor:
-                                MaterialStateProperty.all<Color>(
-                                    Colors.brown.shade500)),
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.brown.shade500)),
                             child: Row(
                               children: [
                                 Text(
@@ -239,6 +277,166 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
+  _updateOrAddBookDialog(bookId, bool update)
+  {
+    String _updateBtn = "";
+    String _updateError = "";
+    String _title = "";
+    if(update) {
+      _updateBtn = "Update Book";
+      _updateError = "Nothing to update.";
+      _title = "Update only new fields";
+    } else{
+      _updateBtn = "Add Book";
+      _updateError = "All fields are required!";
+      _title = "Enter the new Book's info";
+    }
+
+
+     return showDialog(
+      context: context,
+      builder: (context) {
+        Map<String, dynamic> newBookData = {};
+        String newName = '';
+        String newAuthor = '';
+        String newCountry = '';
+        String newDescription = '';
+        String newIsbn= '';
+        int? newStock;
+        double? newPrice;
+        bool? newAvailability;
+        final List<bool> availabilityOptions = [true, false];
+        String genreInputs = ''; //comma separated input
+
+        return AlertDialog(
+          title: Text(_title),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                if (!update)
+                  TextField(
+                    onChanged: (value) => newIsbn = value,
+                    decoration:
+                    InputDecoration(hintText: 'Enter ISBN'),
+                  ),
+                TextField(
+                  onChanged: (value) => newName = value,
+                  decoration:
+                  InputDecoration(hintText: 'Enter new title'),
+                ),
+                TextField(
+                  onChanged: (value) => newAuthor = value,
+                  decoration: InputDecoration(hintText: 'Author'),
+                ),
+                TextField(
+                  onChanged: (value) => newCountry = value,
+                  decoration: InputDecoration(hintText: 'Country'),
+                ),
+                TextField(
+                  onChanged: (value) => newDescription = value,
+                  decoration:
+                  InputDecoration(hintText: 'Description'),
+                ),
+                TextField(
+                  onChanged: (value) =>
+                  newPrice = double.tryParse(value.trim()),
+                  decoration: InputDecoration(hintText: 'Price'),
+                ),
+                TextField(
+                  onChanged: (value) =>
+                  newStock = int.tryParse(value.trim()),
+                  decoration: InputDecoration(hintText: 'Stock'),
+                ),
+                DropdownButtonFormField(
+                  decoration:
+                  InputDecoration(labelText: 'Availability'),
+                  value: newAvailability,
+                  items: [
+                    DropdownMenuItem(
+                        value: true, child: Text('Available')),
+                    DropdownMenuItem(
+                        value: false, child: Text('Unavailable')),
+                  ],
+                  onChanged: (value) => newAvailability = value,
+                ),
+                TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'Genres (comma separated)',
+                    hintText: 'Fantasy, Mystery, Sci-Fi',
+                  ),
+                  onChanged: (value) => genreInputs = value,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+                onPressed: () async {
+                  if (newName.trim().isNotEmpty) {
+                    newBookData['book_name'] = newName.trim();
+                  }
+                  if (newAuthor.trim().isNotEmpty) {
+                    newBookData['author'] = newAuthor.trim();
+                  }
+                  if (newCountry.trim().isNotEmpty) {
+                    newBookData['country'] = newCountry.trim();
+                  }
+                  if (newDescription.trim().isNotEmpty) {
+                    newBookData['description'] =
+                        newDescription.trim();
+                  }
+                  if (newIsbn.trim().isNotEmpty) {
+                    newBookData['isbn'] =
+                        newIsbn.trim();
+                  }
+                  if (newPrice != null) {
+                    newBookData['price'] = newPrice;
+                  }
+                  if (newStock != null) {
+                    newBookData['quantity'] = newStock;
+                  }
+                  if (newAvailability != null) {
+                    newBookData
+                        .addAll({'available': newAvailability});
+                  }
+                  if (genreInputs.trim().isNotEmpty) {
+                    newBookData['genres'] = genreInputs
+                        .split(',')
+                        .map((g) => g.trim())
+                        .where((g) => g.isNotEmpty)
+                        .toList();
+                  }
+
+                  if(update) {
+                    if (newBookData.isNotEmpty) {
+                      await updateBook(bookId, newBookData);
+                    } else {
+                      showErrorDialog("error",_updateError, context); //general function from main
+                    }
+                  } else{
+                    if(newBookData.length < 9)
+                      {
+                        showErrorDialog("error",_updateError, context); //general function from main
+                      } else{
+                      newBookData['wishlist'] = [];
+                      newBookData['cart'] = [];
+                      await addBook(newBookData);
+                    }
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text(_updateBtn)),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'))
+          ],
+        );
+      },
+    );
+  }
+
   Widget getMenu(bookId) {
     return PopupMenuButton<MenuItem>(
       initialValue: selectedItem,
@@ -252,128 +450,7 @@ class _AdminPageState extends State<AdminPage> {
           value: MenuItem.update,
           child: TextButton(
               onPressed: () async {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    Map<String, dynamic> newBookData = {};
-                    String newName = '';
-                    String newAuthor = '';
-                    String newCountry = '';
-                    String newDescription = '';
-                    int? newStock;
-                    double? newPrice;
-                    bool? newAvailability;
-                    final List<bool> availabilityOptions = [true, false];
-                    String genreInputs = ''; //comma separated input
-                    // 'book_name': book_name,
-                    // 'author': author,
-                    // 'country': country,
-                    // 'genres': genres,
-                    // 'description': description,
-                    // 'quantity': quantity,
-                    // 'price': price,
-                    // 'available': available,
-
-                    return AlertDialog(
-                      title: Text("Update only new fields"),
-                      content: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            TextField(
-                              onChanged: (value) => newName = value,
-                              decoration:
-                              InputDecoration(hintText: 'Enter new title'),
-                            ),
-                            TextField(
-                              onChanged: (value) => newAuthor = value,
-                              decoration: InputDecoration(hintText: 'Author'),
-                            ),
-                            TextField(
-                              onChanged: (value) => newCountry = value,
-                              decoration: InputDecoration(hintText: 'Country'),
-                            ),
-                            TextField(
-                              onChanged: (value) => newDescription = value,
-                              decoration:
-                              InputDecoration(hintText: 'Description'),
-                            ),
-                            TextField(
-                              onChanged: (value) =>
-                              newPrice = double.tryParse(value.trim()),
-                              decoration: InputDecoration(hintText: 'Price'),
-                            ),
-                            TextField(
-                              onChanged: (value) =>
-                              newStock = int.tryParse(value.trim()),
-                              decoration: InputDecoration(hintText: 'Stock'),
-                            ),
-                            DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: 'Availability'),
-                              value: newAvailability,
-                              items: [
-                                DropdownMenuItem(value: true, child: Text('Available')),
-                                DropdownMenuItem(value: false, child: Text('Unavailable')),
-                              ],
-                              onChanged: (value) => newAvailability = value,
-                            ),
-                            TextField(
-                              decoration: const InputDecoration(
-                                labelText: 'Genres (comma separated)',
-                                hintText: 'Fantasy, Mystery, Sci-Fi',
-                              ),
-                              onChanged: (value) => genreInputs = value,
-                            ),
-                          ],
-                        ),
-                      ),
-                      actions: [
-                        ElevatedButton(
-                            onPressed: () async {
-                              if (newName.trim().isNotEmpty) {
-                                newBookData['book_name'] = newName.trim();
-                              }
-                              if (newAuthor.trim().isNotEmpty) {
-                                newBookData['author'] = newAuthor.trim();
-                              }
-                              if (newCountry.trim().isNotEmpty) {
-                                newBookData['country'] = newCountry.trim();
-                              }
-                              if (newDescription.trim().isNotEmpty) {
-                                newBookData['description'] = newDescription.trim();
-                              }
-                              if (newPrice != null) {
-                                newBookData['price'] = newPrice;
-                              }
-                              if (newStock != null) {
-                                newBookData['quantity'] = newStock;
-                              }
-                              if (newAvailability != null) {
-                                newBookData.addAll({'available': newAvailability});
-                              }
-                              if (genreInputs.trim().isNotEmpty) {
-                                newBookData['genres'] = genreInputs
-                                    .split(',').map((g) => g.trim())
-                                    .where((g) => g.isNotEmpty).toList();
-                              }
-
-                              if (newBookData.isNotEmpty) {
-                                await updateBook(bookId, newBookData);
-                              } else {
-                                showAlert(context,
-                                    "Nothing to update."); //general function from main
-                              }
-                              Navigator.pop(context);
-                            },
-                            child: Text('Update')),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('Cancel'))
-                      ],
-                    );
-                  },
-                );
+                _updateOrAddBookDialog(bookId, true);
               },
               child: Text("Update Book")),
         ),
@@ -390,7 +467,6 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -399,10 +475,8 @@ class _AdminPageState extends State<AdminPage> {
       backgroundColor: Colors.orange.shade100,
       body: Center(
           child: Column(
-            children: [
-              buildBodyList()
-            ],
-          )),
+        children: [buildBodyList()],
+      )),
     );
   }
 }
