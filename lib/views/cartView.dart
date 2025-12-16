@@ -23,6 +23,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   CollectionReference allBooks = FirebaseFirestore.instance.collection('Books');
+  CollectionReference allUsers = FirebaseFirestore.instance.collection('Users');
   final _selectedIndex = 1;
   late var booksInCart;
   late double cartSubtotal = 0;
@@ -50,7 +51,9 @@ class _CartPageState extends State<CartPage> {
     for (var bookRef in userCart) {
       var bookId = bookRef.id;
       var book = getBook(booksInfo, bookId);
-      await deleteBookFromCart(widget.userID, usersInfo, bookId);
+      // await deleteBookFromCart(widget.userID, usersInfo, bookId);
+      await updateElement(allUsers, widget.userID, 'cart', []);
+
     }
   }
 
