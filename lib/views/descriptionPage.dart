@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 
-class DescriptionPage extends StatefulWidget {
-  const DescriptionPage({super.key});
+class DescriptionPage extends StatelessWidget {
+  const DescriptionPage({super.key, required bookId});
+  final bookId = "";
 
-  @override
-  State<DescriptionPage> createState() => _DescriptionPageState();
-}
-
-class _DescriptionPageState extends State<DescriptionPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-    );
+    return Scaffold();
   }
 }

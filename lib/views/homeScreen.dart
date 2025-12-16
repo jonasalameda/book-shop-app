@@ -86,14 +86,9 @@ Widget? _generateFeatured() {
   return StreamBuilder<List<QuerySnapshot>>(
     // time to use combinedstream from RXdart
     stream: CombineLatestStream.list([
-      FirebaseFirestore.instance
-          .collection('Books')
-          .orderBy("name")
-          .snapshots(),
+      FirebaseFirestore.instance.collection('Books').snapshots(),
     ]),
     builder: (context, snapshot) {
-      print('firebase alguma ocisa aqui');
-      print(snapshot.data![0]);
       if (!snapshot.hasData) {
         print(
             'a todos os agentes da overwatch, aqui é o wintom haha... obviamente');
@@ -109,7 +104,7 @@ Widget? _generateFeatured() {
         ...booksData.map(
           (d) => {
             'id': d.id,
-            'name': d['name'],
+            'name': d['book_name'],
             'author': d['author'],
             'available': d['available'],
             'country': d['country'],
@@ -132,9 +127,8 @@ Widget? _generateFeatured() {
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, i) {
             final item = booksMap[i];
-            return Card(
-              semanticContainer: false,
-              shadowColor: Colors.black,
+            return Container(
+              padding: EdgeInsets.all(8.0),
               child: Column(
                 children: [
                   item['image'].isEmpty
@@ -143,7 +137,10 @@ Widget? _generateFeatured() {
                           image: NetworkImage(item['image']),
                           width: 100,
                           height: 100,
-                        )
+                        ),
+                  Text(item['name'] ?? ""),
+                  Text("${item['price']}"),
+                  Text("${item['quantity']}")
                 ],
               ),
             );

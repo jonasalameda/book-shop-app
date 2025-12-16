@@ -7,7 +7,6 @@ class MapPage extends StatefulWidget {
   _MapPageState createState() => _MapPageState();
 }
 
-
 class _MapPageState extends State<MapPage> {
   late GoogleMapController mapController;
   static final LatLng _center = const LatLng(45.5144626, -73.6755719);
@@ -68,7 +67,7 @@ class _MapPageState extends State<MapPage> {
       drawer: customerDrawer(context, 5),
       backgroundColor: Colors.orange.shade100,
       body: Center(
-        child: Column(children:[buildGoogleMapsBody()]),
+        child: Column(children: [buildGoogleMapsBody()]),
       ),
     );
   }

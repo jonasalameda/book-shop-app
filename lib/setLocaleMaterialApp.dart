@@ -1,6 +1,7 @@
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:bookshop/views/googleMap.dart';
+import 'package:bookshop/views/homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:bookshop/views/loginpage.dart';
@@ -42,7 +43,7 @@ Widget buildMaterialApp(BuildContext context) {
       routes: {
         '/': (context) => const SplashScreen(),
         '/login': (context) => LogInPage(),
-        '/home': (context) => DashboardPage(),
+        '/home': (context) => HomeScreen(),
         '/registerUser': (context) => RegisterUserPage(),
         // '/admin': (context) => AdminPage(userID: 'cpWtMJprI1mqtNey7XGf',), //Only one admin, so we hard-code
         '/admin': (context) => AdminPage(
@@ -56,7 +57,6 @@ Widget buildMaterialApp(BuildContext context) {
               userID: currentUserID!,
             ),
         '/map': (context) => MapPage(),
-        '/description': (context) => DescriptionPage(),
         // add more routes as needed
       });
 }
