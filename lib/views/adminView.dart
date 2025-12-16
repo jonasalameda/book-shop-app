@@ -35,6 +35,14 @@ class _AdminPageState extends State<AdminPage> {
             FirebaseFirestore.instance.collection('Books').snapshots()
           ]),
           builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (!snapshot.hasData || snapshot.data == null) {
+              return const Center(child: Text('No data available'));
+            }
+
             var dbUsers = snapshot.data![0].docs;
             var dbBooks = snapshot.data![1].docs;
             var booksInfo = [
@@ -195,7 +203,7 @@ class _AdminPageState extends State<AdminPage> {
                             errorBuilder: (context, error, stackTrace) {
                               return const Image(
                                 image:
-                                    AssetImage('assets/bookPlacehoolder.jpg'),
+                                    AssetImage('assets/bookPlaceholder.jpg'),
                                 width: 60,
                               );
                             },
@@ -473,10 +481,11 @@ class _AdminPageState extends State<AdminPage> {
       appBar: buildAppBar(context),
       drawer: adminDrawer(context, _selectedIndex),
       backgroundColor: Colors.orange.shade100,
-      body: Center(
-          child: Column(
-        children: [buildBodyList()],
-      )),
+      body: Column(
+        children: [
+          buildBodyList()
+        ],
+      ),
     );
   }
 }
