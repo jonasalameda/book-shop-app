@@ -17,76 +17,112 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            Row(
+        appBar: buildAppBar(),
+        backgroundColor: Color.fromRGBO(219, 206, 206, 1),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
               children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Container(
-                    padding: EdgeInsets.all(0),
-                    child: Image.asset('assets/dashboardBg.jpg'),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.loose,
-                  child: Container(
-                    width: 500,
-                    height: 110,
-                    padding: const EdgeInsets.all(0),
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("assets/homeTitleDecoration.png"),
-                            fit: BoxFit.fitWidth)),
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "Featured Books",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 24),
-                        ),
-                      ],
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: Container(
+                        padding: EdgeInsets.all(0),
+                        child: Image.asset('assets/dashboardBg.jpg'),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
+                SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.loose,
+                      child: Container(
+                        width: 500,
+                        height: 110,
+                        padding: const EdgeInsets.all(0),
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                    "assets/homeTitleDecoration.png"),
+                                fit: BoxFit.fitWidth)),
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "Featured Books",
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 24),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Padding(
+                  padding: EdgeInsetsGeometry.all(8.0),
+                  child: _generateFeatured(),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                const Text(
+                  "Featured Books",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      decoration: TextDecoration.underline,
+                      fontSize: 32),
+                ),
+                Padding(
+                  padding: EdgeInsetsGeometry.all(8),
+                  child: _generateFeatured(),
+                ),
+                const Text(
+                  "Featured Books",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      decoration: TextDecoration.underline,
+                      fontSize: 32),
+                ),
+                Padding(
+                  padding: EdgeInsetsGeometry.all(8),
+                  child: _generateFeatured(),
+                )
               ],
             ),
-            const SizedBox(
-              height: 50,
-            ),
-            Padding(
-              padding: EdgeInsetsGeometry.all(8.0),
-              child: _generateFeatured(),
-            )
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 
-Widget? _generateFeatured() {
+Widget? _generateFeatured({String? filter}) {
   return StreamBuilder<List<QuerySnapshot>>(
     // time to use combinedstream from RXdart
     stream: CombineLatestStream.list([
-      FirebaseFirestore.instance.collection('Books').snapshots(),
+      (filter != null)
+          ? FirebaseFirestore.instance
+              .collection('Books')
+              .orderBy(filter)
+              .snapshots()
+          : FirebaseFirestore.instance.collection('Books').snapshots(),
     ]),
     builder: (context, snapshot) {
       if (!snapshot.hasData) {
@@ -138,9 +174,14 @@ Widget? _generateFeatured() {
                           width: 100,
                           height: 100,
                         ),
-                  Text(item['name'] ?? ""),
+                  Text(
+                    item['name'] ?? "",
+                    style: TextStyle(
+                        color:
+                            (item['quantity'] > 0) ? Colors.black : Colors.red),
+                  ),
                   Text("${item['price']}"),
-                  Text("${item['quantity']}")
+                  Text("${item['quantity']}"),
                 ],
               ),
             );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bookshop/userSettings.dart';
+
 enum Options { search, myCart, wishList, logout, filter }
 
 var _popUpMenuIndex = 0;
@@ -42,9 +43,10 @@ AppBar buildAppBar() {
       //   ],
       // ),
       Switch(
-          value: isLight, onChanged: (value){
-         isLight = changeColorTheme(isLight);
-      }),
+          value: isLight,
+          onChanged: (value) {
+            isLight = changeColorTheme(isLight);
+          }),
       // PopupMenuButton(
       //   onSelected: (value) {
       //     _onMenuItemsSelected(value as int);
