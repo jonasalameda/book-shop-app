@@ -162,6 +162,16 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/map');
           },
         ),
+
+        ListTile(
+          title: Text("Home"),
+          selected: selectedIndex == 6,
+          onTap: () {
+            unloadCurrentUser();
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/home');
+          },
+        ),
       ],
     ),
   );
