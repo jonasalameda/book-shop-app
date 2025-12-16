@@ -213,7 +213,7 @@ class _CartPageState extends State<CartPage> {
                                             (context, error, stackTrace) {
                                       return Image(
                                           image: AssetImage(
-                                              'assets/images/placeholder.png'));
+                                              'assets/bookPlacehoolder.png'));
                                     }),
                                     title: Text(
                                       currentBookInfo['book_name'],
