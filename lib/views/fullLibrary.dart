@@ -8,6 +8,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:bookshop/common.dart';
 import 'package:bookshop/main.dart';
 import '../l10n/app_localizations.dart';
+import 'package:bookshop/views/descriptionPage.dart';
 
 //User: bookstore@admin.com, psw: 123123123
 enum MenuItem { view, cart, wishlist}
@@ -215,7 +216,7 @@ class _fullLibraryState extends State<fullLibrary> {
                                     : Colors.red,
                               ),
                               SizedBox(width: 8), // small spacing
-                              getMenu(),
+                              getMenu(book['id']),
                             ],
                           ),
                         ),
@@ -266,7 +267,7 @@ class _fullLibraryState extends State<fullLibrary> {
     );
   }
 
-  Widget getMenu() {
+  Widget getMenu(itemId) {
     return PopupMenuButton<MenuItem>(
       initialValue: selectedItem,
       onSelected: (MenuItem item) {
@@ -279,7 +280,11 @@ class _fullLibraryState extends State<fullLibrary> {
           value: MenuItem.view,
           child: Text("View Description"),
           onTap: () {
-            Navigator.pushNamed(context, '/description');
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (builder) =>
+                        DescriptionPage(bookId: itemId)));
           },
         ),
         PopupMenuItem<MenuItem>(
