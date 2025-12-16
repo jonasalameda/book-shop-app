@@ -20,7 +20,11 @@ class DescriptionPage extends StatefulWidget {
 
 class _DescriptionPageState extends State<DescriptionPage> {
   buildDescription(BuildContext context) {
-    final item = ModalRoute.of(context)!.settings.arguments as Map;
+    print("jfdkhckse not an id");
+    print(currentUserID);
+    print(widget.bookId);
+
+    // final item = ModalRoute.of(context)!.settings.arguments as Map;
     return Expanded(
       child: Padding(
         padding: EdgeInsets.all(10),
@@ -72,7 +76,8 @@ class _DescriptionPageState extends State<DescriptionPage> {
 
               var currentUser = getUser(usersInfo, currentUserID!);
               var currentBook = getBook(booksInfo, widget.bookId);
-
+              print(currentBook);
+              print(currentUser);
               // String? bookId;
 
               return Column(
@@ -86,7 +91,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                       currentBook['image'].isEmpty
                           ? Image(image: AssetImage('bookPlaceholder.jpg'))
                           : Image(
-                              image: NetworkImage(item['image']),
+                              image: NetworkImage(currentBook['image']),
                               width: 300,
                               height: 300,
                             ),
@@ -100,7 +105,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                currentBook['name'],
+                                currentBook['book_name'],
                                 style: TextStyle(
                                     fontSize: 25,
                                     decoration: TextDecoration.underline),
@@ -136,11 +141,16 @@ class _DescriptionPageState extends State<DescriptionPage> {
                                       'cart':
                                           FieldValue.arrayUnion([currentBook])
                                     });
-                                    if(cartArray.contains(currentBook)){
-                                      showErrorDialog("Item already in cart", "This item is already in your cart you can checkout any time", context);
-                                    }
-                                    else{
-                                      showSuccess("item added successfully to cart", "Book is now in your cart check out before stock ends :)", context);
+                                    if (cartArray.contains(currentBook)) {
+                                      showErrorDialog(
+                                          "Item already in cart",
+                                          "This item is already in your cart you can checkout any time",
+                                          context);
+                                    } else {
+                                      showSuccess(
+                                          "item added successfully to cart",
+                                          "Book is now in your cart check out before stock ends :)",
+                                          context);
                                     }
                                   },
                                   icon: Icon(Icons.favorite)),
