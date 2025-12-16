@@ -7,10 +7,13 @@
       "name": {}
     }
   },
+  "appTitle" : "Bibliotheque de Ruina",
+
   "drawerSearch": "Rechercher",
   "drawerCart": "Mon Panier",
   "drawerAccount": "Mon Compte et Liste de Souhait",
   "drawerFilters": "Appliquer les Filtres",
+  "drawerFindUs": "Où nous trouver",
   "drawerLogout": "Déconnexion",
 
   "accountGreeting" : "On est Content de te revoir {name}!",
@@ -21,5 +24,15 @@
   },
 
   "accountWishList" : "Voici votre liste de souhaites",
-  "accountLogOut" : "Déconnexion"
+  "accountLogOut" : "Déconnexion",
+
+  "cart" : "Votre Panier :",
+  "cartEmpty" : "Votre panier est vide au moment",
+  "cartSubtotal": "Soustotal",
+  "cartFederal": "Taxes Federales",
+  "cartProvincial": "Taxes Provinciales",
+  "cartCheckOut": "Completer ma commande",
+
+  "mapsFindUs" : "Rejoignez-nous ici pour récupérer ou savourer un livre"
+
 }

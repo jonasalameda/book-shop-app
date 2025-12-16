@@ -9,6 +9,8 @@ import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bookshop/common.dart';
 import 'paymentPage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:bookshop/l10n/app_localizations.dart';
 
 class CartPage extends StatefulWidget {
   final String userID;
@@ -175,7 +177,7 @@ class _CartPageState extends State<CartPage> {
                   // Text(bookId.toString()),
                   // Text(cartSubtotal.toStringAsFixed(2)), //!!!can access the price
                   Row(
-                    children: [Text("Your Cart:")],
+                    children: [Text(AppLocalizations.of(context)!.cart)],
                   ),
                   SizedBox(
                     height: 10,
@@ -183,7 +185,7 @@ class _CartPageState extends State<CartPage> {
                   // Column(children: [
                   Expanded(
                       child: userCart.length == 0
-                          ? Center(child: Text('Your cart is currently empty'))
+                          ? Center(child: Text(AppLocalizations.of(context)!.cartEmpty))
                           : ListView.builder(
                               itemCount: userCart.length,
                               itemBuilder: (context, i) {
@@ -260,8 +262,8 @@ class _CartPageState extends State<CartPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Subtotal: ',
+                      Text(AppLocalizations.of(context)!.cartSubtotal +
+                        ': ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
@@ -276,8 +278,8 @@ class _CartPageState extends State<CartPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Federal Tax (5%): ',
+                      Text(AppLocalizations.of(context)!.cartFederal +
+                        '(5%): ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
@@ -292,8 +294,8 @@ class _CartPageState extends State<CartPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Provincial Tax (9.975%): ',
+                      Text(AppLocalizations.of(context)!.cart +
+                        '(9.975%): ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
@@ -356,7 +358,7 @@ class _CartPageState extends State<CartPage> {
                                 backgroundColor: Colors.brown.shade700,
                                 minimumSize: Size(300, 100)),
                             child: Text(
-                              'CheckOut',
+                              AppLocalizations.of(context)!.cartCheckout,
                               style: TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,

@@ -30,8 +30,8 @@ AppBar buildAppBar(BuildContext context) {
 
   return AppBar(
     backgroundColor: barColor,
-    title: const Text(
-      'Library Of Ruina',
+    title: Text(
+      AppLocalizations.of(context)!.appTitle,
       style: TextStyle(color: Colors.white, fontSize: 30),
       textAlign: TextAlign.center,
     ),
@@ -109,6 +109,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
             ],
           ),
         ),
+        buildLanguageSwitcher(context),
         ListTile(
           title: Text(AppLocalizations.of(context)!.drawerSearch),
           selected: selectedIndex == 0,
@@ -150,7 +151,15 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
-        buildLanguageSwitcher(context),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.drawerFindUs),
+          selected: selectedIndex == 4,
+          onTap: () {
+            unloadCurrentUser();
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/map');
+          },
+        ),
 
       ],
     ),
@@ -160,10 +169,12 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
 Drawer adminDrawer(BuildContext context, int selectedIndex) {
   // search, books, archive, customers
   return Drawer(
+
     child: ListView(
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
       children: [
+        buildLanguageSwitcher(context),
         // const DrawerHeader(
         //   decoration: BoxDecoration(color: Colors.blue),
         //   child: Text('Drawer'),
@@ -177,7 +188,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('My Cart'),
+          title:  Text(AppLocalizations.of(context)!.drawerCart),
           selected: selectedIndex == 1,
           onTap: () {
             Navigator.pop(context);
@@ -185,7 +196,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('Account and Wishlist'),
+          title:  Text(AppLocalizations.of(context)!.drawerAccount),
           selected: selectedIndex == 2,
           onTap: () {
             Navigator.pop(context);
@@ -193,7 +204,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('Apply Filters'),
+          title:  Text(AppLocalizations.of(context)!.drawerFilters),
           selected: selectedIndex == 3,
           onTap: () {
             Navigator.pop(context);
@@ -201,7 +212,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title: const Text('Logout'),
+          title:  Text(AppLocalizations.of(context)!.drawerLogout),
           selected: selectedIndex == 4,
           onTap: () {
             currentUserID = '';
@@ -210,17 +221,26 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/login');
           },
         ),
+        // ListTile(
+        //   title: const Text('Logout'),
+        //   selected: selectedIndex == 4,
+        //   onTap: () {
+        //     currentUserID = '';
+        //     currentUserAppBar = null;
+        //     Navigator.pop(context);
+        //     Navigator.pushNamed(context, '/login');
+        //   },
+        // ),
         ListTile(
-          title: const Text('Logout'),
+          title: Text(AppLocalizations.of(context)!.drawerFindUs),
           selected: selectedIndex == 4,
           onTap: () {
             currentUserID = '';
             currentUserAppBar = null;
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/login');
+            Navigator.pushNamed(context, '/map');
           },
         ),
-        buildLanguageSwitcher(context),
       ],
     ),
   );

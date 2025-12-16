@@ -110,6 +110,12 @@ abstract class AppLocalizations {
   /// **'Welcome, {name}!'**
   String greeting(Object name);
 
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Library Of Ruina'**
+  String get appTitle;
+
   /// No description provided for @drawerSearch.
   ///
   /// In en, this message translates to:
@@ -134,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Apply Filters'**
   String get drawerFilters;
 
+  /// No description provided for @drawerFindUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Where to find us'**
+  String get drawerFindUs;
+
   /// No description provided for @drawerLogout.
   ///
   /// In en, this message translates to:
@@ -157,6 +169,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'LogOut'**
   String get accountLogOut;
+
+  /// No description provided for @cart.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Cart :'**
+  String get cart;
+
+  /// No description provided for @cartEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cart is currently empty.'**
+  String get cartEmpty;
+
+  /// No description provided for @cartSubtotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtotal'**
+  String get cartSubtotal;
+
+  /// No description provided for @cartFederal.
+  ///
+  /// In en, this message translates to:
+  /// **'Federal Taxes'**
+  String get cartFederal;
+
+  /// No description provided for @cartProvincial.
+  ///
+  /// In en, this message translates to:
+  /// **'Provincial Taxes'**
+  String get cartProvincial;
+
+  /// No description provided for @cartCheckout.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete my order'**
+  String get cartCheckout;
+
+  /// No description provided for @mapsFindUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Join us here to pickup or enjoy a book'**
+  String get mapsFindUs;
 }
 
 class _AppLocalizationsDelegate

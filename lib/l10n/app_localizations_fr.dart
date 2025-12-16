@@ -17,6 +17,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get appTitle => 'Bibliotheque de Ruina';
+
+  @override
   String get drawerSearch => 'Rechercher';
 
   @override
@@ -27,6 +30,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get drawerFilters => 'Appliquer les Filtres';
+
+  @override
+  String get drawerFindUs => 'Où nous trouver';
 
   @override
   String get drawerLogout => 'Déconnexion';
@@ -41,4 +47,26 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get accountLogOut => 'Déconnexion';
+
+  @override
+  String get cart => 'Votre Panier :';
+
+  @override
+  String get cartEmpty => 'Votre panier est vide au moment';
+
+  @override
+  String get cartSubtotal => 'Soustotal';
+
+  @override
+  String get cartFederal => 'Taxes Federales';
+
+  @override
+  String get cartProvincial => 'Taxes Provinciales';
+
+  @override
+  String get cartCheckout => 'Complete my order';
+
+  @override
+  String get mapsFindUs =>
+      'Rejoignez-nous ici pour récupérer ou savourer un livre';
 }
