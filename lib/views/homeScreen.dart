@@ -191,8 +191,8 @@ Widget? _generateFeatured({String? filter}) {
                         color:
                             (item['quantity'] > 0) ? Colors.black : Colors.red),
                   ),
-                  Text("${item['price']}"),
-                  Text("${item['quantity']}"),
+                  Text("\$${item['price']}"),
+                  Text("Stock: ${item['quantity']}"),
                 ],
               ),
             );

@@ -67,7 +67,15 @@ class _MapPageState extends State<MapPage> {
       drawer: customerDrawer(context, 5),
       backgroundColor: Colors.orange.shade100,
       body: Center(
-        child: Column(children: [buildGoogleMapsBody()]),
+        child: Row(
+          children: [
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
+              child: buildGoogleMapsBody(),
+            )
+          ],
+        ),
       ),
     );
   }
