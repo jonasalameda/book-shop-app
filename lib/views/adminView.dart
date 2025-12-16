@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar2.dart';
@@ -24,6 +26,8 @@ class _AdminPageState extends State<AdminPage> {
   String _searchText = '';
   final _searchController = TextEditingController();
   MenuItem? selectedItem;
+  Timer? _searchTimer;
+
 
   buildBodyList() {
     return Expanded(
@@ -35,6 +39,14 @@ class _AdminPageState extends State<AdminPage> {
             FirebaseFirestore.instance.collection('Books').snapshots()
           ]),
           builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (!snapshot.hasData || snapshot.data == null || snapshot.data!.length < 2) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
             var dbUsers = snapshot.data![0].docs;
             var dbBooks = snapshot.data![1].docs;
             var booksInfo = [
@@ -48,7 +60,7 @@ class _AdminPageState extends State<AdminPage> {
                   'country': data?['country'] ?? '',
                   'genres': data?['genres'] ?? [],
                   'description': data?['description'] ?? '',
-                  'image': data?['image'] ?? 'assets/bookPlacehoolder.jpg',
+                  'image': data?['image'] ?? 'assets/bookPlaceholder.jpg',
                   'quantity': data?['quantity'] ?? 0,
                   'price': data?['price'] ?? 0.00,
                   'available': data?['available'] ?? false,
@@ -86,7 +98,8 @@ class _AdminPageState extends State<AdminPage> {
                         (book['book_name'] ?? '').toString().toLowerCase();
                     final author =
                         (book['author'] ?? '').toString().toLowerCase();
-                    final genres = (book['genres'] ?? []);
+                    // final genres = (book['genres'] ?? []);
+                    final List genres = book['genres'] is List ? book['genres'] : [];
 
                     final bool genreMatches = genres.any((genre) =>
                         genre.toString().toLowerCase().contains(_searchText));
@@ -104,8 +117,8 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     SizedBox(height: 10),
                     Text(
-                      AppLocalizations.of(context)!
-                          .accountGreeting(currentUser['first_name']),
+                      AppLocalizations.of(context)?.accountGreeting(currentUser['first_name']) ?? '',
+                          // .accountGreeting(currentUser['first_name']),
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -167,8 +180,13 @@ class _AdminPageState extends State<AdminPage> {
                 TextField(
                   controller: _searchController,
                   onChanged: (value) {
-                    setState(() {
-                      _searchText = value.toLowerCase();
+                    //cancel if there was a timer to reset
+                    _searchTimer?.cancel();
+                    //wait to seconds before updating the search
+                    _searchTimer = Timer(Duration(seconds: 2), () {
+                      setState(() {
+                        _searchText = value.toLowerCase();
+                      });
                     });
                   },
                   decoration: InputDecoration(
@@ -195,7 +213,7 @@ class _AdminPageState extends State<AdminPage> {
                             errorBuilder: (context, error, stackTrace) {
                               return const Image(
                                 image:
-                                    AssetImage('assets/bookPlacehoolder.jpg'),
+                                    AssetImage('assets/bookPlaceholder.jpg'),
                                 width: 60,
                               );
                             },
@@ -210,6 +228,7 @@ class _AdminPageState extends State<AdminPage> {
                               Text(book['author']),
                               Text('Price: \$${book['price']}'),
                               Text('Qty: ${book['quantity']}'),
+                              Text('Genres: ${(book['genres'] as List).join(', ')}'),
                             ],
                           ),
                           trailing: Row(
@@ -253,7 +272,7 @@ class _AdminPageState extends State<AdminPage> {
                             child: Row(
                               children: [
                                 Text(
-                                  AppLocalizations.of(context)!.accountLogOut,
+                                  AppLocalizations.of(context)?.accountLogOut ?? '',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -473,10 +492,11 @@ class _AdminPageState extends State<AdminPage> {
       appBar: buildAppBar(context),
       drawer: adminDrawer(context, _selectedIndex),
       backgroundColor: Colors.orange.shade100,
-      body: Center(
-          child: Column(
-        children: [buildBodyList()],
-      )),
+      body: Column(
+        children: [
+          buildBodyList()
+        ],
+      ),
     );
   }
 }
