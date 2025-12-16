@@ -1,4 +1,5 @@
-import 'package:bookshop/appBar.dart';
+// import 'package:bookshop/appBar.dart';
+import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context),
+      drawer: customerDrawer(context, 1),
       body: Center(
         child: Column(
           children: [

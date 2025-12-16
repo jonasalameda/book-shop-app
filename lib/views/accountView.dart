@@ -68,7 +68,7 @@ class _AccountPageState extends State<AccountPage> {
                   'country': data?['country'] ?? '',
                   'genres': data?['genres'] ?? [],
                   'description': data?['description'] ?? '',
-                  'image': data?['image'] ?? 'assets/bookPlaceholder.jpg',
+                  'image': data?['image'] ?? '',
                   'quantity': data?['quantity'] ?? 0,
                   'price': data?['price'] ?? 0.00,
                   'available': data?['available'] ?? false,
@@ -213,7 +213,7 @@ class _AccountPageState extends State<AccountPage> {
                                           (context, error, stackTrace) {
                                     return Image(
                                         image: AssetImage(
-                                            'assets/images/placeholder.png'));
+                                            'assets/images/Placeholder.png'));
                                   }),
                                   title: Text(
                                     currentBook['book_name'],

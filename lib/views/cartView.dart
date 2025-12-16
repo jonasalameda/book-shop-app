@@ -144,7 +144,7 @@ class _CartPageState extends State<CartPage> {
                   SizedBox(
                     height: 15,
                   ),
-                  Text(currentUser.toString()),
+                  // Text(currentUser.toString()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -218,13 +218,18 @@ class _CartPageState extends State<CartPage> {
                                   margin: EdgeInsets.symmetric(vertical: 2),
                                   child: ListTile(
                                     //TODO: put image holder or link to book image
-                                    leading: Image.network(
-                                        currentBookInfo['image'], errorBuilder:
-                                            (context, error, stackTrace) {
-                                      return Image(
-                                          image: AssetImage(
-                                              'assets/images/Placeholder.png'));
-                                    }),
+                                    // leading:
+                                    // Image.network(
+                                    //     currentBookInfo['image'], errorBuilder:
+                                    //         (context, error, stackTrace) {
+                                    //   return
+                                    //     Image(
+                                    //       image: AssetImage(
+                                    //           'assets/images/Placeholder.png'));
+                                    // }),
+                                    leading:Image(
+                                            image: AssetImage(
+                                                'assets/bookPlaceholder.png')) ,
                                     title: Text(
                                       currentBookInfo['book_name'],
                                       style: TextStyle(
