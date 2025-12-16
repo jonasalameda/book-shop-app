@@ -1,5 +1,6 @@
 import 'package:bookshop/l10n/app_localizations.dart';
 import 'package:bookshop/models/UserModel.dart';
+import 'package:bookshop/views/homeScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
@@ -112,9 +113,10 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           title: Text(AppLocalizations.of(context)!.drawerSearch),
           selected: selectedIndex == 0,
           onTap: () {
-            Navigator.pop(context);
+            // Navigator.pop(context);
 
-            Navigator.pushNamed(context, '/home');
+            Navigator.push(
+                context, MaterialPageRoute(builder: (builder) => HomeScreen()));
             // Navigator.pushNamed(context, '/logout');
           },
         ),
