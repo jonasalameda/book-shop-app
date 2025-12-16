@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar2.dart';
@@ -24,6 +26,8 @@ class _AdminPageState extends State<AdminPage> {
   String _searchText = '';
   final _searchController = TextEditingController();
   MenuItem? selectedItem;
+  Timer? _searchTimer;
+
 
   buildBodyList() {
     return Expanded(
@@ -176,8 +180,13 @@ class _AdminPageState extends State<AdminPage> {
                 TextField(
                   controller: _searchController,
                   onChanged: (value) {
-                    setState(() {
-                      _searchText = value.toLowerCase();
+                    //cancel if there was a timer to reset
+                    _searchTimer?.cancel();
+                    //wait to seconds before updating the search
+                    _searchTimer = Timer(Duration(seconds: 2), () {
+                      setState(() {
+                        _searchText = value.toLowerCase();
+                      });
                     });
                   },
                   decoration: InputDecoration(
@@ -219,7 +228,7 @@ class _AdminPageState extends State<AdminPage> {
                               Text(book['author']),
                               Text('Price: \$${book['price']}'),
                               Text('Qty: ${book['quantity']}'),
-                              // Text('Genres: ${(book['genres'] as List).join(', ')}'),
+                              Text('Genres: ${(book['genres'] as List).join(', ')}'),
                             ],
                           ),
                           trailing: Row(
