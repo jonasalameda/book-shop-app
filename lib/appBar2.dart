@@ -127,7 +127,8 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           onTap: () {
             Navigator.pop(context);
             // Navigator.pushNamed(context, '/cart');
-            Navigator.push(context,
+            Navigator.push(
+                context,
                 MaterialPageRoute(
                     builder: (context) => CartPage(userID: currentUserID!)));
           },
