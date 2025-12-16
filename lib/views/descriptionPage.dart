@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bookshop/common.dart';
 import 'package:bookshop/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -8,19 +9,22 @@ import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
 
+class DescriptionPage extends StatefulWidget {
+  final String bookId;
 
-class Descriptionpage extends StatefulWidget {
-  const Descriptionpage({super.key});
+  DescriptionPage({Key? key, required this.bookId}) : super(key: key);
 
   @override
-  State<Descriptionpage> createState() => _DescriptionpageState();
+  State<DescriptionPage> createState() => _DescriptionPageState();
 }
 
-class _DescriptionpageState extends State<Descriptionpage> {
-  
+class _DescriptionPageState extends State<DescriptionPage> {
+  buildDescription(BuildContext context) {
+    print("jfdkhckse not an id");
+    print(currentUserID);
+    print(widget.bookId);
 
-  buildDescription(BuildContext context){
-    final item = ModalRoute.of(context)!.settings.arguments as Map;
+    // final item = ModalRoute.of(context)!.settings.arguments as Map;
     return Expanded(
       child: Padding(
         padding: EdgeInsets.all(10),
@@ -71,34 +75,26 @@ class _DescriptionpageState extends State<Descriptionpage> {
               ];
 
               var currentUser = getUser(usersInfo, currentUserID!);
-              var userCart = currentUser['cart'];
+              var currentBook = getBook(booksInfo, widget.bookId);
+              print(currentBook);
+              print(currentUser);
               // String? bookId;
-
-              double setcartSubtotal() {
-                double subtotal = 0;
-                for (var bookRef in userCart) {
-                  var bookId = bookRef.id;
-                  var book = getBook(booksInfo, bookId!);
-                  if (book != null) {
-                    subtotal += (book['price'] as num).toDouble();
-                  }
-                }
-                return subtotal;
-              }
 
               return Column(
                 children: [
-                  SizedBox(height: 25,),
+                  SizedBox(
+                    height: 25,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      item['image'].isEmpty
+                      currentBook['image'].isEmpty
                           ? Image(image: AssetImage('bookPlaceholder.jpg'))
                           : Image(
-                        image: NetworkImage(item['image']),
-                        width: 300,
-                        height: 300,
-                      ),
+                              image: NetworkImage(currentBook['image']),
+                              width: 300,
+                              height: 300,
+                            ),
                     ],
                   ),
                   Container(
@@ -108,21 +104,81 @@ class _DescriptionpageState extends State<Descriptionpage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(item['name'], style: TextStyle(fontSize: 25, decoration: TextDecoration.underline),),
-                              Text("\$${item['price']}", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                              Text(
+                                currentBook['book_name'],
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    decoration: TextDecoration.underline),
+                              ),
+                              Text(
+                                "\$${currentBook['price']}",
+                                style: TextStyle(
+                                    fontSize: 25, fontWeight: FontWeight.bold),
+                              ),
                             ],
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Author: ${item['author']}"),
-                              Text("Stock: ${item['quantity']}"),
+                              Text("Author: ${currentBook['author']}"),
+                              Text("Stock: ${currentBook['quantity']}"),
                             ],
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                  onPressed: () async {
+                                    List<dynamic> cartArray =
+                                        currentUser['cart'];
+                                    await FirebaseFirestore.instance
+                                        .collection('Users')
+                                        .doc(currentUserID!)
+                                        .update({
+                                      'cart':
+                                          FieldValue.arrayUnion([currentBook])
+                                    });
+                                    if (cartArray.contains(currentBook)) {
+                                      showErrorDialog(
+                                          "Item already in cart",
+                                          "This item is already in your cart you can checkout any time",
+                                          context);
+                                    } else {
+                                      showSuccess(
+                                          "item added successfully to cart",
+                                          "Book is now in your cart check out before stock ends :)",
+                                          context);
+                                    }
+                                  },
+                                  icon: Icon(Icons.shopping_cart)
+                              ),
+                              IconButton(
+                                  onPressed: () async {
+                                    List<dynamic> wishListArray =
+                                        currentUser['wishlist'];
+                                    await FirebaseFirestore.instance
+                                        .collection('Users')
+                                        .doc(currentUserID!)
+                                        .update({
+                                      'wishlist':
+                                          FieldValue.arrayUnion([currentBook])
+                                    });
+                                    if(wishListArray.contains(currentBook)){
+                                      showErrorDialog("Item already in wishList", "This item is already in your wishlist you can add it to your cart any time", context);
+                                    }
+                                    else{
+                                      showSuccess("Item added successfully to wishlist", "Book is now in your wishlist :)", context);
+                                    }
+                                  },
+                                  icon: Icon(Icons.favorite)
+                              ),
+                            ],
+                          )
                         ],
-                      )
-                  )
+                      ))
                 ],
               );
             }),
@@ -132,14 +188,12 @@ class _DescriptionpageState extends State<Descriptionpage> {
 
   @override
   Widget build(BuildContext context) {
-    final item = ModalRoute.of(context)!.settings.arguments as Map;
+    // final item = ModalRoute.of(context)!.settings.arguments as Map;
 
     return Scaffold(
       appBar: buildAppBar(context),
       drawer: customerDrawer(context, 0),
-      body: Center(
-        child:buildDescription(context)
-      ),
+      body: Center(child: buildDescription(context)),
     );
-}
+  }
 }

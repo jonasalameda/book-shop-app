@@ -174,7 +174,8 @@ Widget? _generateFeatured({String? filter}) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (builder) => Descriptionpage()));
+                              builder: (builder) =>
+                                  DescriptionPage(bookId: item['id'])));
                     },
                     child: item['image'].isEmpty
                         ? Image(image: AssetImage('bookPlaceholder.jpg'))
