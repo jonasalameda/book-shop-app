@@ -263,7 +263,7 @@ class _AdminPageState extends State<AdminPage> {
                             child: Row(
                               children: [
                                 Text(
-                                  AppLocalizations.of(context)!.accountLogOut,
+                                  AppLocalizations.of(context)?.accountLogOut ?? '',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
