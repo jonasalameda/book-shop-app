@@ -22,7 +22,7 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   final _selectedIndex = 1;
   String _searchText = '';
-  final TextEditingController _searchController = TextEditingController();
+  final  _searchController = TextEditingController();
   MenuItem? selectedItem;
 
   buildBodyList() {
@@ -79,6 +79,15 @@ class _AdminPageState extends State<AdminPage> {
             if (currentUser == null) {
               return const Center(child: CircularProgressIndicator());
             }
+            final filteredBooks = _searchText.isEmpty ? booksInfo : booksInfo.where((book) {
+              final title = (book['book_name'] ?? '').toString().toLowerCase();
+              final author = (book['author'] ?? '').toString().toLowerCase();
+              final genres = (book['genres'] ?? []);
+
+              final bool genreMatches = genres.any((genre) => genre.toString().toLowerCase().contains(_searchText));
+
+              return title.contains(_searchText) || author.contains(_searchText) || genreMatches;
+            }).toList();
 
             return Column(
               children: [
@@ -121,17 +130,27 @@ class _AdminPageState extends State<AdminPage> {
                     Text("Library Books:", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),),
                   ],
                 ),
-                Row(
-                  children: [
-                    Text("Library Books:", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),),
-                  ],
+                TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchText = value.toLowerCase();
+                    });
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search book...',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 20),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: booksInfo.length,
+                    itemCount: filteredBooks.length,
                     itemBuilder: (context, i) {
-                      final book = booksInfo[i];
+                      final book = filteredBooks[i];
 
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 4),
