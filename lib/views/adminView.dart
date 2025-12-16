@@ -94,7 +94,8 @@ class _AdminPageState extends State<AdminPage> {
                         (book['book_name'] ?? '').toString().toLowerCase();
                     final author =
                         (book['author'] ?? '').toString().toLowerCase();
-                    final genres = (book['genres'] ?? []);
+                    // final genres = (book['genres'] ?? []);
+                    final List genres = book['genres'] is List ? book['genres'] : [];
 
                     final bool genreMatches = genres.any((genre) =>
                         genre.toString().toLowerCase().contains(_searchText));
@@ -218,6 +219,7 @@ class _AdminPageState extends State<AdminPage> {
                               Text(book['author']),
                               Text('Price: \$${book['price']}'),
                               Text('Qty: ${book['quantity']}'),
+                              Text('Genres: ${(book['genres'] as List).join(', ')}'),
                             ],
                           ),
                           trailing: Row(
