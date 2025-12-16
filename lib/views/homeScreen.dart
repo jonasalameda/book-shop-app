@@ -1,4 +1,4 @@
-import 'package:bookshop/appBar.dart';
+import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context),
+      drawer: customerDrawer(context, 0),
       body: Center(
         child: Column(
           children: [
@@ -95,7 +96,6 @@ Widget? _generateFeatured() {
         return Center(child: CircularProgressIndicator());
       }
 
-      print('roda... viva??');
       var booksData = snapshot.data![0].docs;
       print(booksData.toString());
       //merge into one combined list
@@ -116,8 +116,6 @@ Widget? _generateFeatured() {
           },
         ),
       ];
-      print('maps aqui ooo');
-      print(booksMap);
       return Container(
         width: double.infinity,
         height: 200.0,
@@ -131,13 +129,18 @@ Widget? _generateFeatured() {
               padding: EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  item['image'].isEmpty
-                      ? Image(image: AssetImage('bookPlaceholder.jpg'))
-                      : Image(
-                          image: NetworkImage(item['image']),
-                          width: 100,
-                          height: 100,
-                        ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/description', arguments: item);
+                    },
+                    child: item['image'].isEmpty
+                        ? Image(image: AssetImage('bookPlaceholder.jpg'))
+                        : Image(
+                      image: NetworkImage(item['image']),
+                      width: 100,
+                      height: 100,
+                    ),
+                  ),
                   Text(item['name'] ?? ""),
                   Text("${item['price']}"),
                   Text("${item['quantity']}")
