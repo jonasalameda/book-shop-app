@@ -4,10 +4,11 @@ import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bookshop/common.dart';
-
+import 'package:bookshop/main.dart';
 import '../l10n/app_localizations.dart';
 
 //User: bookstore@admin.com, psw: 123123123
+enum MenuItem { update, delete, add }
 
 class AdminPage extends StatefulWidget {
   final String userID;
@@ -20,16 +21,9 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   final _selectedIndex = 1;
-
-  /**
-   * Update the user's wish list, remove the current book from the list
-   */
-  deleteSavedBook(String userId, List usersInfo, var bookReferenceID) async {
-    var user = getUser(usersInfo, widget.userID);
-    await FirebaseFirestore.instance.collection('Users').doc(userId).update({
-      'wishlist': FieldValue.arrayRemove([bookReferenceID])
-    });
-  }
+  String _searchText = '';
+  final _searchController = TextEditingController();
+  MenuItem? selectedItem;
 
   buildBodyList() {
     return Expanded(
@@ -79,12 +73,28 @@ class _AdminPageState extends State<AdminPage> {
                 };
               }),
             ];
+
             // loadCurrentUser();
             var currentUser = getUser(usersInfo, widget.userID);
             if (currentUser == null) {
               return const Center(child: CircularProgressIndicator());
             }
-            var savedBooks = currentUser['wishlist'];
+            final filteredBooks = _searchText.isEmpty
+                ? booksInfo
+                : booksInfo.where((book) {
+                    final title =
+                        (book['book_name'] ?? '').toString().toLowerCase();
+                    final author =
+                        (book['author'] ?? '').toString().toLowerCase();
+                    final genres = (book['genres'] ?? []);
+
+                    final bool genreMatches = genres.any((genre) =>
+                        genre.toString().toLowerCase().contains(_searchText));
+
+                    return title.contains(_searchText) ||
+                        author.contains(_searchText) ||
+                        genreMatches;
+                  }).toList();
 
             return Column(
               children: [
@@ -121,148 +131,108 @@ class _AdminPageState extends State<AdminPage> {
                     )
                   ],
                 ),
+                SizedBox(height: 25),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        SizedBox(width: 15),
-                        Text(
-                          AppLocalizations.of(context)!.accountWishList,
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.brown.shade900),
+                    ElevatedButton(
+                      onPressed: () async{
+                        _updateOrAddBookDialog('', false);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.brown.shade500,
                         ),
-                      ],
+                      ),
+                      child: Text(
+                        'Add Book',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.bookmark,
-                          color: Colors.redAccent,
-                          size: 30,
-                        ),
-                        SizedBox(width: 15)
-                      ],
-                    )
                   ],
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 25),
+                Row(
+                  children: [
+                    Text(
+                      "Library Books:",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
+                    ),
+                  ],
+                ),
+                TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchText = value.toLowerCase();
+                    });
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search book...',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
                 Expanded(
-                    child: savedBooks.length == 0
-                        ? Center(
-                            child:
-                                Column(children: [CircularProgressIndicator()]))
-                        : ListView.builder(
-                            itemCount: savedBooks.length,
-                            itemBuilder: (context, i) {
-                              final currentBookReference = savedBooks[i];
-                              // final String currentBookIdDouble = (currentBookReference.id.toString()) as String;
-                              final String currentBookId =
-                                  currentBookReference.id.toString();
-                              final currentBook =
-                                  getBook(booksInfo, currentBookId);
-                              if (currentBook == null) {
-                                return Center(
-                                    child: SingleChildScrollView(
-                                        scrollDirection: Axis.vertical,
-                                        child: Column(children: [
-                                          // Text(currentBookId.value.runtimeType()),
-                                          Text(
-                                              '${currentBookId.runtimeType}'), // prints a string so id is String but error is double
-                                          Text(
-                                              '${currentBookId}'), //prints book id so that means the book list is not being fetched right
-                                          SizedBox(
-                                            height: 30,
-                                          ),
-                                          Text(savedBooks[i]
-                                              .toString()), //WishList List is also being fetched so not an issue
-                                          Text(currentBook.toString()),
-                                          SizedBox(
-                                            height: 30,
-                                          ),
-                                          Text(booksInfo[i]
-                                              .toString()), //Book List is also being fetched so not an issue
-                                          Text(
-                                              '${booksInfo[i]['id'].runtimeType}'), //Book List is also being fetched so not an issue
-                                          Text(
-                                              "${booksInfo[i]['id'] == currentBookId}"), // returns false :/
-                                          // returns trueeeeeeeeee!!!
-                                          CircularProgressIndicator()
-                                        ])));
-                              }
-                              //currentBook  is not null and exists
-                              return Card(
-                                margin: EdgeInsets.symmetric(vertical: 2),
-                                child: ListTile(
-                                  //TODO: put image holder or link to book image
-                                  leading: Image.network(currentBook['image'],
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                    return Image(
-                                        image: AssetImage(
-                                            'assets/images/placeholder.png'));
-                                  }),
-                                  title: Text(
-                                    currentBook['book_name'],
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  subtitle: Text(currentBook['author']),
-                                  trailing: Wrap(
-                                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(currentBook['price'].toString()),
-                                      IconButton(
-                                        onPressed: () {
-                                          // TODO: delete the current book from the wish list
-                                          deleteSavedBook(widget.userID,
-                                              usersInfo, currentBookReference);
-                                        },
-                                        icon: Icon(
-                                          Icons.delete_forever,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      IconButton(
-                                          onPressed: () async {
-                                            //TODO: put current book in cart array instead of wishlist array
-                                            List<dynamic> cartArray =
-                                                currentUser['cart'];
-                                            // cartArray.add(currentBookId);
-                                            // addToCart(widget.userID, usersInfo, currentBookReference);
-                                            await FirebaseFirestore.instance
-                                                .collection('Users')
-                                                .doc(widget.userID)
-                                                .update({
-                                              'cart': FieldValue.arrayUnion(
-                                                  [currentBookReference])
-                                            });
-                                            if (cartArray.contains(
-                                                currentBookReference)) {
-                                              showErrorDialog(
-                                                  'Item already in cart',
-                                                  'It seems like you have already added this item to your cart',
-                                                  context,
-                                                  'Okay');
-                                            } else {
-                                              showSuccess(
-                                                  'Item added Successfully',
-                                                  'Item is now in your cart you can checkout',
-                                                  context);
-                                            }
-                                          },
-                                          icon: Icon(
-                                            Icons.add_shopping_cart,
-                                            color: Colors.brown,
-                                          ))
-                                    ],
-                                  ),
-                                ),
+                  child: ListView.builder(
+                    itemCount: filteredBooks.length,
+                    itemBuilder: (context, i) {
+                      final book = filteredBooks[i];
+
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 4),
+                        child: ListTile(
+                          leading: Image.network(
+                            book['image'],
+                            width: 60,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Image(
+                                image:
+                                    AssetImage('assets/bookPlacehoolder.jpg'),
+                                width: 60,
                               );
                             },
-                          )),
+                          ),
+                          title: Text(
+                            book['book_name'],
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(book['author']),
+                              Text('Price: \$${book['price']}'),
+                              Text('Qty: ${book['quantity']}'),
+                            ],
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            // important, otherwise Row tries to expand
+                            children: [
+                              Icon(
+                                book['available']
+                                    ? Icons.check_circle
+                                    : Icons.cancel,
+                                color: book['available']
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                              SizedBox(width: 8), // small spacing
+                              getMenu(book['id']),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -307,6 +277,196 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
+  _updateOrAddBookDialog(bookId, bool update)
+  {
+    String _updateBtn = "";
+    String _updateError = "";
+    String _title = "";
+    if(update) {
+      _updateBtn = "Update Book";
+      _updateError = "Nothing to update.";
+      _title = "Update only new fields";
+    } else{
+      _updateBtn = "Add Book";
+      _updateError = "All fields are required!";
+      _title = "Enter the new Book's info";
+    }
+
+
+     return showDialog(
+      context: context,
+      builder: (context) {
+        Map<String, dynamic> newBookData = {};
+        String newName = '';
+        String newAuthor = '';
+        String newCountry = '';
+        String newDescription = '';
+        String newIsbn= '';
+        int? newStock;
+        double? newPrice;
+        bool? newAvailability;
+        final List<bool> availabilityOptions = [true, false];
+        String genreInputs = ''; //comma separated input
+
+        return AlertDialog(
+          title: Text(_title),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                if (!update)
+                  TextField(
+                    onChanged: (value) => newIsbn = value,
+                    decoration:
+                    InputDecoration(hintText: 'Enter ISBN'),
+                  ),
+                TextField(
+                  onChanged: (value) => newName = value,
+                  decoration:
+                  InputDecoration(hintText: 'Enter new title'),
+                ),
+                TextField(
+                  onChanged: (value) => newAuthor = value,
+                  decoration: InputDecoration(hintText: 'Author'),
+                ),
+                TextField(
+                  onChanged: (value) => newCountry = value,
+                  decoration: InputDecoration(hintText: 'Country'),
+                ),
+                TextField(
+                  onChanged: (value) => newDescription = value,
+                  decoration:
+                  InputDecoration(hintText: 'Description'),
+                ),
+                TextField(
+                  onChanged: (value) =>
+                  newPrice = double.tryParse(value.trim()),
+                  decoration: InputDecoration(hintText: 'Price'),
+                ),
+                TextField(
+                  onChanged: (value) =>
+                  newStock = int.tryParse(value.trim()),
+                  decoration: InputDecoration(hintText: 'Stock'),
+                ),
+                DropdownButtonFormField(
+                  decoration:
+                  InputDecoration(labelText: 'Availability'),
+                  value: newAvailability,
+                  items: [
+                    DropdownMenuItem(
+                        value: true, child: Text('Available')),
+                    DropdownMenuItem(
+                        value: false, child: Text('Unavailable')),
+                  ],
+                  onChanged: (value) => newAvailability = value,
+                ),
+                TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'Genres (comma separated)',
+                    hintText: 'Fantasy, Mystery, Sci-Fi',
+                  ),
+                  onChanged: (value) => genreInputs = value,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+                onPressed: () async {
+                  if (newName.trim().isNotEmpty) {
+                    newBookData['book_name'] = newName.trim();
+                  }
+                  if (newAuthor.trim().isNotEmpty) {
+                    newBookData['author'] = newAuthor.trim();
+                  }
+                  if (newCountry.trim().isNotEmpty) {
+                    newBookData['country'] = newCountry.trim();
+                  }
+                  if (newDescription.trim().isNotEmpty) {
+                    newBookData['description'] =
+                        newDescription.trim();
+                  }
+                  if (newIsbn.trim().isNotEmpty) {
+                    newBookData['isbn'] =
+                        newIsbn.trim();
+                  }
+                  if (newPrice != null) {
+                    newBookData['price'] = newPrice;
+                  }
+                  if (newStock != null) {
+                    newBookData['quantity'] = newStock;
+                  }
+                  if (newAvailability != null) {
+                    newBookData
+                        .addAll({'available': newAvailability});
+                  }
+                  if (genreInputs.trim().isNotEmpty) {
+                    newBookData['genres'] = genreInputs
+                        .split(',')
+                        .map((g) => g.trim())
+                        .where((g) => g.isNotEmpty)
+                        .toList();
+                  }
+
+                  if(update) {
+                    if (newBookData.isNotEmpty) {
+                      await updateBook(bookId, newBookData);
+                    } else {
+                      showErrorDialog("error",_updateError, context); //general function from main
+                    }
+                  } else{
+                    if(newBookData.length < 9)
+                      {
+                        showErrorDialog("error",_updateError, context); //general function from main
+                      } else{
+                      newBookData['wishlist'] = [];
+                      newBookData['cart'] = [];
+                      await addBook(newBookData);
+                    }
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text(_updateBtn)),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'))
+          ],
+        );
+      },
+    );
+  }
+
+  Widget getMenu(bookId) {
+    return PopupMenuButton<MenuItem>(
+      initialValue: selectedItem,
+      onSelected: (MenuItem item) {
+        setState(() {
+          selectedItem = item;
+        });
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<MenuItem>>[
+        PopupMenuItem<MenuItem>(
+          value: MenuItem.update,
+          child: TextButton(
+              onPressed: () async {
+                _updateOrAddBookDialog(bookId, true);
+              },
+              child: Text("Update Book")),
+        ),
+        PopupMenuItem<MenuItem>(
+          value: MenuItem.delete,
+          child: TextButton(
+              onPressed: () async {
+                await deleteBook(bookId);
+              },
+              child: Text("Delete Book")),
+        ),
+        // PopupMenuItem<MenuItem>(value: MenuItem.add, child: Text('Item 3')),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -315,9 +475,7 @@ class _AdminPageState extends State<AdminPage> {
       backgroundColor: Colors.orange.shade100,
       body: Center(
           child: Column(
-        children: [
-          // buildBodyList()
-        ],
+        children: [buildBodyList()],
       )),
     );
   }

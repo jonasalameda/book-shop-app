@@ -113,7 +113,9 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           selected: selectedIndex == 0,
           onTap: () {
             Navigator.pop(context);
+
             Navigator.pushNamed(context, '/home');
+            // Navigator.pushNamed(context, '/logout');
           },
         ),
         ListTile(
@@ -151,7 +153,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
         ),
         ListTile(
           title: Text(AppLocalizations.of(context)!.drawerFindUs),
-          selected: selectedIndex == 4,
+          selected: selectedIndex == 5,
           onTap: () {
             unloadCurrentUser();
             Navigator.pop(context);

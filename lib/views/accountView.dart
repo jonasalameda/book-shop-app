@@ -68,7 +68,7 @@ class _AccountPageState extends State<AccountPage> {
                   'country': data?['country'] ?? '',
                   'genres': data?['genres'] ?? [],
                   'description': data?['description'] ?? '',
-                  'image': data?['image'] ?? 'assets/bookPlacehoolder.jpg',
+                  'image': data?['image'] ?? 'assets/bookPlaceholder.jpg',
                   'quantity': data?['quantity'] ?? 0,
                   'price': data?['price'] ?? 0.00,
                   'available': data?['available'] ?? false,

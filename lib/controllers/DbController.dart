@@ -132,3 +132,34 @@ Future<UserModel?> getUserByEmail(String email) async {
     return null;
   }
 }
+
+Future<bool> deleteBook(String bookId) async {
+  return await deleteRow(
+    bookId,
+    FirebaseFirestore.instance.collection('Books'),
+  );
+}
+
+/// Updates a book document with new info
+Future<bool> updateBook(String bookId, Map<String, dynamic> updatedData) async {
+  try {
+    await FirebaseFirestore.instance
+        .collection('Books')
+        .doc(bookId)
+        .update(updatedData);
+    return true;
+  } catch (e) {
+    print('Error updating book: $e');
+    return false;
+  }
+}
+
+Future<bool> addBook(Map<String, dynamic> bookData) async {
+  try {
+    await FirebaseFirestore.instance.collection('Books').add(bookData);
+    return true;
+  } catch (e) {
+    print('Error adding book: $e');
+    return false;
+  }
+}
