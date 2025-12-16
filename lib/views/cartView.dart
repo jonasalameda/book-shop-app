@@ -15,7 +15,6 @@ import 'package:bookshop/l10n/app_localizations.dart';
 class CartPage extends StatefulWidget {
   final String userID;
 
-
   const CartPage({Key? key, required this.userID}) : super(key: key);
 
   @override
@@ -30,7 +29,6 @@ class _CartPageState extends State<CartPage> {
   late double federalTax = 0;
   late double provincialTax = 0;
   late double totalCart = 0;
-
 
   /**
    * Update the user's wish list, remove the current book from the list
@@ -195,7 +193,9 @@ class _CartPageState extends State<CartPage> {
 
                   Expanded(
                       child: userCart.length == 0
-                          ? Center(child: Text(AppLocalizations.of(context)!.cartEmpty))
+                          ? Center(
+                              child:
+                                  Text(AppLocalizations.of(context)!.cartEmpty))
                           : ListView.builder(
                               itemCount: userCart.length,
                               itemBuilder: (context, i) {
@@ -227,9 +227,9 @@ class _CartPageState extends State<CartPage> {
                                     //       image: AssetImage(
                                     //           'assets/images/Placeholder.png'));
                                     // }),
-                                    leading:Image(
-                                            image: AssetImage(
-                                                'assets/bookPlaceholder.png')) ,
+                                    leading: Image(
+                                        image: AssetImage(
+                                            'assets/bookPlaceholder.jpg')),
                                     title: Text(
                                       currentBookInfo['book_name'],
                                       style: TextStyle(
@@ -255,24 +255,28 @@ class _CartPageState extends State<CartPage> {
                                           ),
                                         ),
                                         Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.brown.shade300,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                // ! it is referencing the amount of books in stock
-                                                child: Text(
-                                                    AppLocalizations.of(context)!.bookQuantity + ': $bookQuantity', style: TextStyle(fontSize: 12),),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Text(
-                                                bookPrice.toString(),
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold),
-                                              ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.brown.shade300,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          // ! it is referencing the amount of books in stock
+                                          child: Text(
+                                            AppLocalizations.of(context)!
+                                                    .bookQuantity +
+                                                ': $bookQuantity',
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          bookPrice.toString(),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -282,8 +286,8 @@ class _CartPageState extends State<CartPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(AppLocalizations.of(context)!.cartSubtotal +
-                        ': ',
+                      Text(
+                        AppLocalizations.of(context)!.cartSubtotal + ': ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
@@ -298,8 +302,8 @@ class _CartPageState extends State<CartPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(AppLocalizations.of(context)!.cartFederal +
-                        '(5%): ',
+                      Text(
+                        AppLocalizations.of(context)!.cartFederal + '(5%): ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
@@ -314,8 +318,8 @@ class _CartPageState extends State<CartPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(AppLocalizations.of(context)!.cart +
-                        '(9.975%): ',
+                      Text(
+                        AppLocalizations.of(context)!.cart + '(9.975%): ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
@@ -360,18 +364,20 @@ class _CartPageState extends State<CartPage> {
                               }
                               if (itemsInStock) {
                                 showSuccessPayment(
-                                    AppLocalizations.of(context)!.cartOrderReceived,
-                                    AppLocalizations.of(context)!.cartThankYou(totalCart.toStringAsFixed(2)),
+                                    AppLocalizations.of(context)!
+                                        .cartOrderReceived,
+                                    AppLocalizations.of(context)!.cartThankYou(
+                                        totalCart.toStringAsFixed(2)),
                                     context,
                                     totalCart);
                                 cartSubtotal = 0;
 
                                 emptyCart(userCart, booksInfo, usersInfo);
-                              }
-                              else{
+                              } else {
                                 showErrorDialog(
                                     AppLocalizations.of(context)!.cartError,
-                                    AppLocalizations.of(context)!.cartOutOfStock,
+                                    AppLocalizations.of(context)!
+                                        .cartOutOfStock,
                                     context);
                               }
 

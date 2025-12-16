@@ -1,3 +1,4 @@
+import 'package:bookshop/models/UserModel.dart';
 import 'package:bookshop/views/adminView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +97,8 @@ class _LogInPageState extends State<LogInPage> {
                           controller: _passwordController,
                           obscureText: _obscured,
                           decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.loginPassword,
+                            labelText:
+                                AppLocalizations.of(context)!.loginPassword,
                             border: OutlineInputBorder(),
                             contentPadding: EdgeInsets.all(10),
                             suffixIcon: IconButton(
@@ -128,8 +130,12 @@ class _LogInPageState extends State<LogInPage> {
                                   _emailController.text.toLowerCase();
                               final userPassword = _passwordController.text;
                               if (userEmail.isEmpty || userPassword.isEmpty) {
-                                showErrorDialog(AppLocalizations.of(context)!.loginEmptyTitle,
-                                    AppLocalizations.of(context)!.loginEmptyContent, context);
+                                showErrorDialog(
+                                    AppLocalizations.of(context)!
+                                        .loginEmptyTitle,
+                                    AppLocalizations.of(context)!
+                                        .loginEmptyContent,
+                                    context);
                               }
 
                               String? userID = findUser(usersList, userEmail);
@@ -146,13 +152,19 @@ class _LogInPageState extends State<LogInPage> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: Text(AppLocalizations.of(context)!.loginUserNotregister),
-                                        content: Text(AppLocalizations.of(context)!.loginUserInexistentContent),
+                                        title: Text(
+                                            AppLocalizations.of(context)!
+                                                .loginUserNotregister),
+                                        content: Text(
+                                            AppLocalizations.of(context)!
+                                                .loginUserInexistentContent),
                                         actions: [
                                           TextButton(
                                               onPressed: () =>
                                                   Navigator.of(context).pop(),
-                                              child: Text(AppLocalizations.of(context)!.tryAgain)),
+                                              child: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .tryAgain)),
                                           TextButton(
                                               onPressed: () {
                                                 Navigator.push(
@@ -162,7 +174,8 @@ class _LogInPageState extends State<LogInPage> {
                                                             RegisterUserPage()));
                                               },
                                               child: Text(
-                                                AppLocalizations.of(context)!.registerBtn,
+                                                AppLocalizations.of(context)!
+                                                    .registerBtn,
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -179,8 +192,12 @@ class _LogInPageState extends State<LogInPage> {
                                     currentUser['password_hash'], userPassword);
                                 // User exists but password is incorrect
                                 if (!isCorrectPassword) {
-                                  showErrorDialog(AppLocalizations.of(context)!.loginWrongPasswordTitle,
-                                      AppLocalizations.of(context)!.loginWrongPasswordContent, context);
+                                  showErrorDialog(
+                                      AppLocalizations.of(context)!
+                                          .loginWrongPasswordTitle,
+                                      AppLocalizations.of(context)!
+                                          .loginWrongPasswordContent,
+                                      context);
                                 } else {
                                   // Password is correct
                                   if (currentUser['id'] ==
@@ -195,7 +212,8 @@ class _LogInPageState extends State<LogInPage> {
                                                 userID: currentUserID!)));
                                   } else {
                                     currentUserID = currentUser['id'];
-                                    currentUserAppBar = currentUser;
+                                    // currentUserAppBar = UserModel.fromMap(
+                                    //     currentUser.toMap(), userID);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
