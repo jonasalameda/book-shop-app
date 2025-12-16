@@ -57,6 +57,7 @@ Widget buildMaterialApp(BuildContext context) {
               userID: currentUserID!,
             ),
         '/map': (context) => MapPage(),
+        '/description': (context) => DescriptionPage(),
         // add more routes as needed
       });
 }

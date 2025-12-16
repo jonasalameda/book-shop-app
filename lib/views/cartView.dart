@@ -65,9 +65,7 @@ class _CartPageState extends State<CartPage> {
     return true;
   }
 
-  loadBooks() {
-    // print ("lalallalallalaledficowiehcfowehpochewo");
-    // print (widget.userID);
+  loadBooks(BuildContext context) {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.all(10),
@@ -77,10 +75,6 @@ class _CartPageState extends State<CartPage> {
               FirebaseFirestore.instance.collection('Books').snapshots()
             ]),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
-
               var dbUsers = snapshot.data![0].docs;
               var dbBooks = snapshot.data![1].docs;
 
@@ -142,7 +136,6 @@ class _CartPageState extends State<CartPage> {
                   SizedBox(
                     height: 15,
                   ),
-                  // Text(currentUser.toString()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -180,8 +173,8 @@ class _CartPageState extends State<CartPage> {
 
                   // Text(userCart.toString()),
                   // Text(currentUser.toString()),
-                  // // is workin now
-                  // // Text(bookId.toString()),
+                  // is workin now
+                  // Text(bookId.toString()),
                   // Text(cartSubtotal.toStringAsFixed(2)), //!!!can access the price
                   Row(
                     children: [Text(AppLocalizations.of(context)!.cart)],
@@ -190,7 +183,6 @@ class _CartPageState extends State<CartPage> {
                     height: 10,
                   ),
                   // Column(children: [
-
                   Expanded(
                       child: userCart.length == 0
                           ? Center(
@@ -208,11 +200,6 @@ class _CartPageState extends State<CartPage> {
                                     currentBookInfo['quantity'];
                                 final bookPrice = currentBookInfo['price'];
                                 // final bookImage = currentBookInfo['image']?? 'assets/bookPlacehoolder.jpg';
-                                cartSubtotal = setcartSubtotal();
-                                federalTax = 5 / 100 * cartSubtotal;
-                                provincialTax = 9.975 / 100 * cartSubtotal;
-                                totalCart =
-                                    cartSubtotal + federalTax + provincialTax;
 
                                 return Card(
                                   margin: EdgeInsets.symmetric(vertical: 2),
@@ -243,11 +230,13 @@ class _CartPageState extends State<CartPage> {
                                         IconButton(
                                           onPressed: () {
                                             // TODO: delete the current book from the wish list
-                                            deleteBookFromCart(
-                                                widget.userID,
-                                                usersInfo,
-                                                currentBookReference);
-                                            setcartSubtotal();
+                                            setState(() {
+                                              deleteBookFromCart(
+                                                  widget.userID,
+                                                  usersInfo,
+                                                  currentBookReference);
+                                              setcartSubtotal();
+                                            });
                                           },
                                           icon: Icon(
                                             Icons.delete_forever,
@@ -411,7 +400,7 @@ class _CartPageState extends State<CartPage> {
       drawer: customerDrawer(context, _selectedIndex),
       backgroundColor: Colors.orange.shade100,
       body: Center(
-        child: Column(children: [loadBooks()]),
+        child: Column(children: [loadBooks(context)]),
       ),
     );
   }
