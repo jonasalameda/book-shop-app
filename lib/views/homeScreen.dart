@@ -1,6 +1,7 @@
 // import 'package:bookshop/appBar.dart';
 import 'package:bookshop/appBar2.dart';
 import 'package:bookshop/main.dart';
+import 'package:bookshop/views/descriptionPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/streams.dart';
@@ -84,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 50,
                 ),
                 const Text(
-                  "Featured Books",
+                  "Best Sellers",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
@@ -96,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: _generateFeatured(),
                 ),
                 const Text(
-                  "Featured Books",
+                  "Our Staff Recommendation",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
@@ -168,13 +169,21 @@ Widget? _generateFeatured({String? filter}) {
               padding: EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  item['image'].isEmpty
-                      ? Image(image: AssetImage('bookPlaceholder.jpg'))
-                      : Image(
-                          image: NetworkImage(item['image']),
-                          width: 100,
-                          height: 100,
-                        ),
+                  OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => Descriptionpage()));
+                    },
+                    child: item['image'].isEmpty
+                        ? Image(image: AssetImage('bookPlaceholder.jpg'))
+                        : Image(
+                            image: NetworkImage(item['image']),
+                            width: 100,
+                            height: 100,
+                          ),
+                  ),
                   Text(
                     item['name'] ?? "",
                     style: TextStyle(
