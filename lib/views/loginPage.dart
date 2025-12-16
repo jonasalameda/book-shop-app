@@ -133,7 +133,9 @@ class _LogInPageState extends State<LogInPage> {
                                     'Please enter both email and password',
                                     context);
                               }
+
                               String? userID = findUser(usersList, userEmail);
+
                               currentUserID = userID; // Changed to nullable
 
                               //needed to check
@@ -187,7 +189,8 @@ class _LogInPageState extends State<LogInPage> {
                                       context);
                                 } else {
                                   // Password is correct
-                                  if(currentUser['id'] == 'cpWtMJprI1mqtNey7XGf') //admin
+                                  if (currentUser['id'] ==
+                                      'cpWtMJprI1mqtNey7XGf') //admin
                                   // if (currentUser['user_role'] == 'admin') //admin
                                   {
                                     Navigator.push(

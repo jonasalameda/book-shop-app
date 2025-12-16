@@ -1,5 +1,10 @@
 import 'package:bookshop/appBar.dart';
+import 'package:bookshop/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/streams.dart';
+
+const FEATURED_BOOKS_LIMIT = 6;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +18,138 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: Center(),
+      body: Center(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    padding: EdgeInsets.all(0),
+                    child: Image.asset('assets/dashboardBg.jpg'),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.loose,
+                  child: Container(
+                    width: 500,
+                    height: 110,
+                    padding: const EdgeInsets.all(0),
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("assets/homeTitleDecoration.png"),
+                            fit: BoxFit.fitWidth)),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Featured Books",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 24),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Padding(
+              padding: EdgeInsetsGeometry.all(8.0),
+              child: _generateFeatured(),
+            )
+          ],
+        ),
+      ),
     );
   }
+}
+
+Widget? _generateFeatured() {
+  return StreamBuilder<List<QuerySnapshot>>(
+    // time to use combinedstream from RXdart
+    stream: CombineLatestStream.list([
+      FirebaseFirestore.instance
+          .collection('Books')
+          .orderBy("name")
+          .snapshots(),
+    ]),
+    builder: (context, snapshot) {
+      print('firebase alguma ocisa aqui');
+      print(snapshot.data![0]);
+      if (!snapshot.hasData) {
+        print(
+            'a todos os agentes da overwatch, aqui é o wintom haha... obviamente');
+        return Center(child: CircularProgressIndicator());
+      }
+
+      print('roda... viva??');
+      var booksData = snapshot.data![0].docs;
+      print(booksData.toString());
+      //merge into one combined list
+      var booksMap = [
+        // use spread operator
+        ...booksData.map(
+          (d) => {
+            'id': d.id,
+            'name': d['name'],
+            'author': d['author'],
+            'available': d['available'],
+            'country': d['country'],
+            'description': d['description'],
+            'genres': d['genres'],
+            'price': d['price'],
+            'quantity': d['quantity'],
+            'image': d['image'] ?? '',
+          },
+        ),
+      ];
+      print('maps aqui ooo');
+      print(booksMap);
+      return Container(
+        width: double.infinity,
+        height: 200.0,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: booksMap.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, i) {
+            final item = booksMap[i];
+            return Card(
+              semanticContainer: false,
+              shadowColor: Colors.black,
+              child: Column(
+                children: [
+                  item['image'].isEmpty
+                      ? Image(image: AssetImage('bookPlaceholder.jpg'))
+                      : Image(
+                          image: NetworkImage(item['image']),
+                          width: 100,
+                          height: 100,
+                        )
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    },
+  );
 }

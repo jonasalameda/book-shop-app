@@ -94,7 +94,8 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     SizedBox(height: 10),
                     Text(
-                      AppLocalizations.of(context)!.accountGreeting(currentUser['first_name']),
+                      AppLocalizations.of(context)!
+                          .accountGreeting(currentUser['first_name']),
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -151,92 +152,117 @@ class _AdminPageState extends State<AdminPage> {
                 Expanded(
                     child: savedBooks.length == 0
                         ? Center(
-                        child: Column(
-                            children:[
-                              CircularProgressIndicator()]))
+                            child:
+                                Column(children: [CircularProgressIndicator()]))
                         : ListView.builder(
-                      itemCount: savedBooks.length,
-                      itemBuilder: (context, i) {
-                        final currentBookReference = savedBooks[i];
-                        // final String currentBookIdDouble = (currentBookReference.id.toString()) as String;
-                        final String currentBookId = currentBookReference.id.toString();
-                        final currentBook = getBook(booksInfo, currentBookId);
-                        if (currentBook == null) {
-                          return Center(
-                              child:SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: Column(children: [
-                                    // Text(currentBookId.value.runtimeType()),
-                                    Text('${currentBookId.runtimeType}'), // prints a string so id is String but error is double
-                                    Text('${currentBookId}'), //prints book id so that means the book list is not being fetched right
-                                    SizedBox(height: 30,),
-                                    Text(savedBooks[i].toString()), //WishList List is also being fetched so not an issue
-                                    Text(currentBook.toString()),
-                                    SizedBox(height: 30,),
-                                    Text(booksInfo[i].toString()), //Book List is also being fetched so not an issue
-                                    Text('${booksInfo[i]['id'].runtimeType}'), //Book List is also being fetched so not an issue
-                                    Text("${booksInfo[i]['id'] == currentBookId}"), // returns false :/
-                                    // returns trueeeeeeeeee!!!
-                                    CircularProgressIndicator()
-                                  ])));
-                        }
-                        //currentBook  is not null and exists
-                        return Card(
-                          margin: EdgeInsets.symmetric(vertical: 2),
-                          child: ListTile(
-                            //TODO: put image holder or link to book image
-                            leading: Image.network(
-                                currentBook['image'],
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Image(image: AssetImage('assets/images/placeholder.png'));
-                                }),
-                            title: Text(
-                              currentBook['book_name'],
-                              style:
-                              TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(currentBook['author']),
-                            trailing: Wrap(
-                              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(currentBook['price'].toString()),
-                                IconButton(
-                                  onPressed: () {
-                                    // TODO: delete the current book from the wish list
-                                    deleteSavedBook(widget.userID, usersInfo, currentBookReference);
-                                  },
-                                  icon: Icon(
-                                    Icons.delete_forever,
-                                    color: Colors.red,
+                            itemCount: savedBooks.length,
+                            itemBuilder: (context, i) {
+                              final currentBookReference = savedBooks[i];
+                              // final String currentBookIdDouble = (currentBookReference.id.toString()) as String;
+                              final String currentBookId =
+                                  currentBookReference.id.toString();
+                              final currentBook =
+                                  getBook(booksInfo, currentBookId);
+                              if (currentBook == null) {
+                                return Center(
+                                    child: SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Column(children: [
+                                          // Text(currentBookId.value.runtimeType()),
+                                          Text(
+                                              '${currentBookId.runtimeType}'), // prints a string so id is String but error is double
+                                          Text(
+                                              '${currentBookId}'), //prints book id so that means the book list is not being fetched right
+                                          SizedBox(
+                                            height: 30,
+                                          ),
+                                          Text(savedBooks[i]
+                                              .toString()), //WishList List is also being fetched so not an issue
+                                          Text(currentBook.toString()),
+                                          SizedBox(
+                                            height: 30,
+                                          ),
+                                          Text(booksInfo[i]
+                                              .toString()), //Book List is also being fetched so not an issue
+                                          Text(
+                                              '${booksInfo[i]['id'].runtimeType}'), //Book List is also being fetched so not an issue
+                                          Text(
+                                              "${booksInfo[i]['id'] == currentBookId}"), // returns false :/
+                                          // returns trueeeeeeeeee!!!
+                                          CircularProgressIndicator()
+                                        ])));
+                              }
+                              //currentBook  is not null and exists
+                              return Card(
+                                margin: EdgeInsets.symmetric(vertical: 2),
+                                child: ListTile(
+                                  //TODO: put image holder or link to book image
+                                  leading: Image.network(currentBook['image'],
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                    return Image(
+                                        image: AssetImage(
+                                            'assets/images/placeholder.png'));
+                                  }),
+                                  title: Text(
+                                    currentBook['book_name'],
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(currentBook['author']),
+                                  trailing: Wrap(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(currentBook['price'].toString()),
+                                      IconButton(
+                                        onPressed: () {
+                                          // TODO: delete the current book from the wish list
+                                          deleteSavedBook(widget.userID,
+                                              usersInfo, currentBookReference);
+                                        },
+                                        icon: Icon(
+                                          Icons.delete_forever,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      IconButton(
+                                          onPressed: () async {
+                                            //TODO: put current book in cart array instead of wishlist array
+                                            List<dynamic> cartArray =
+                                                currentUser['cart'];
+                                            // cartArray.add(currentBookId);
+                                            // addToCart(widget.userID, usersInfo, currentBookReference);
+                                            await FirebaseFirestore.instance
+                                                .collection('Users')
+                                                .doc(widget.userID)
+                                                .update({
+                                              'cart': FieldValue.arrayUnion(
+                                                  [currentBookReference])
+                                            });
+                                            if (cartArray.contains(
+                                                currentBookReference)) {
+                                              showErrorDialog(
+                                                  'Item already in cart',
+                                                  'It seems like you have already added this item to your cart',
+                                                  context,
+                                                  'Okay');
+                                            } else {
+                                              showSuccess(
+                                                  'Item added Successfully',
+                                                  'Item is now in your cart you can checkout',
+                                                  context);
+                                            }
+                                          },
+                                          icon: Icon(
+                                            Icons.add_shopping_cart,
+                                            color: Colors.brown,
+                                          ))
+                                    ],
                                   ),
                                 ),
-                                IconButton(
-                                    onPressed: () async {
-                                      //TODO: put current book in cart array instead of wishlist array
-                                      List<dynamic> cartArray =
-                                      currentUser['cart'];
-                                      // cartArray.add(currentBookId);
-                                      // addToCart(widget.userID, usersInfo, currentBookReference);
-                                      await FirebaseFirestore.instance.collection('Users').doc(widget.userID).update({
-                                        'cart': FieldValue.arrayUnion([currentBookReference])
-                                      });
-                                      if(cartArray.contains(currentBookReference)){
-                                        showErrorDialog('Item already in cart', 'It seems like you have already added this item to your cart', context, 'Okay');
-                                      }
-                                      else{
-                                        showSuccess('Item added Successfully', 'Item is now in your cart you can checkout', context);
-                                      }
-                                    },
-                                    icon: Icon(
-                                      Icons.add_shopping_cart,
-                                      color: Colors.brown,
-                                    ))
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    )),
+                              );
+                            },
+                          )),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -252,8 +278,8 @@ class _AdminPageState extends State<AdminPage> {
                             },
                             style: ButtonStyle(
                                 backgroundColor:
-                                MaterialStateProperty.all<Color>(
-                                    Colors.brown.shade500)),
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.brown.shade500)),
                             child: Row(
                               children: [
                                 Text(
@@ -287,7 +313,8 @@ class _AdminPageState extends State<AdminPage> {
       appBar: buildAppBar(context),
       drawer: adminDrawer(context, _selectedIndex),
       backgroundColor: Colors.orange.shade100,
-      body: Center(child:Column(
+      body: Center(
+          child: Column(
         children: [
           // buildBodyList()
         ],

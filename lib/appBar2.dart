@@ -10,7 +10,9 @@ import 'setLocaleMaterialApp.dart';
 
 // enum Options {genres, authors, saved, cart, logout}
 enum Options { search, myCart, wishList, logout, filter }
+
 UserModel? currentUserAppBar;
+
 enum AdminOptions { search, books, archive, customers }
 
 var _popUpMenuIndex = 0;
@@ -24,10 +26,7 @@ var appBarHeight = AppBar().preferredSize.height;
 
 final String title = "";
 
-
-
 AppBar buildAppBar(BuildContext context) {
-
   return AppBar(
     backgroundColor: barColor,
     title: const Text(
@@ -49,7 +48,6 @@ AppBar buildAppBar(BuildContext context) {
 }
 
 Drawer customerDrawer(BuildContext context, int selectedIndex) {
-
   loadCurrentUser();
   return Drawer(
     child: ListView(
@@ -89,22 +87,22 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
                 child: currentUserAppBar == null
                     ? Center(child: CircularProgressIndicator())
                     : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                    Text(
-                      "${currentUserAppBar!.email}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            "${currentUserAppBar!.email}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),
@@ -118,7 +116,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title:  Text(AppLocalizations.of(context)!.drawerCart),
+          title: Text(AppLocalizations.of(context)!.drawerCart),
           selected: selectedIndex == 1,
           onTap: () {
             Navigator.pop(context);
@@ -126,7 +124,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title:  Text(AppLocalizations.of(context)!.drawerAccount),
+          title: Text(AppLocalizations.of(context)!.drawerAccount),
           selected: selectedIndex == 2,
           onTap: () {
             Navigator.pop(context);
@@ -134,7 +132,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         ListTile(
-          title:  Text(AppLocalizations.of(context)!.drawerFilters),
+          title: Text(AppLocalizations.of(context)!.drawerFilters),
           selected: selectedIndex == 3,
           onTap: () {
             Navigator.pop(context);
@@ -151,7 +149,6 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           },
         ),
         buildLanguageSwitcher(context),
-
       ],
     ),
   );
@@ -181,22 +178,22 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
                 child: currentUserAppBar == null
                     ? Center(child: CircularProgressIndicator())
                     : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                    Text(
-                      "${currentUserAppBar!.email}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            "${currentUserAppBar!.email}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),

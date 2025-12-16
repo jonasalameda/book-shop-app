@@ -44,8 +44,8 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  emptyCart(List userCart, List booksInfo, List usersInfo) async{
-    for(var bookRef in userCart){
+  emptyCart(List userCart, List booksInfo, List usersInfo) async {
+    for (var bookRef in userCart) {
       var bookId = bookRef.id;
       var book = getBook(booksInfo, bookId);
       await deleteBookFromCart(widget.userID, usersInfo, bookId);
@@ -54,7 +54,7 @@ class _CartPageState extends State<CartPage> {
 
   Future<bool> decreaseBookQuantity(
       int currentQuantity, String currentBookID) async {
-    if(currentQuantity <= 0){
+    if (currentQuantity <= 0) {
       // showErrorDialog("Sorry can't checkout", "We are currently out of stock for this item please come back another time", context);
       return false;
     }
@@ -206,15 +206,17 @@ class _CartPageState extends State<CartPage> {
                                   margin: EdgeInsets.symmetric(vertical: 2),
                                   child: ListTile(
                                     //TODO: put image holder or link to book image
-                                    leading :Image.network(
-                                      currentBookInfo['image'],
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Image(image: AssetImage('assets/images/placeholder.png'));
-                                      }),
+                                    leading: Image.network(
+                                        currentBookInfo['image'], errorBuilder:
+                                            (context, error, stackTrace) {
+                                      return Image(
+                                          image: AssetImage(
+                                              'assets/images/placeholder.png'));
+                                    }),
                                     title: Text(
                                       currentBookInfo['book_name'],
-                                      style:
-                                      TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     subtitle: Text(currentBookInfo['author']),
                                     trailing: Wrap(
@@ -224,7 +226,10 @@ class _CartPageState extends State<CartPage> {
                                         IconButton(
                                           onPressed: () {
                                             // TODO: delete the current book from the wish list
-                                            deleteBookFromCart(widget.userID, usersInfo, currentBookReference);
+                                            deleteBookFromCart(
+                                                widget.userID,
+                                                usersInfo,
+                                                currentBookReference);
                                             setcartSubtotal();
                                           },
                                           icon: Icon(
@@ -233,24 +238,26 @@ class _CartPageState extends State<CartPage> {
                                           ),
                                         ),
                                         Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.brown.shade300,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                // ! it is referencing the amount of books in stock
-                                                child: Text(
-                                                    'Currently in Stock: $bookQuantity', style: TextStyle(fontSize: 12),),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Text(
-                                                bookPrice.toString(),
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold),
-                                              ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.brown.shade300,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          // ! it is referencing the amount of books in stock
+                                          child: Text(
+                                            'Currently in Stock: $bookQuantity',
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          bookPrice.toString(),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -326,17 +333,17 @@ class _CartPageState extends State<CartPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            onPressed: () async{
+                            onPressed: () async {
                               var itemsInStock;
                               for (var bookRef in userCart) {
                                 var bookId = bookRef.id;
                                 var book = getBook(booksInfo, bookId);
                                 if (book != null) {
-                                itemsInStock = await  decreaseBookQuantity(
+                                  itemsInStock = await decreaseBookQuantity(
                                       book['quantity'], bookId);
                                 }
                               }
-                              if(itemsInStock){
+                              if (itemsInStock) {
                                 showSuccessPayment(
                                     'Order Received',
                                     'Thank you for choosing the library of Ruina \n Your total is ${totalCart.toStringAsFixed(2)}',
@@ -345,9 +352,11 @@ class _CartPageState extends State<CartPage> {
                                 cartSubtotal = 0;
 
                                 emptyCart(userCart, booksInfo, usersInfo);
-                              }
-                              else{
-                                showErrorDialog("Error", "Some of the items in your cart are currently out of stock please try again later", context);
+                              } else {
+                                showErrorDialog(
+                                    "Error",
+                                    "Some of the items in your cart are currently out of stock please try again later",
+                                    context);
                               }
 
                               // decreaseBookQuantity(books, booksInfo['quantit'], currentBookID)

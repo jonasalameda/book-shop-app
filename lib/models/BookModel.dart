@@ -18,8 +18,18 @@ class BookModel {
   double price;
   bool available;
 
-  BookModel(this.id, this.isbn, this.book_name, this.author, this.country, this.genres,
-      this.description,this.image, this.quantity, this.price, this.available);
+  BookModel(
+      this.id,
+      this.isbn,
+      this.book_name,
+      this.author,
+      this.country,
+      this.genres,
+      this.description,
+      this.image,
+      this.quantity,
+      this.price,
+      this.available);
 
   /// Maps without the ID
   Map<String, Object?> toMap() {
@@ -31,7 +41,7 @@ class BookModel {
       'country': country,
       'genres': genres,
       'description': description,
-      'image' : image,
+      'image': image,
       'quantity': quantity,
       'price': price,
       'available': available,
@@ -39,7 +49,7 @@ class BookModel {
   }
 
   BookModel.fromMap(Map<String, dynamic> map)
-      : id =  map['id'],
+      : id = map['id'],
         isbn = map['isbn'],
         book_name = map['book_name'],
         author = map['author'],

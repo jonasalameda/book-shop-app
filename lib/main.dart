@@ -5,7 +5,6 @@ import 'setLocaleMaterialApp.dart';
 
 String? currentUserID;
 
-
 Future<void> main() async {
   await loadCurrentUser();
   WidgetsFlutterBinding.ensureInitialized();
