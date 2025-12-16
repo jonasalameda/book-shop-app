@@ -242,7 +242,7 @@ class _CartPageState extends State<CartPage> {
                                                 ),
                                                 // ! it is referencing the amount of books in stock
                                                 child: Text(
-                                                    'Currently in Stock: $bookQuantity', style: TextStyle(fontSize: 12),),
+                                                    AppLocalizations.of(context)!.bookQuantity + ': $bookQuantity', style: TextStyle(fontSize: 12),),
                                               ),
                                               SizedBox(
                                                 height: 10,
@@ -340,8 +340,8 @@ class _CartPageState extends State<CartPage> {
                               }
                               if(itemsInStock){
                                 showSuccessPayment(
-                                    'Order Received',
-                                    'Thank you for choosing the library of Ruina \n Your total is ${totalCart.toStringAsFixed(2)}',
+                                    AppLocalizations.of(context)!.cartOrderReceived,
+                                    AppLocalizations.of(context)!.cartThankYou(totalCart.toStringAsFixed(2)),
                                     context,
                                     totalCart);
                                 cartSubtotal = 0;
@@ -349,7 +349,10 @@ class _CartPageState extends State<CartPage> {
                                 emptyCart(userCart, booksInfo, usersInfo);
                               }
                               else{
-                                showErrorDialog("Error", "Some of the items in your cart are currently out of stock please try again later", context);
+                                showErrorDialog(
+                                    AppLocalizations.of(context)!.cartError,
+                                    AppLocalizations.of(context)!.cartOutOfStock,
+                                    context);
                               }
 
                               // decreaseBookQuantity(books, booksInfo['quantit'], currentBookID)

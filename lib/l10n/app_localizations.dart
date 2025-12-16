@@ -116,6 +116,12 @@ abstract class AppLocalizations {
   /// **'Library Of Ruina'**
   String get appTitle;
 
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
   /// No description provided for @drawerSearch.
   ///
   /// In en, this message translates to:
@@ -151,6 +157,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logout'**
   String get drawerLogout;
+
+  /// No description provided for @loginEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get loginEmail;
+
+  /// No description provided for @loginPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get loginPassword;
+
+  /// No description provided for @loginBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get loginBtn;
+
+  /// No description provided for @loginNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New to Ruina?'**
+  String get loginNew;
+
+  /// No description provided for @loginNewAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an Account'**
+  String get loginNewAccount;
+
+  /// No description provided for @loginEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty Fields'**
+  String get loginEmptyTitle;
+
+  /// No description provided for @loginEmptyContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter both email and password'**
+  String get loginEmptyContent;
+
+  /// No description provided for @loginUserNotregister.
+  ///
+  /// In en, this message translates to:
+  /// **'User is not registered'**
+  String get loginUserNotregister;
+
+  /// No description provided for @loginUserInexistentContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry to inform you, we do not have an account registered to this email please check again or register today!'**
+  String get loginUserInexistentContent;
+
+  /// No description provided for @loginWrongPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect Password'**
+  String get loginWrongPasswordTitle;
+
+  /// No description provided for @loginWrongPasswordContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Oops! Seems like it was the wrong password'**
+  String get loginWrongPasswordContent;
+
+  /// No description provided for @registerFName.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get registerFName;
+
+  /// No description provided for @registerLName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get registerLName;
+
+  /// No description provided for @registerPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'PhoneNumber'**
+  String get registerPhone;
+
+  /// No description provided for @registerConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'ConfirmPassword'**
+  String get registerConfirmPassword;
+
+  /// No description provided for @registerBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get registerBtn;
+
+  /// No description provided for @registerHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get registerHaveAccount;
+
+  /// No description provided for @registerSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration Successful!'**
+  String get registerSuccess;
+
+  /// No description provided for @registerSuccessContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been created. Please login.'**
+  String get registerSuccessContent;
+
+  /// No description provided for @bookQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently in stock'**
+  String get bookQuantity;
+
+  /// No description provided for @bookPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get bookPrice;
 
   /// No description provided for @accountGreeting.
   ///
@@ -205,6 +337,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Complete my order'**
   String get cartCheckout;
+
+  /// No description provided for @cartOrderReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'We have received your order'**
+  String get cartOrderReceived;
+
+  /// No description provided for @cartThankYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for choosing the library of Ruina \n Your total is \${totalCart}'**
+  String cartThankYou(Object totalCart);
+
+  /// No description provided for @cartPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Proceed with payment'**
+  String get cartPayment;
+
+  /// No description provided for @cartError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get cartError;
+
+  /// No description provided for @cartOutOfStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Some of the items in your cart are currently out of stock please try again later'**
+  String get cartOutOfStock;
+
+  /// No description provided for @paymentCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Number'**
+  String get paymentCard;
+
+  /// No description provided for @paymentCardExpiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiry (MM/YY)'**
+  String get paymentCardExpiry;
+
+  /// No description provided for @paymentSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Successful!'**
+  String get paymentSuccess;
+
+  /// No description provided for @paymentEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to my page'**
+  String get paymentEnd;
+
+  /// No description provided for @pay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay'**
+  String get pay;
+
+  /// No description provided for @payError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all fields'**
+  String get payError;
 
   /// No description provided for @mapsFindUs.
   ///

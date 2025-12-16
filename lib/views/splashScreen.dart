@@ -1,3 +1,4 @@
+import 'package:bookshop/l10n/app_localizations.dart';
 import 'package:bookshop/views/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar.dart';
@@ -36,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           Color.fromRGBO(140, 118, 83, 1.0)),
                       fixedSize: WidgetStatePropertyAll(Size(200, 65)),
                       enableFeedback: true),
-                  child: Text("Log in")),
+                  child: Text(AppLocalizations.of(context)!.loginBtn)),
               SizedBox(
                 height: 20,
               ),
@@ -44,13 +45,13 @@ class _SplashScreenState extends State<SplashScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "New to Ruina? ",
+                    AppLocalizations.of(context)!.loginNew,
                     style: TextStyle(color: Colors.white),
                   ),
                   Padding(
                     padding: EdgeInsetsGeometry.all(0),
                     child: Text(
-                      "Create an Account",
+                      AppLocalizations.of(context)!.loginNewAccount,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

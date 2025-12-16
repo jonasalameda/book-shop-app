@@ -1,4 +1,5 @@
 import 'package:bookshop/appBar2.dart';
+import 'package:bookshop/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -22,7 +23,7 @@ class _PaymentPageState extends State<PaymentPage> {
         expiry.text.isEmpty ||
         cvv.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please fill in all fields")),
+        SnackBar(content:Text( AppLocalizations.of(context)!.payError)),
       );
       return;
     }
@@ -48,11 +49,12 @@ class _PaymentPageState extends State<PaymentPage> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: cardNumber,
               decoration: InputDecoration(
-                labelText: "Card Number",
+                labelText: AppLocalizations.of(context)!.paymentCard,
                 hintText: "4242 4242 4242 4242",
                 border: OutlineInputBorder(),
               ),
@@ -65,7 +67,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   child: TextField(
                     controller: expiry,
                     decoration: InputDecoration(
-                      labelText: "Expiry (MM/YY)",
+                      labelText: AppLocalizations.of(context)!.paymentCardExpiry,
                       hintText: "12/30",
                       border: OutlineInputBorder(),
                     ),
@@ -97,7 +99,7 @@ class _PaymentPageState extends State<PaymentPage> {
               ),
               onPressed: processPayment,
               child: Text(
-                "Pay \$${widget.totalPayment.toStringAsFixed(2)}",
+                AppLocalizations.of(context)!.pay + " \$${widget.totalPayment.toStringAsFixed(2)}",
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -126,7 +128,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                 color: Colors.green, size: 80),
             SizedBox(height: 20),
             Text(
-              "Payment Successful!",
+              AppLocalizations.of(context)!.paymentSuccess,
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
@@ -141,7 +143,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/account');
               },
-              child: Text("Finish"),
+              child: Text(AppLocalizations.of(context)!.paymentEnd),
             )
           ],
         ),
