@@ -187,12 +187,15 @@ class _LogInPageState extends State<LogInPage> {
                                       'cpWtMJprI1mqtNey7XGf') //admin
                                   // if (currentUser['user_role'] == 'admin') //admin
                                   {
+                                    currentUserID = currentUser['id'];
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => AdminPage(
                                                 userID: currentUserID!)));
                                   } else {
+                                    currentUserID = currentUser['id'];
+                                    currentUserAppBar = currentUser;
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
