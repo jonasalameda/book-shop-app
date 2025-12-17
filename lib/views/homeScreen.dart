@@ -166,6 +166,7 @@ Widget? _generateFeatured({String? filter}) {
           itemBuilder: (context, i) {
             final item = booksMap[i];
             return Container(
+              width: 200,
               padding: EdgeInsets.all(8.0),
               child: Column(
                 children: [
@@ -178,18 +179,28 @@ Widget? _generateFeatured({String? filter}) {
                                   DescriptionPage(bookId: item['id'])));
                     },
                     child: item['image'].isEmpty
-                        ? Image(image: AssetImage('bookPlaceholder.jpg'))
+                        ? Image(
+                            image: AssetImage('assets/bookPlaceholder.jpg'),
+                            width: 100,
+                            height: 100,
+                          )
                         : Image(
                             image: NetworkImage(item['image']),
                             width: 100,
                             height: 100,
                           ),
                   ),
-                  Text(
-                    item['name'] ?? "",
-                    style: TextStyle(
-                        color:
-                            (item['quantity'] > 0) ? Colors.black : Colors.red),
+                  Wrap(
+                    children: [
+                      Text(
+                        item['name'] ?? "",
+                        softWrap: true,
+                        style: TextStyle(
+                            color: (item['quantity'] > 0)
+                                ? Colors.black
+                                : Colors.red),
+                      ),
+                    ],
                   ),
                   Text("\$${item['price']}"),
                   Text("Stock: ${item['quantity']}"),

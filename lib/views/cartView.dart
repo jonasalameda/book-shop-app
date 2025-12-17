@@ -53,7 +53,6 @@ class _CartPageState extends State<CartPage> {
       var book = getBook(booksInfo, bookId);
       // await deleteBookFromCart(widget.userID, usersInfo, bookId);
       await updateElement(allUsers, widget.userID, 'cart', []);
-
     }
   }
 
@@ -121,7 +120,6 @@ class _CartPageState extends State<CartPage> {
               var currentUser = getUser(usersInfo, widget.userID);
               var userCart = currentUser['cart'];
               // String? bookId;
-
               double setcartSubtotal() {
                 double subtotal = 0;
                 for (var bookRef in userCart) {

@@ -72,7 +72,9 @@ class _MapPageState extends State<MapPage> {
             Flexible(
               flex: 1,
               fit: FlexFit.loose,
-              child: buildGoogleMapsBody(),
+              child: Container(
+                child: buildGoogleMapsBody(),
+              ),
             )
           ],
         ),

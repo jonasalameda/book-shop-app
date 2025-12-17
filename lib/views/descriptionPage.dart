@@ -90,7 +90,11 @@ class _DescriptionPageState extends State<DescriptionPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       currentBook['image'].isEmpty
-                          ? Image(image: AssetImage('bookPlaceholder.jpg'))
+                          ? Image(
+                              image: AssetImage('assets/bookPlaceholder.jpg'),
+                              width: 300,
+                              height: 300,
+                            )
                           : Image(
                               image: NetworkImage(currentBook['image']),
                               width: 300,
@@ -105,12 +109,15 @@ class _DescriptionPageState extends State<DescriptionPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                currentBook['book_name'],
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    decoration: TextDecoration.underline),
-                              ),
+                              Flexible(
+                                  flex: 1,
+                                  fit: FlexFit.tight,
+                                  child: Text(
+                                    currentBook['book_name'],
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        decoration: TextDecoration.underline),
+                                  )),
                               Text(
                                 "\$${currentBook['price']}",
                                 style: TextStyle(
