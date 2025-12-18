@@ -45,7 +45,10 @@ Widget buildMaterialApp(BuildContext context) {
       routes: {
         '/': (context) => const SplashScreen(),
         '/login': (context) => LogInPage(),
-        '/home': (context) => HomeScreen(),
+        '/home': (context) {
+          acrossUserID = currentUserID;
+          return HomeScreen();
+        },
         '/registerUser': (context) => RegisterUserPage(),
         // '/admin': (context) => AdminPage(userID: 'cpWtMJprI1mqtNey7XGf',), //Only one admin, so we hard-code
         '/admin': (context) => AdminPage(

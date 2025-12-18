@@ -6,7 +6,6 @@ import 'setLocaleMaterialApp.dart';
 // String? currentUserID;
 
 Future<void> main() async {
-  await loadCurrentUser();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
@@ -17,7 +16,8 @@ Future<void> main() async {
     ),
   );
   // BookDB().initializeDB();
-  // loadCurrentUser();
+  await loadCurrentUser();
+
   runApp(MyApp());
 }
 

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/streams.dart';
 
 const FEATURED_BOOKS_LIMIT = 6;
-
+String? acrossUserID;
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -177,7 +177,7 @@ Widget? _generateFeatured({String? filter}) {
                           context,
                           MaterialPageRoute(
                               builder: (builder) =>
-                                  DescriptionPage(bookId: item['id'])));
+                                  DescriptionPage(bookId: item['id'], userId: acrossUserID!)));
                     },
                     child: item['image'].isEmpty
                         ? Image(

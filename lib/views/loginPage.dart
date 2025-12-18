@@ -201,52 +201,50 @@ class _LogInPageState extends State<LogInPage> {
                               var currentUser =
                               getUser(usersList, userID);
 
-                              // await loadCurrentUser();
-                              bool isCorrectPassword = verifyPassword(
-                                  currentUser['password_hash'],
-                                  userPassword);
-                              // User exists but password is incorrect
-                              if (!isCorrectPassword) {
-                                showErrorDialog(
-                                    AppLocalizations.of(context)!
-                                        .loginWrongPasswordTitle,
-                                    AppLocalizations.of(context)!
-                                        .loginWrongPasswordContent,
-                                    context);
-                              } else {
-                                // Password is correct
-                                if (currentUser['id'] ==
-                                    'cpWtMJprI1mqtNey7XGf') //admin
-                                  // if (currentUser['user_role'] == 'admin') //admin
-                                    {
-                                  currentUserID = currentUser['id'];
-                                  await loadCurrentUser();
-                                  currentUserAppBar =
-                                  await getUserById(currentUserID!);
-                                  Navigator.pop(context);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => AdminPage(
-                                              userID: currentUserID!)));
-                                } else {
-                                  currentUserID = currentUser['id'];
-                                  // currentUserAppBar = currentUser;
-                                  currentUserAppBar =
-                                  await getUserById(currentUserID!);
-                                  await loadCurrentUser();
-                                  Navigator.pop(context);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              AccountPage(
-                                                  userID:
-                                                  currentUserID!)));
-                                }
-                              }
-                            }
-                          },
+                                    // await loadCurrentUser();
+                                    bool isCorrectPassword = verifyPassword(
+                                        currentUser['password_hash'],
+                                        userPassword);
+                                    // User exists but password is incorrect
+                                    if (!isCorrectPassword) {
+                                      showErrorDialog(
+                                          AppLocalizations.of(context)!
+                                              .loginWrongPasswordTitle,
+                                          AppLocalizations.of(context)!
+                                              .loginWrongPasswordContent,
+                                          context);
+                                    } else {
+                                      // Password is correct
+                                      if (currentUser['id'] ==
+                                          'cpWtMJprI1mqtNey7XGf') //admin
+                                      // if (currentUser['user_role'] == 'admin') //admin
+                                      {
+
+                                        currentUserID = currentUser['id'];
+                                        await loadCurrentUser();
+                                        showSuccess("Id", currentUserID.toString(), context);
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => AdminPage(
+                                                    userID: currentUserID!)));
+                                      } else {
+                                        currentUserID = currentUser['id'];
+                                        // currentUserAppBar = currentUser;
+                                        showSuccess("Id", currentUserID.toString(), context);
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AccountPage(
+                                                        userID:
+                                                            currentUserID!)));
+                                      }
+                                    }
+                                  }
+                                },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
                               Colors.brown.shade500,

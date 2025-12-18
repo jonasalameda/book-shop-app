@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bookshop/views/homeScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/appBar2.dart';
@@ -284,7 +285,7 @@ class _fullLibraryState extends State<fullLibrary> {
                 context,
                 MaterialPageRoute(
                     builder: (builder) =>
-                        DescriptionPage(bookId: itemId)));
+                        DescriptionPage(bookId: itemId, userId: acrossUserID!,)));
           },
         ),
         PopupMenuItem<MenuItem>(
