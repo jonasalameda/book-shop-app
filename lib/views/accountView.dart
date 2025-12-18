@@ -169,9 +169,11 @@ class _AccountPageState extends State<AccountPage> {
                             itemCount: savedBooks.length,
                             itemBuilder: (context, i) {
                               final currentBookReference = savedBooks[i];
+                              print('top 75 momentos tv globinho');
+                              print(booksInfo[i]['id']);
                               // final String currentBookIdDouble = (currentBookReference.id.toString()) as String;
                               final String currentBookId =
-                                  currentBookReference.id.toString();
+                                  currentBookReference['id'].toString();
                               final currentBook =
                                   getBook(booksInfo, currentBookId);
                               if (currentBook == null) {
@@ -213,7 +215,7 @@ class _AccountPageState extends State<AccountPage> {
                                           (context, error, stackTrace) {
                                     return Image(
                                         image: AssetImage(
-                                            'assets/images/Placeholder.png'));
+                                            'assets/bookPlaceholder.jpg'));
                                   }),
                                   title: Text(
                                     currentBook['book_name'],
