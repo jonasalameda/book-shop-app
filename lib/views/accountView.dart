@@ -28,7 +28,7 @@ class _AccountPageState extends State<AccountPage> {
     // List savedBooks = user['wishlist'];
     // print(savedBooks);
     await FirebaseFirestore.instance.collection('Users').doc(userId).update({
-      'wishlist': FieldValue.arrayRemove([bookReferenceID])
+      'wishlist': FieldValue.arrayRemove([bookReferenceID['id'] ?? bookReferenceID])
     });
   }
   // addToCart(String userId, List usersInfo, var bookReferenceID) async {
@@ -171,7 +171,7 @@ class _AccountPageState extends State<AccountPage> {
                               final currentBookReference = savedBooks[i];
                               // final String currentBookIdDouble = (currentBookReference.id.toString()) as String;
                               final String currentBookId =
-                                  currentBookReference.id.toString();
+                                  currentBookReference['id'];
                               final currentBook =
                                   getBook(booksInfo, currentBookId);
                               if (currentBook == null) {
@@ -213,7 +213,7 @@ class _AccountPageState extends State<AccountPage> {
                                           (context, error, stackTrace) {
                                     return Image(
                                         image: AssetImage(
-                                            'assets/images/Placeholder.png'));
+                                            'assets/bookPlaceholder.jpg'));
                                   }),
                                   title: Text(
                                     currentBook['book_name'],
@@ -248,7 +248,7 @@ class _AccountPageState extends State<AccountPage> {
                                                 .doc(widget.userID)
                                                 .update({
                                               'cart': FieldValue.arrayUnion(
-                                                  [currentBookReference])
+                                                  [currentBook['id']])
                                             });
                                             if (cartArray.contains(
                                                 currentBookReference)) {

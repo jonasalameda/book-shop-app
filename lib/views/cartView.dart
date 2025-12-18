@@ -49,7 +49,7 @@ class _CartPageState extends State<CartPage> {
 
   emptyCart(List userCart, List booksInfo, List usersInfo) async {
     for (var bookRef in userCart) {
-      var bookId = bookRef.id;
+      var bookId = bookRef['id'];
       var book = getBook(booksInfo, bookId);
       // await deleteBookFromCart(widget.userID, usersInfo, bookId);
       await updateElement(allUsers, widget.userID, 'cart', []);
@@ -131,7 +131,7 @@ class _CartPageState extends State<CartPage> {
               double setcartSubtotal() {
                 double subtotal = 0;
                 for (var bookRef in userCart) {
-                  var bookId = bookRef.id;
+                  var bookId = bookRef['id'];
                   var book = getBook(booksInfo, bookId!);
                   if (book != null) {
                     subtotal += (book['price'] as num).toDouble();
@@ -202,7 +202,7 @@ class _CartPageState extends State<CartPage> {
                               itemBuilder: (context, i) {
                                 final currentBookReference = userCart[i];
                                 final String currentBookId =
-                                    currentBookReference.id;
+                                    currentBookReference['id'];
                                 final currentBookInfo =
                                     getBook(booksInfo, currentBookId);
                                 final bookQuantity =
@@ -243,7 +243,7 @@ class _CartPageState extends State<CartPage> {
                                               deleteBookFromCart(
                                                   widget.userID,
                                                   usersInfo,
-                                                  currentBookReference);
+                                                  currentBookReference['id']);
                                               setcartSubtotal();
                                             });
                                           },
@@ -353,7 +353,7 @@ class _CartPageState extends State<CartPage> {
                             onPressed: () async {
                               var itemsInStock;
                               for (var bookRef in userCart) {
-                                var bookId = bookRef.id;
+                                var bookId = bookRef['id'];
                                 var book = getBook(booksInfo, bookId);
                                 if (book != null) {
                                   itemsInStock = await decreaseBookQuantity(
