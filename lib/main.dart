@@ -1,22 +1,26 @@
+import 'package:bookshop/env.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'common.dart';
 import 'setLocaleMaterialApp.dart';
 
 // String? currentUserID;
 
 Future<void> main() async {
-  await loadCurrentUser();
   WidgetsFlutterBinding.ensureInitialized();
+  await loadCurrentUser();
+  await dotenv.load(fileName: 'lib/.env');
   await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: "AIzaSyBbuPvGLzeKv0pXmx00hlXySPxT7F8ZQcE",
-      appId: "530607033314",
-      messagingSenderId: "1:530607033314:android:f0812a8ac5623e81bd47bb",
-      projectId: "book-shop-cdfd8",
+    options: FirebaseOptions(
+      apiKey: Enviroment.apiKey,
+      appId: Enviroment.appID,
+      messagingSenderId: Enviroment.messagingSenderId,
+      projectId: Enviroment.projectId,
     ),
   );
   // BookDB().initializeDB();
+
   runApp(MyApp());
 }
 

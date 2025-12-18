@@ -14,8 +14,13 @@ l10n.yaml
 # As packages are no longer pinned, we use a lockfile for testing locally.
 # When unpinning packages, Using lockfiles ensures that failures in PRs are
 # actually due to those PRs, not due to a package being updated.
+*.lock
+pubspec.lock
+/pubspec.lock
 !/pubspec.lock
-
+*.env
+.env.dev
+.env
 # IntelliJ related
 *.iml
 *.ipr
