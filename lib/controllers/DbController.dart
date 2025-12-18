@@ -6,11 +6,11 @@ import 'package:bookshop/models/UserModel.dart';
 //TODO: Initialize all collections/tables
 class BookDB {
   late final CollectionReference books =
-      FirebaseFirestore.instance.collection('Books');
+  FirebaseFirestore.instance.collection('Books');
   late final CollectionReference users =
-      FirebaseFirestore.instance.collection('Users');
+  FirebaseFirestore.instance.collection('Users');
   late final CollectionReference cart =
-      FirebaseFirestore.instance.collection('Cart');
+  FirebaseFirestore.instance.collection('Cart');
 
   void initializeDB() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +28,7 @@ class BookDB {
 Future<List> getTableList(String tableName) async {
   try {
     final tableData =
-        await FirebaseFirestore.instance.collection(tableName).get();
+    await FirebaseFirestore.instance.collection(tableName).get();
     return tableData.docs
         .map((doc) => doc.data() as Map<String, dynamic>)
         .toList();
@@ -107,7 +107,7 @@ Future<bool> updateRow(
 Future<UserModel?> getUserById(String userId) async {
   try {
     final doc =
-        await FirebaseFirestore.instance.collection('Users').doc(userId).get();
+    await FirebaseFirestore.instance.collection('Users').doc(userId).get();
     if (!doc.exists) return null;
     return UserModel.fromMap(doc.data()!, doc.id);
   } catch (e) {
@@ -151,6 +151,19 @@ Future<bool> updateBook(String bookId, Map<String, dynamic> updatedData) async {
     return true;
   } catch (e) {
     print('Error updating book: $e');
+    return false;
+  }
+}
+
+Future<bool> updateUser(String userId, Map<String, dynamic> updatedData) async {
+  try {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .update(updatedData);
+    return true;
+  } catch (e) {
+    print('Error updating user: $e');
     return false;
   }
 }
@@ -202,17 +215,17 @@ Future<List<Map<String, dynamic>>?> fetchAllUsersMap(String userId) async
     final mappedUsers = snap.docs.map((user) {
       final userData = user.data();
       return {
-      'id': user.id,
-      'first_name': userData['first_name'] ?? '',
-      'last_name': userData['last_name'] ?? '',
-      'phone_number': userData['phone_number'] ?? '',
-      'email': userData['email'] ?? '',
-      'password_hash': userData['password_hash'] ?? '',
-      'wishlist': userData['wishlist'] ?? [],
-      'cart': userData['cart'] ?? [],
-      'role': userData['role'] ?? [],
-      'type': 'user'
-    };}).toList();
+        'id': user.id,
+        'first_name': userData['first_name'] ?? '',
+        'last_name': userData['last_name'] ?? '',
+        'phone_number': userData['phone_number'] ?? '',
+        'email': userData['email'] ?? '',
+        'password_hash': userData['password_hash'] ?? '',
+        'wishlist': userData['wishlist'] ?? [],
+        'cart': userData['cart'] ?? [],
+        'role': userData['role'] ?? [],
+        'type': 'user'
+      };}).toList();
 
     return mappedUsers;
   } catch (e) {
@@ -250,4 +263,3 @@ Future<List<Map<String, dynamic>>?> fetchAllBooksMap() async
     return null;
   }
 }
-

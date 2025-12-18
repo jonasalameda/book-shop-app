@@ -22,6 +22,7 @@ enum AdminOptions { search, books, archive, customers }
 
 var _popUpMenuIndex = 0;
 int _selectedIndex = 0;
+
 // final currentUserAppBar = getcurrentUserAppBar();
 // UserModel? currentUserAppBar;
 
@@ -32,6 +33,7 @@ var appBarHeight = AppBar().preferredSize.height;
 final String title = "";
 
 AppBar buildAppBar(BuildContext context) {
+
   return AppBar(
     backgroundColor: barColor,
     title: Text(
@@ -52,8 +54,91 @@ AppBar buildAppBar(BuildContext context) {
   );
 }
 
+_updateUser(userId, BuildContext context)
+{
+  return showDialog(
+    context: context,
+    builder: (context) {
+      Map<String, dynamic> newData = {};
+      String newfname = '';
+      String newlname = '';
+      String newEmail= '';
+      String newPhone= '';
+
+      return AlertDialog(
+        title: const Text("Update Information"),
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                onChanged: (value) => newfname = value,
+                decoration:
+                InputDecoration(hintText: 'Enter new first name'),
+              ),
+              TextField(
+                onChanged: (value) => newlname = value,
+                decoration:
+                InputDecoration(hintText: 'Enter new last name'),
+              ),
+              TextField(
+                onChanged: (value) => newEmail = value,
+                decoration:
+                InputDecoration(hintText: 'Enter new email'),
+              ),
+              TextField(
+                onChanged: (value) => newPhone = value,
+                decoration:
+                InputDecoration(hintText: 'Enter new phone'),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+              onPressed: () async {
+                final emailRegex = RegExp(
+                    r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
+                final phoneRegex = RegExp(r'^[0-9]{3}-[0-9]{3}-[0-9]{4}$');
+
+                if (newfname.trim().isNotEmpty) {
+                  newData['first_name'] = newfname.trim();
+                  currentUserAppBar!.first_name = newData['first_name'];
+                }
+                if (newlname.trim().isNotEmpty) {
+                  newData['last_name'] = newlname.trim();
+                  currentUserAppBar!.last_name = newData['last_name'];
+                }
+                if (newEmail.trim().isNotEmpty && emailRegex.hasMatch(newEmail.trim())) {
+                  newData['email'] = newEmail.trim();
+                  currentUserAppBar!.email = newData['email'];
+                }
+                if (newPhone.trim().isNotEmpty && phoneRegex.hasMatch(newPhone.trim())) {
+                  newData['phone_number'] = newPhone.trim();
+                  currentUserAppBar!.phone_number = newData['phone_number'];
+                }
+
+                if (newData.isNotEmpty) {
+                  await updateUser(userId, newData);
+                } else {
+                  showErrorDialog("Could not update!","Make sure the email is valid and the phone number should be in the format 123-123-1234 if needs to be updated.", context); //general function from main
+                }
+                // await loadCurrentUser();
+                Navigator.pop(context);
+              },
+              child: Text("Update")),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'))
+        ],
+      );
+    },
+  );
+}
+
 Drawer customerDrawer(BuildContext context, int selectedIndex) {
-  // loadCurrentUser();
   return Drawer(
     child: ListView(
       // Important: Remove any padding from the ListView.
@@ -75,22 +160,29 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
                 child: currentUserAppBar == null
                     ? Center(child: CircularProgressIndicator())
                     : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16),
-                          ),
-                          Text(
-                            "${currentUserAppBar!.email}",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                    Text(
+                      "${currentUserAppBar!.email}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    IconButton(
+                        onPressed: () async{
+                          await _updateUser(currentUserID, context);
+                          Navigator.pop(context);
+
+                          Navigator.pushNamed(context, '/account');
+                        }, icon: Icon(Icons.edit))
+                  ],
+                ),
               ),
             ],
           ),
@@ -195,22 +287,28 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
                 child: currentUserAppBar == null
                     ? Center(child: CircularProgressIndicator())
                     : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16),
-                          ),
-                          Text(
-                            "${currentUserAppBar!.email}",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${currentUserAppBar!.first_name} ${currentUserAppBar!.last_name}",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                    Text(
+                      "${currentUserAppBar!.email}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    IconButton(
+                        onPressed: () async{
+                          await _updateUser(currentUserID, context);
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/admin');
+                        }, icon: Icon(Icons.edit))
+                  ],
+                ),
               ),
             ],
           ),
@@ -238,6 +336,7 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           onTap: () {
             currentUserID = '';
             currentUserAppBar = null;
+            unloadCurrentUser();
             Navigator.pop(context);
             Navigator.pushNamed(context, '/login');
           },
