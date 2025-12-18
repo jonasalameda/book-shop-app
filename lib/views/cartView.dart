@@ -202,7 +202,7 @@ class _CartPageState extends State<CartPage> {
                               itemBuilder: (context, i) {
                                 final currentBookReference = userCart[i];
                                 final String currentBookId =
-                                    currentBookReference.id;
+                                    currentBookReference['id'];
                                 final currentBookInfo =
                                     getBook(booksInfo, currentBookId);
                                 final bookQuantity =
