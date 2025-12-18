@@ -31,8 +31,6 @@ var appBarHeight = AppBar().preferredSize.height;
 
 final String title = "";
 
-
-
 AppBar buildAppBar(BuildContext context) {
   return AppBar(
     backgroundColor: barColor,
@@ -106,6 +104,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
 
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (builder) => HomeScreen()));
+            Navigator.pop(context);
             Navigator.pushNamed(context, '/library');
           },
         ),
@@ -154,7 +153,6 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/map');
           },
         ),
-
         ListTile(
           title: Text("Home"),
           selected: selectedIndex == 6,
@@ -218,14 +216,6 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           ),
         ),
         ListTile(
-          title: Text(AppLocalizations.of(context)!.drawerSearch),
-          selected: selectedIndex == 0,
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/admin');
-          },
-        ),
-        ListTile(
           title: Text('Admin'),
           selected: selectedIndex == 1,
           onTap: () {
@@ -250,17 +240,6 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             currentUserAppBar = null;
             Navigator.pop(context);
             Navigator.pushNamed(context, '/login');
-          },
-        ),
-
-        ListTile(
-          title: Text(AppLocalizations.of(context)!.drawerFindUs),
-          selected: selectedIndex == 4,
-          onTap: () {
-            currentUserID = '';
-            currentUserAppBar = null;
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/map');
           },
         ),
       ],
