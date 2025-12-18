@@ -1,23 +1,34 @@
 import 'package:bookshop/l10n/app_localizations.dart';
-
+import 'package:bookshop/models/UserModel.dart';
 import 'main.dart';
 import 'appBar2.dart';
 import 'package:bookshop/controllers/DbController.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/views/paymentPage.dart';
 
+UserModel? currentUser;
+
+String? currentUserID;
+
+List<Map<String, dynamic>> allUsers = [];
+List<Map<String, dynamic>> allBooks = [];
+
 Future<void> loadCurrentUser() async {
   // currentUserID = userID;
   if (currentUserID == null) return;
-  currentUserAppBar = await getUserById(currentUserID!);
+
+  currentUser = await getUserById(currentUserID!);
 }
 
+
 void unloadCurrentUser() {
-  currentUserID = '';
+  currentUser = null;
+  currentUserID = null;
   currentUserAppBar = null;
 }
 
-showErrorDialog(String error, String message,BuildContext context,[String textbutton = 'Try Again']) {
+showErrorDialog(String error, String message, BuildContext context,
+    [String textbutton = 'Try Again']) {
   showDialog(
       context: context,
       builder: (builder) {
@@ -55,8 +66,8 @@ void showSuccessDialog(BuildContext context) {
   );
 }
 
-
-void showSuccess(String title, String message,BuildContext context,[String textbutton = 'okay']) {
+void showSuccess(String title, String message, BuildContext context,
+    [String textbutton = 'okay']) {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -76,7 +87,9 @@ void showSuccess(String title, String message,BuildContext context,[String textb
     },
   );
 }
-void showSuccessPayment(String title, String message,BuildContext context, double totalcart) {
+
+void showSuccessPayment(
+    String title, String message, BuildContext context, double totalcart) {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -90,8 +103,8 @@ void showSuccessPayment(String title, String message,BuildContext context, doubl
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          PaymentPage(totalPayment: totalcart))); // Close dialog
+                      builder: (context) => PaymentPage(
+                          totalPayment: totalcart))); // Close dialog
             },
             child: Text(AppLocalizations.of(context)!.cartPayment),
           )

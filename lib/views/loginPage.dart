@@ -125,7 +125,14 @@ class _LogInPageState extends State<LogInPage> {
                         Flexible(
                           fit: FlexFit.tight,
                           child: ElevatedButton(
-                            onPressed: () async {
+                            onPressed: _isLoading ? null
+                            :
+                                () async
+                            {
+                              setState(() {
+                                _isLoading = true;
+                              });
+
                               final userEmail =
                                   _emailController.text.toLowerCase();
                               final userPassword = _passwordController.text;
@@ -136,18 +143,25 @@ class _LogInPageState extends State<LogInPage> {
                                     AppLocalizations.of(context)!
                                         .loginEmptyContent,
                                     context);
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                                return;
                               }
 
                               String? userID = findUser(usersList, userEmail);
 
-                              currentUserID = userID; // Changed to nullable
+                              // currentUserID = userID; // Changed to nullable
 
                               //needed to check
                               // print(userID);
                               // showErrorDialog(userID.toString(), usersList.toString(), context);
-                              await loadCurrentUser();
+                              // await loadCurrentUser();
                               if (userID == null) {
                                 //showErrorDialog('User is not registered', 'Sorry to inform you, we do not have an account registered to this email please check again or register today!', context);
+                                setState(() {
+                                  _isLoading = false;
+                                });
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -185,9 +199,9 @@ class _LogInPageState extends State<LogInPage> {
                                     });
                               } else {
                                 var currentUser =
-                                    getUser(usersList, currentUserID!);
+                                    getUser(usersList, userID);
 
-                                await loadCurrentUser();
+                                // await loadCurrentUser();
                                 bool isCorrectPassword = verifyPassword(
                                     currentUser['password_hash'], userPassword);
                                 // User exists but password is incorrect
@@ -205,6 +219,7 @@ class _LogInPageState extends State<LogInPage> {
                                   // if (currentUser['user_role'] == 'admin') //admin
                                   {
                                     currentUserID = currentUser['id'];
+                                    await loadCurrentUser();
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -213,6 +228,7 @@ class _LogInPageState extends State<LogInPage> {
                                   } else {
                                     currentUserID = currentUser['id'];
                                     // currentUserAppBar = currentUser;
+                                    currentUserAppBar = await getUserById(currentUserID!);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -227,7 +243,9 @@ class _LogInPageState extends State<LogInPage> {
                                 Colors.brown.shade500,
                               ),
                             ),
-                            child: Text(
+                            child: _isLoading ? CircularProgressIndicator(color: Colors.white)
+                            :
+                            Text(
                               AppLocalizations.of(context)!.loginBtn,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,

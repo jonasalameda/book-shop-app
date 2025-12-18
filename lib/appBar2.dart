@@ -28,6 +28,8 @@ var appBarHeight = AppBar().preferredSize.height;
 
 final String title = "";
 
+
+
 AppBar buildAppBar(BuildContext context) {
   return AppBar(
     backgroundColor: barColor,
@@ -50,30 +52,12 @@ AppBar buildAppBar(BuildContext context) {
 }
 
 Drawer customerDrawer(BuildContext context, int selectedIndex) {
-  loadCurrentUser();
+  // loadCurrentUser();
   return Drawer(
     child: ListView(
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
       children: [
-        // DrawerHeader(
-        //   decoration: BoxDecoration(color: Color(0xFFAE9674)),
-        //   child: Row(
-        //     children: [
-        //       // CircleAvatar(
-        //       //   radius: 40,
-        //       //   backgroundColor: Colors.transparent,
-        //       //   foregroundImage: AssetImage('assets/avatarExample.jpg'),
-        //       // ),
-        //       currentUserAppBar == null
-        //           ? CircularProgressIndicator()
-        //           :
-        //               // leading: Text("${currentUserAppBar!.id}"),
-        //  Text("${currentUserAppBar!.email ?? "unsefined"}"),
-        //
-        //     ],
-        //   ),
-        // ),
         DrawerHeader(
           decoration: BoxDecoration(color: Color(0xFFAE9674)),
           child: Row(
@@ -162,7 +146,6 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           title: Text(AppLocalizations.of(context)!.drawerFindUs),
           selected: selectedIndex == 5,
           onTap: () {
-            unloadCurrentUser();
             Navigator.pop(context);
             Navigator.pushNamed(context, '/map');
           },
@@ -172,7 +155,6 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
           title: Text("Home"),
           selected: selectedIndex == 6,
           onTap: () {
-            unloadCurrentUser();
             Navigator.pop(context);
             Navigator.pushNamed(context, '/home');
           },

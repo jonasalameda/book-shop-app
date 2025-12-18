@@ -20,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: buildAppBar(context),
+        drawer: customerDrawer(context, 6),
         backgroundColor: Color.fromRGBO(219, 206, 206, 1),
         body: SingleChildScrollView(
           child: Center(

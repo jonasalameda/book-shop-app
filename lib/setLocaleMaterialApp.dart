@@ -52,12 +52,23 @@ Widget buildMaterialApp(BuildContext context) {
               userID: 'cpWtMJprI1mqtNey7XGf',
             ),
         //customer: Xzw3cOOpQJ2DFSTKHQh2  - admin: cpWtMJprI1mqtNey7XGf
-        '/account': (context) => AccountPage(
-              userID: currentUserID!,
-            ),
-        '/cart': (context) => CartPage(
-              userID: currentUserID!,
-            ),
+        // '/account': (context) => AccountPage(
+        //       userID: currentUserID!,
+        //     ),
+        '/account': (context) {
+          if (currentUserID == null)
+          {
+            return LogInPage();
+          }
+            return AccountPage(userID: currentUserID!);
+          },
+        '/cart': (context) {
+          if (currentUserID == null)
+          {
+            return LogInPage();
+          }
+          return CartPage(userID: currentUserID!);
+        },
         '/map': (context) => MapPage(),
         '/library': (context) => fullLibrary(),
         // add more routes as needed

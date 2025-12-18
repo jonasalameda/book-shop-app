@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'common.dart';
 import 'setLocaleMaterialApp.dart';
 
-String? currentUserID;
+// String? currentUserID;
 
 Future<void> main() async {
   await loadCurrentUser();

@@ -77,6 +77,14 @@ class _CartPageState extends State<CartPage> {
               FirebaseFirestore.instance.collection('Books').snapshots()
             ]),
             builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(child: Text('Error loading data'));
+              }
+
+              if (!snapshot.hasData || snapshot.data == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
               var dbUsers = snapshot.data![0].docs;
               var dbBooks = snapshot.data![1].docs;
 

@@ -140,6 +140,7 @@ Future<bool> deleteBook(String bookId) async {
   );
 }
 
+
 /// Updates a book document with new info
 Future<bool> updateBook(String bookId, Map<String, dynamic> updatedData) async {
   try {
@@ -163,3 +164,90 @@ Future<bool> addBook(Map<String, dynamic> bookData) async {
     return false;
   }
 }
+
+Future<Map<String, dynamic>?> fetchUserMap(String userId) async
+{
+  try{
+    final doc = await FirebaseFirestore.instance.collection('Users').doc(userId).get();
+    if(!doc.exists)
+      return null;
+
+    final userData = doc.data()!;
+
+    final userMap = {
+      'id': doc.id,
+      'first_name': userData['first_name'] ?? '',
+      'last_name': userData['last_name'] ?? '',
+      'phone_number': userData['phone_number'] ?? '',
+      'email': userData['email'] ?? '',
+      'password_hash': userData['password_hash'] ?? '',
+      'wishlist': userData['wishlist'] ?? [],
+      'cart': userData['cart'] ?? [],
+      'role': userData['role'] ?? [],
+      'type': 'user'
+    };
+
+    return userMap;
+  } catch (e) {
+    print('Error from fetchUserMap: $e');
+    return null;
+  }
+}
+
+Future<List<Map<String, dynamic>>?> fetchAllUsersMap(String userId) async
+{
+  try{
+    final snap = await FirebaseFirestore.instance.collection('Users').get();
+
+    final mappedUsers = snap.docs.map((user) {
+      final userData = user.data();
+      return {
+      'id': user.id,
+      'first_name': userData['first_name'] ?? '',
+      'last_name': userData['last_name'] ?? '',
+      'phone_number': userData['phone_number'] ?? '',
+      'email': userData['email'] ?? '',
+      'password_hash': userData['password_hash'] ?? '',
+      'wishlist': userData['wishlist'] ?? [],
+      'cart': userData['cart'] ?? [],
+      'role': userData['role'] ?? [],
+      'type': 'user'
+    };}).toList();
+
+    return mappedUsers;
+  } catch (e) {
+    print('Error from fetchUserMap: $e');
+    return null;
+  }
+}
+
+Future<List<Map<String, dynamic>>?> fetchAllBooksMap() async
+{
+  try{
+    final snap = await FirebaseFirestore.instance.collection('Books').get();
+
+    final mappedBooks = snap.docs.map((book) {
+      final bookData = book.data();
+      return {
+        'id': book.id,
+        'isbn': bookData['isbn'] ?? '',
+        'bool_name': bookData['bool_name'] ?? '',
+        'author': bookData['author'] ?? '',
+        'country': bookData['country'] ?? '',
+        'genres': bookData['genres'] ?? [],
+        'description': bookData['description'] ?? "",
+        'image': bookData['image'] ?? "",
+        'quantity': bookData['quantity'] ?? 0,
+        'price': bookData['price'] ?? 0,
+        'available': bookData['available'] ?? false,
+        'type': 'book'
+      };
+    }).toList();
+
+    return mappedBooks;
+  } catch (e) {
+    print('Error from fetchUserMap: $e');
+    return null;
+  }
+}
+
