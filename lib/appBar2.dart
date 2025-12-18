@@ -28,8 +28,6 @@ var appBarHeight = AppBar().preferredSize.height;
 
 final String title = "";
 
-
-
 AppBar buildAppBar(BuildContext context) {
   return AppBar(
     backgroundColor: barColor,
@@ -102,6 +100,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
 
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (builder) => HomeScreen()));
+            Navigator.pop(context);
             Navigator.pushNamed(context, '/library');
           },
         ),
@@ -150,7 +149,6 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
             Navigator.pushNamed(context, '/map');
           },
         ),
-
         ListTile(
           title: Text("Home"),
           selected: selectedIndex == 6,

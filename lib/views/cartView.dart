@@ -49,7 +49,7 @@ class _CartPageState extends State<CartPage> {
 
   emptyCart(List userCart, List booksInfo, List usersInfo) async {
     for (var bookRef in userCart) {
-      var bookId = bookRef['id'];
+      var bookId = bookRef.id;
       var book = getBook(booksInfo, bookId);
       // await deleteBookFromCart(widget.userID, usersInfo, bookId);
       await updateElement(allUsers, widget.userID, 'cart', []);
@@ -243,7 +243,8 @@ class _CartPageState extends State<CartPage> {
                                               deleteBookFromCart(
                                                   widget.userID,
                                                   usersInfo,
-                                                  currentBookReference['id']);
+                                                  currentBookReference);
+
                                               setcartSubtotal();
                                             });
                                           },
@@ -290,7 +291,7 @@ class _CartPageState extends State<CartPage> {
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                       Text(
-                        '\$${cartSubtotal.toStringAsFixed(2)}: ',
+                        '\$${setcartSubtotal().toStringAsFixed(2)}: ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w700),
                       ),
@@ -306,7 +307,7 @@ class _CartPageState extends State<CartPage> {
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                       Text(
-                        '\$${(cartSubtotal * (5 / 100)).toStringAsFixed(2)}: ',
+                        '\$${(setcartSubtotal() * (5 / 100)).toStringAsFixed(2)}: ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w700),
                       ),
@@ -322,7 +323,7 @@ class _CartPageState extends State<CartPage> {
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                       Text(
-                        '\$${provincialTax.toStringAsFixed(2)}: ',
+                        '\$${(setcartSubtotal() * (9.975 / 100)).toStringAsFixed(2)}: ',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w700),
                       ),
@@ -338,7 +339,7 @@ class _CartPageState extends State<CartPage> {
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        '\$${totalCart.toStringAsFixed(2)}: ',
+                        '\$${(setcartSubtotal() * (5 / 100) + (setcartSubtotal() * (9.975 / 100) + setcartSubtotal())).toStringAsFixed(2)}: ',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),

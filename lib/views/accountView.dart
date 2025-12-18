@@ -28,7 +28,7 @@ class _AccountPageState extends State<AccountPage> {
     // List savedBooks = user['wishlist'];
     // print(savedBooks);
     await FirebaseFirestore.instance.collection('Users').doc(userId).update({
-      'wishlist': FieldValue.arrayRemove([bookReferenceID['id'] ?? bookReferenceID])
+      'wishlist': FieldValue.arrayRemove([bookReferenceID])
     });
   }
   // addToCart(String userId, List usersInfo, var bookReferenceID) async {
@@ -169,9 +169,11 @@ class _AccountPageState extends State<AccountPage> {
                             itemCount: savedBooks.length,
                             itemBuilder: (context, i) {
                               final currentBookReference = savedBooks[i];
+                              print('top 75 momentos tv globinho');
+                              print(booksInfo[i]['id']);
                               // final String currentBookIdDouble = (currentBookReference.id.toString()) as String;
                               final String currentBookId =
-                                  currentBookReference['id'];
+                                  currentBookReference['id'].toString();
                               final currentBook =
                                   getBook(booksInfo, currentBookId);
                               if (currentBook == null) {
@@ -248,7 +250,7 @@ class _AccountPageState extends State<AccountPage> {
                                                 .doc(widget.userID)
                                                 .update({
                                               'cart': FieldValue.arrayUnion(
-                                                  [currentBook['id']])
+                                                  [currentBookReference])
                                             });
                                             if (cartArray.contains(
                                                 currentBookReference)) {
