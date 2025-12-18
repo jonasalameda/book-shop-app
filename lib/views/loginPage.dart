@@ -223,8 +223,11 @@ class _LogInPageState extends State<LogInPage> {
                                           'cpWtMJprI1mqtNey7XGf') //admin
                                       // if (currentUser['user_role'] == 'admin') //admin
                                       {
+
                                         currentUserID = currentUser['id'];
                                         await loadCurrentUser();
+                                        showSuccess("Id", currentUserID.toString(), context);
+                                        currentUserAppBar = await getUserById(currentUser['id']);
                                         Navigator.pop(context);
                                         Navigator.push(
                                             context,
@@ -235,7 +238,8 @@ class _LogInPageState extends State<LogInPage> {
                                         currentUserID = currentUser['id'];
                                         // currentUserAppBar = currentUser;
                                         currentUserAppBar =
-                                            await getUserById(currentUserID!);
+                                            await getUserById(currentUser['id']!);
+                                        showSuccess("Id", currentUserID.toString(), context);
                                         Navigator.pop(context);
                                         Navigator.push(
                                             context,

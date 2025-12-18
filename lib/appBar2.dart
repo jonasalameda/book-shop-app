@@ -14,6 +14,9 @@ import 'setLocaleMaterialApp.dart';
 enum Options { search, myCart, wishList, logout, filter }
 
 UserModel? currentUserAppBar;
+setCurrentUser() async{
+  currentUserAppBar = await getUserById(currentUserID!);
+}
 
 enum AdminOptions { search, books, archive, customers }
 
@@ -58,6 +61,7 @@ Drawer customerDrawer(BuildContext context, int selectedIndex) {
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
       children: [
+        Text(currentUserAppBar.toString()),
         DrawerHeader(
           decoration: BoxDecoration(color: Color(0xFFAE9674)),
           child: Row(

@@ -11,17 +11,20 @@ import 'package:rxdart/rxdart.dart';
 
 class DescriptionPage extends StatefulWidget {
   final String bookId;
+  final String userId;
 
-  DescriptionPage({Key? key, required this.bookId}) : super(key: key);
+  DescriptionPage({Key? key, required this.bookId, required this.userId}) : super(key: key);
 
   @override
   State<DescriptionPage> createState() => _DescriptionPageState();
 }
 
 class _DescriptionPageState extends State<DescriptionPage> {
+
   buildDescription(BuildContext context) {
     print("jfdkhckse not an id");
-    print(currentUserID);
+    print(widget.userId);
+    // print(currentUserAppBar); // this is null and i cannot let it stay
     print(widget.bookId);
 
     // final item = ModalRoute.of(context)!.settings.arguments as Map;
@@ -37,6 +40,14 @@ class _DescriptionPageState extends State<DescriptionPage> {
               var dbUsers = snapshot.data![0].docs;
               var dbBooks = snapshot.data![1].docs;
 
+              print(dbUsers);
+              print("printing snapshots");
+              print(dbBooks);
+              if(!snapshot.hasData){
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
               var usersInfo = [
                 ...dbUsers.map((customer) {
                   var data = customer.data() as Map<String, dynamic>?;
@@ -74,10 +85,17 @@ class _DescriptionPageState extends State<DescriptionPage> {
                 }),
               ];
 
-              var currentUser = getUser(usersInfo, currentUserID!);
+              // print("current user id is : " + curreantUserID.toString()); // now is null
+              print("cuhellooo we are here"); // here is good
               var currentBook = getBook(booksInfo, widget.bookId);
-              print(currentBook);
-              print(currentUser);
+              // print('hellooo now we put book in');
+              // print(booksInfo); // good
+              var currentUser = getUser(usersInfo, widget.userId);
+              print("user with get user using list");
+              print(currentUser); //prints the user
+
+              // print(currentBook);
+              print("current user: " + currentUser.toString());
               // String? bookId;
 
               return SingleChildScrollView(
@@ -105,6 +123,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                   Container(
                       padding: EdgeInsets.all(32),
                       child: Column(
+
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,11 +159,12 @@ class _DescriptionPageState extends State<DescriptionPage> {
                             children: [
                               IconButton(
                                   onPressed: () async {
+                                    currentUserAppBar = await getUserById(widget.userId);
                                     List<dynamic> cartArray =
                                         currentUser['cart'];
                                     await FirebaseFirestore.instance
                                         .collection('Users')
-                                        .doc(currentUserID!)
+                                        .doc(widget.userId)
                                         .update({
                                       'cart':
                                           FieldValue.arrayUnion([currentBook])
@@ -168,7 +188,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                                         currentUser['wishlist'];
                                     await FirebaseFirestore.instance
                                         .collection('Users')
-                                        .doc(currentUserID!)
+                                        .doc(widget.userId)
                                         .update({
                                       'wishlist':
                                           FieldValue.arrayUnion([currentBook])
