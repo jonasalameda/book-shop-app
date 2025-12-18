@@ -27,7 +27,7 @@ class _LogInPageState extends State<LogInPage> {
   bool _isLoading = false;
 
   final CollectionReference allUsers =
-      FirebaseFirestore.instance.collection('Users');
+  FirebaseFirestore.instance.collection('Users');
 
   bool verifyPassword(String passwordInDB, String inputPassword) {
     return passwordInDB == inputPassword;
@@ -98,7 +98,7 @@ class _LogInPageState extends State<LogInPage> {
                         obscureText: _obscured,
                         decoration: InputDecoration(
                           labelText:
-                              AppLocalizations.of(context)!.loginPassword,
+                          AppLocalizations.of(context)!.loginPassword,
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.all(10),
                           suffixIcon: IconButton(
@@ -126,139 +126,140 @@ class _LogInPageState extends State<LogInPage> {
                         fit: FlexFit.tight,
                         child: ElevatedButton(
                           onPressed: () async {
-                                  setState(() {
-                                    _isLoading = true;
-                                  });
 
-                                  final userEmail =
-                                      _emailController.text.toLowerCase();
-                                  final userPassword = _passwordController.text;
-                                  if (userEmail.isEmpty ||
-                                      userPassword.isEmpty) {
-                                    showErrorDialog(
-                                        AppLocalizations.of(context)!
-                                            .loginEmptyTitle,
-                                        AppLocalizations.of(context)!
-                                            .loginEmptyContent,
-                                        context);
-                                    setState(() {
-                                      _isLoading = false;
-                                    });
-                                    return;
-                                  }
 
-                                  String? userID =
-                                      findUser(usersList, userEmail);
+                            final userEmail =
+                            _emailController.text.toLowerCase();
+                            final userPassword = _passwordController.text;
+                            if (userEmail.isEmpty ||
+                                userPassword.isEmpty) {
+                              showErrorDialog(
+                                  AppLocalizations.of(context)!
+                                      .loginEmptyTitle,
+                                  AppLocalizations.of(context)!
+                                      .loginEmptyContent,
+                                  context);
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              return;
+                            }
 
-                                  // currentUserID = userID; // Changed to nullable
+                            String? userID =
+                            findUser(usersList, userEmail);
 
-                                  //needed to check
-                                  // print(userID);
-                                  // showErrorDialog(userID.toString(), usersList.toString(), context);
-                                  // await loadCurrentUser();
-                                  if (userID == null) {
-                                    //showErrorDialog('User is not registered', 'Sorry to inform you, we do not have an account registered to this email please check again or register today!', context);
-                                    setState(() {
-                                      _isLoading = false;
-                                    });
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: Text(
-                                                AppLocalizations.of(context)!
-                                                    .loginUserNotregister),
-                                            content: Text(AppLocalizations.of(
+                            // currentUserID = userID; // Changed to nullable
+
+                            //needed to check
+                            // print(userID);
+                            // showErrorDialog(userID.toString(), usersList.toString(), context);
+                            // await loadCurrentUser();
+                            if (userID == null) {
+                              //showErrorDialog('User is not registered', 'Sorry to inform you, we do not have an account registered to this email please check again or register today!', context);
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                          AppLocalizations.of(context)!
+                                              .loginUserNotregister),
+                                      content: Text(AppLocalizations.of(
+                                          context)!
+                                          .loginUserInexistentContent),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(),
+                                            child: Text(
+                                                AppLocalizations.of(
                                                     context)!
-                                                .loginUserInexistentContent),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.of(context)
-                                                          .pop(),
-                                                  child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .tryAgain)),
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                RegisterUserPage()));
-                                                  },
-                                                  child: Text(
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .registerBtn,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ))
-                                            ],
-                                          );
-                                        });
-                                  } else {
-                                    var currentUser =
-                                        getUser(usersList, userID);
+                                                    .tryAgain)),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          RegisterUserPage()));
+                                            },
+                                            child: Text(
+                                              AppLocalizations.of(
+                                                  context)!
+                                                  .registerBtn,
+                                              style: TextStyle(
+                                                  fontWeight:
+                                                  FontWeight.bold),
+                                            ))
+                                      ],
+                                    );
+                                  });
+                            } else {
+                              var currentUser =
+                              getUser(usersList, userID);
 
-                                    // await loadCurrentUser();
-                                    bool isCorrectPassword = verifyPassword(
-                                        currentUser['password_hash'],
-                                        userPassword);
-                                    // User exists but password is incorrect
-                                    if (!isCorrectPassword) {
-                                      showErrorDialog(
-                                          AppLocalizations.of(context)!
-                                              .loginWrongPasswordTitle,
-                                          AppLocalizations.of(context)!
-                                              .loginWrongPasswordContent,
-                                          context);
-                                    } else {
-                                      // Password is correct
-                                      if (currentUser['id'] ==
-                                          'cpWtMJprI1mqtNey7XGf') //admin
-                                      // if (currentUser['user_role'] == 'admin') //admin
-                                      {
-                                        currentUserID = currentUser['id'];
-                                        await loadCurrentUser();
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => AdminPage(
-                                                    userID: currentUserID!)));
-                                      } else {
-                                        currentUserID = currentUser['id'];
-                                        // currentUserAppBar = currentUser;
-                                        currentUserAppBar =
-                                            await getUserById(currentUserID!);
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AccountPage(
-                                                        userID:
-                                                            currentUserID!)));
-                                      }
-                                    }
-                                  }
-                                },
+                              // await loadCurrentUser();
+                              bool isCorrectPassword = verifyPassword(
+                                  currentUser['password_hash'],
+                                  userPassword);
+                              // User exists but password is incorrect
+                              if (!isCorrectPassword) {
+                                showErrorDialog(
+                                    AppLocalizations.of(context)!
+                                        .loginWrongPasswordTitle,
+                                    AppLocalizations.of(context)!
+                                        .loginWrongPasswordContent,
+                                    context);
+                              } else {
+                                // Password is correct
+                                if (currentUser['id'] ==
+                                    'cpWtMJprI1mqtNey7XGf') //admin
+                                  // if (currentUser['user_role'] == 'admin') //admin
+                                    {
+                                  currentUserID = currentUser['id'];
+                                  await loadCurrentUser();
+                                  currentUserAppBar =
+                                  await getUserById(currentUserID!);
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AdminPage(
+                                              userID: currentUserID!)));
+                                } else {
+                                  currentUserID = currentUser['id'];
+                                  // currentUserAppBar = currentUser;
+                                  currentUserAppBar =
+                                  await getUserById(currentUserID!);
+                                  await loadCurrentUser();
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AccountPage(
+                                                  userID:
+                                                  currentUserID!)));
+                                }
+                              }
+                            }
+                          },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
                               Colors.brown.shade500,
                             ),
                           ),
                           child: Text(
-                                  AppLocalizations.of(context)!.loginBtn,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                    color: Colors.white,
-                                  ),
-                                ),
+                            AppLocalizations.of(context)!.loginBtn,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ],

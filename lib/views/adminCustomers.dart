@@ -9,7 +9,7 @@ class AdminCustomersPage extends StatefulWidget {
 }
 
 class _AdminCustomersPageState extends State<AdminCustomersPage> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {

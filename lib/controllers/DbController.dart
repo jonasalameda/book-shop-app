@@ -155,6 +155,19 @@ Future<bool> updateBook(String bookId, Map<String, dynamic> updatedData) async {
   }
 }
 
+Future<bool> updateUser(String userId, Map<String, dynamic> updatedData) async {
+  try {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .update(updatedData);
+    return true;
+  } catch (e) {
+    print('Error updating user: $e');
+    return false;
+  }
+}
+
 Future<bool> addBook(Map<String, dynamic> bookData) async {
   try {
     await FirebaseFirestore.instance.collection('Books').add(bookData);

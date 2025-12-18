@@ -18,6 +18,7 @@ Future<void> loadCurrentUser() async {
   if (currentUserID == null) return;
 
   currentUser = await getUserById(currentUserID!);
+  currentUserAppBar = currentUser;
 }
 
 

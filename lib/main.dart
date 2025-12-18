@@ -17,6 +17,7 @@ Future<void> main() async {
     ),
   );
   // BookDB().initializeDB();
+  // loadCurrentUser();
   runApp(MyApp());
 }
 
