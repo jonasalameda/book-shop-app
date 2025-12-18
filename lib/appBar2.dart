@@ -212,14 +212,6 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
           ),
         ),
         ListTile(
-          title: Text(AppLocalizations.of(context)!.drawerSearch),
-          selected: selectedIndex == 0,
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/admin');
-          },
-        ),
-        ListTile(
           title: Text('Admin'),
           selected: selectedIndex == 1,
           onTap: () {
@@ -244,17 +236,6 @@ Drawer adminDrawer(BuildContext context, int selectedIndex) {
             currentUserAppBar = null;
             Navigator.pop(context);
             Navigator.pushNamed(context, '/login');
-          },
-        ),
-
-        ListTile(
-          title: Text(AppLocalizations.of(context)!.drawerFindUs),
-          selected: selectedIndex == 4,
-          onTap: () {
-            currentUserID = '';
-            currentUserAppBar = null;
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/map');
           },
         ),
       ],

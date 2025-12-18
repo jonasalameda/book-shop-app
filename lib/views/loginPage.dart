@@ -44,9 +44,9 @@ class _LogInPageState extends State<LogInPage> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
 
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
+              // if (!snapshot.hasData) {
+              //   return Center(child: CircularProgressIndicator());
+              // }
 
               var dbUsers = snapshot.data![0].docs;
               var usersList = [
@@ -125,9 +125,7 @@ class _LogInPageState extends State<LogInPage> {
                       Flexible(
                         fit: FlexFit.tight,
                         child: ElevatedButton(
-                          onPressed: _isLoading
-                              ? null
-                              : () async {
+                          onPressed: () async {
                                   setState(() {
                                     _isLoading = true;
                                   });
@@ -253,9 +251,7 @@ class _LogInPageState extends State<LogInPage> {
                               Colors.brown.shade500,
                             ),
                           ),
-                          child: _isLoading
-                              ? CircularProgressIndicator(color: Colors.white)
-                              : Text(
+                          child: Text(
                                   AppLocalizations.of(context)!.loginBtn,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
